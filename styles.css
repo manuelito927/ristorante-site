@@ -126,11 +126,54 @@ body{
 }
 
 
-.menu { padding: 18px; }
+/* Accordion additions (senza duplicare .menu e bordi) */
+.section-toggle{
+  width: 100%;
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  background: transparent;
+  border: 0;
+  padding: 22px 0;  /* uguale alla tua .menu-title */
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
 
-.menu-section{
-  border-top: 1px solid rgba(0,0,0,.12);
-  padding: 14px 0;
+.section-title{
+  font-size: 34px;  /* uguale al tuo h2 */
+  font-weight: 700;
+  letter-spacing: -.2px;
+}
+
+.section-icon{
+  font-size: 34px;  /* uguale al tuo .plus */
+  font-weight: 300;
+  opacity: .9;
+  transform: translateY(-2px);
+}
+
+.section-content{ padding: 0 0 12px; }
+
+.item{
+  padding: 12px 0;
+  border-top: 1px solid rgba(0,0,0,.08);
+}
+
+.item-row{
+  display:flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.item-desc{
+  margin-top: 6px;
+  font-size: 13px;
+  color: rgba(0,0,0,.55);
+  text-transform: uppercase;
+  letter-spacing: .03em;
 }
 
 .section-toggle{
