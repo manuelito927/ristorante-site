@@ -118,3 +118,22 @@ body{
   color: rgba(0,0,0,.45);
   font-size: 16px;
 }
+
+/* FIX Safari iPhone: rimuove stile default dei button (grigio/blu) */
+.menu-title{
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+.menu-title h2{
+  color: #151515;
+}
+
+.plus{
+  color: #151515;
+}
+
