@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Menu Digitale</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <button class="icon-btn" id="openMenu" aria-label="Apri menu">
+      ☰
+    </button>
+
+    <div class="brand">
+      <div class="brand-logo">+400°</div>
+      <div class="brand-sub">QUATTROCENTO GRADI</div>
+    </div>
+
+    <a class="icon-btn" href="#menu" aria-label="Vai al menu">↧</a>
+  </header>
+
+  <!-- SIDE DRAWER -->
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-head">
+      <div class="drawer-title">MENU</div>
+      <button class="icon-btn" id="closeMenu" aria-label="Chiudi menu">✕</button>
+    </div>
+
+    <nav class="drawer-nav">
+      <a href="#menu" class="drawer-link">MENU DIGITALE</a>
+      <a href="#english" class="drawer-link">ENGLISH MENU</a>
+      <a href="#how" class="drawer-link">COME FUNZIONA</a>
+      <a href="#book" class="drawer-link">PRENOTA</a>
+      <a href="#gallery" class="drawer-link">GALLERY</a>
+      <a href="#contacts" class="drawer-link">CONTATTI</a>
+      <a href="#credits" class="drawer-link">RICONOSCIMENTI</a>
+    </nav>
+  </aside>
+  <div class="backdrop" id="backdrop"></div>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-overlay">
+      <h1>All you need<br/>is love<br/>and food</h1>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <main class="wrap" id="menu">
+    <h2 class="section-title">Menù digitale</h2>
+
+    <div class="notice">
+      *Attualmente il menu non dispone di opzioni senza glutine.
+    </div>
+
+    <div id="menuRoot" class="accordion"></div>
+
+    <div class="footer-space"></div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
