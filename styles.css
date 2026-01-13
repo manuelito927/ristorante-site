@@ -51,21 +51,19 @@ background-repeat: no-repeat;
   opacity: .9;
 }
 
-/* HERO (senza immagine per ora) */
 .hero{
-  min-height: 220px;
+  min-height: 280px;
   padding: 46px var(--pad) 22px var(--pad);
   display:flex;
   align-items:flex-end;
-  background: #f6f1ea;
-}
 
-.hero h1{
-  margin:0;
-  font-weight: 700;
-  line-height: .92;
-  letter-spacing: -.5px;
-  font-size: 54px;
+  /* immagine hero */
+  background-image:
+    linear-gradient(to bottom, rgba(246,241,234,.10), rgba(246,241,234,.85)),
+    url("/assets/hero.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 /* MENU LIST */
