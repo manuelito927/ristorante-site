@@ -7,10 +7,7 @@ html,body{ margin:0; padding:0; }
 }
 
 body{
-background-image: url("/assets/img/hero.jpg");
-background-size: cover;
-background-position: center;
-background-repeat: no-repeat;
+  background:#f6f1ea;
   color:#151515;
   font-family: Georgia, "Times New Roman", serif;
 }
@@ -51,26 +48,28 @@ background-repeat: no-repeat;
   opacity: .9;
 }
 
+/* HERO */
 .hero{
   min-height: 260px;
   padding: 46px var(--pad) 22px var(--pad);
   display:flex;
   align-items:flex-end;
 
-background-image: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.05)),
-                  url("/assets/hero.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-  /* immagine hero */
   background-image:
     linear-gradient(to bottom, rgba(246,241,234,.10), rgba(246,241,234,.85)),
     url("/assets/hero.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.hero h1{
+  margin:0;
+  font-weight: 700;
+  line-height: .92;
+  letter-spacing: -.5px;
+  font-size: 54px;
+  color:#151515;
 }
 
 /* MENU LIST */
@@ -118,10 +117,10 @@ background-image: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.05)),
 @media (min-width: 900px){
   :root{ --pad: 26px; }
   .hero{ min-height: 280px; padding-top: 70px; }
-  .hero h1{ font-size: 64px; }
   .hero h1{
-  color: #fff;
-  text-shadow: 0 10px 30px rgba(0,0,0,.35);
-}
+    font-size: 64px;
+    color: #fff;
+    text-shadow: 0 10px 30px rgba(0,0,0,.35);
+  }
   .menu-title h2{ font-size: 38px; }
 }
