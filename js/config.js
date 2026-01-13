@@ -1,2 +1,1 @@
-// js/config.js
-window.API_BASE = "https://TUO-WORKER.workers.dev";
+window.API_BASE = "https://still-haze-01c8.filosofiaefficace.workers.dev";
