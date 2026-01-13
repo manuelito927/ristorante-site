@@ -6,7 +6,7 @@
   <title>Quattrocento Gradi</title>
 
   <!-- CSS -->
-<link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="/css/styles.css?v=1">
 </head>
 <body>
 
@@ -20,7 +20,7 @@
     </div>
   </header>
 
-  <!-- HERO -->
+  <!-- HERO (può restare, non è prioritaria) -->
   <section class="hero">
     <h1>All you need<br>is love<br>and food</h1>
   </section>
@@ -28,82 +28,75 @@
   <!-- MENU -->
   <main class="menu">
 
+    <!-- ANTIPASTI -->
     <section class="menu-section">
-      <div class="menu-title">
+      <button class="menu-title js-toggle" type="button" aria-expanded="false">
         <h2>Antipasti</h2>
         <span class="plus">+</span>
+      </button>
+
+      <div class="menu-content" hidden>
+        <div class="item">
+          <div class="item-row">
+            <span>Siamo fritti</span>
+            <span>10.00</span>
+          </div>
+          <div class="item-desc">Arancini, crocchette, polpette</div>
+        </div>
+
+        <div class="item">
+          <div class="item-row">
+            <span>Arancino al pistacchio</span>
+            <span>8.00</span>
+          </div>
+          <div class="item-desc">Mortadella, pistacchio, fior di latte</div>
+        </div>
       </div>
     </section>
 
+    <!-- PIZZE -->
     <section class="menu-section">
-      <div class="menu-title">
+      <button class="menu-title js-toggle" type="button" aria-expanded="false">
         <h2>Pizze</h2>
         <span class="plus">+</span>
+      </button>
+
+      <div class="menu-content" hidden>
+        <div class="item">
+          <div class="item-row">
+            <span>Margherita</span>
+            <span>6.00</span>
+          </div>
+          <div class="item-desc">Pomodoro, fior di latte, basilico</div>
+        </div>
       </div>
     </section>
 
+    <!-- BEVANDE -->
     <section class="menu-section">
-      <div class="menu-title">
-        <h2>Proposte fuori menù stagionali</h2>
-        <span class="plus">+</span>
-      </div>
-    </section>
-
-    <section class="menu-section">
-      <div class="menu-title">
-        <h2>Aggiunte</h2>
-        <span class="plus">+</span>
-      </div>
-    </section>
-
-    <section class="menu-section">
-      <div class="menu-title">
+      <button class="menu-title js-toggle" type="button" aria-expanded="false">
         <h2>Bevande</h2>
         <span class="plus">+</span>
-      </div>
-    </section>
+      </button>
 
-    <section class="menu-section">
-      <div class="menu-title">
-        <h2>Cocktail</h2>
-        <span class="plus">+</span>
-      </div>
-    </section>
-
-    <section class="menu-section">
-      <div class="menu-title">
-        <h2>Birre</h2>
-        <span class="plus">+</span>
-      </div>
-    </section>
-
-    <section class="menu-section">
-      <div class="menu-title">
-        <h2>Vini</h2>
-        <span class="plus">+</span>
-      </div>
-    </section>
-
-    <section class="menu-section">
-      <div class="menu-title">
-        <h2>Caffè Amari</h2>
-        <span class="plus">+</span>
-      </div>
-    </section>
-
-    <section class="menu-section">
-      <div class="menu-title">
-        <h2>Dolci</h2>
-        <span class="plus">+</span>
+      <div class="menu-content" hidden>
+        <div class="item">
+          <div class="item-row">
+            <span>Acqua</span>
+            <span>2.00</span>
+          </div>
+        </div>
       </div>
     </section>
 
   </main>
 
-  <!-- FOOTER NOTE -->
+  <!-- FOOTER -->
   <footer class="note">
     <p>*Attualmente il menu non dispone di opzioni senza glutine.</p>
   </footer>
 
+  <!-- JS -->
+  <script src="/js/menu.js?v=1"></script>
 </body>
 </html>
