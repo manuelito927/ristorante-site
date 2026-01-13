@@ -55,9 +55,7 @@ body{
   display:flex;
   align-items:flex-end;
 
-  background-image:
-    linear-gradient(to bottom, rgba(246,241,234,.10), rgba(246,241,234,.85)),
-url("/assets/img/hero.jpg");
+  background-image: linear-gradient(to bottom, rgba(246,241,234,.10), rgba(246,241,234,.85)), url("/assets/img/hero.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
