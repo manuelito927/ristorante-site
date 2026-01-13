@@ -52,10 +52,17 @@ background-repeat: no-repeat;
 }
 
 .hero{
-  min-height: 280px;
+  min-height: 260px;
   padding: 46px var(--pad) 22px var(--pad);
   display:flex;
   align-items:flex-end;
+
+  background-image: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.05)),
+                    url("/assets/img/hero.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 
   /* immagine hero */
   background-image:
