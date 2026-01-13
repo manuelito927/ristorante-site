@@ -1,66 +1,109 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Menu Digitale</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quattrocento Gradi</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="./styles/style.css">
 </head>
 <body>
 
-  <!-- TOP BAR -->
-  <header class="topbar">
-    <button class="icon-btn" id="openMenu" aria-label="Apri menu">
-      ☰
-    </button>
+  <!-- HEADER -->
+  <header class="header">
+    <button class="menu-btn">☰</button>
 
-    <div class="brand">
-      <div class="brand-logo">+400°</div>
-      <div class="brand-sub">QUATTROCENTO GRADI</div>
+    <div class="logo">
+      +400°
+      <span>QUATTROCENTO GRADI</span>
     </div>
-
-    <a class="icon-btn" href="#menu" aria-label="Vai al menu">↧</a>
   </header>
 
-  <!-- SIDE DRAWER -->
-  <aside class="drawer" id="drawer" aria-hidden="true">
-    <div class="drawer-head">
-      <div class="drawer-title">MENU</div>
-      <button class="icon-btn" id="closeMenu" aria-label="Chiudi menu">✕</button>
-    </div>
-
-    <nav class="drawer-nav">
-      <a href="#menu" class="drawer-link">MENU DIGITALE</a>
-      <a href="#english" class="drawer-link">ENGLISH MENU</a>
-      <a href="#how" class="drawer-link">COME FUNZIONA</a>
-      <a href="#book" class="drawer-link">PRENOTA</a>
-      <a href="#gallery" class="drawer-link">GALLERY</a>
-      <a href="#contacts" class="drawer-link">CONTATTI</a>
-      <a href="#credits" class="drawer-link">RICONOSCIMENTI</a>
-    </nav>
-  </aside>
-  <div class="backdrop" id="backdrop"></div>
-
   <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-overlay">
-      <h1>All you need<br/>is love<br/>and food</h1>
-    </div>
+  <section class="hero">
+    <h1>All you need<br>is love<br>and food</h1>
   </section>
 
   <!-- MENU -->
-  <main class="wrap" id="menu">
-    <h2 class="section-title">Menù digitale</h2>
+  <main class="menu">
 
-    <div class="notice">
-      *Attualmente il menu non dispone di opzioni senza glutine.
-    </div>
+    <section class="menu-section">
+      <div class="menu-title">
+        <h2>Antipasti</h2>
+        <span class="plus">+</span>
+      </div>
+    </section>
 
-    <div id="menuRoot" class="accordion"></div>
+    <section class="menu-section">
+      <div class="menu-title">
+        <h2>Pizze</h2>
+        <span class="plus">+</span>
+      </div>
+    </section>
 
-    <div class="footer-space"></div>
+    <section class="menu-section">
+      <div class="menu-title">
+        <h2>Proposte fuori menù stagionali</h2>
+        <span class="plus">+</span>
+      </div>
+    </section>
+
+    <section class="menu-section">
+      <div class="menu-title">
+        <h2>Aggiunte</h2>
+        <span class="plus">+</span>
+      </div>
+    </section>
+
+    <section class="menu-section">
+      <div class="menu-title">
+        <h2>Bevande</h2>
+        <span class="plus">+</span>
+      </div>
+    </section>
+
+    <section class="menu-section">
+      <div class="menu-title">
+        <h2>Cocktail</h2>
+        <span class="plus">+</span>
+      </div>
+    </section>
+
+    <section class="menu-section">
+      <div class="menu-title">
+        <h2>Birre</h2>
+        <span class="plus">+</span>
+      </div>
+    </section>
+
+    <section class="menu-section">
+      <div class="menu-title">
+        <h2>Vini</h2>
+        <span class="plus">+</span>
+      </div>
+    </section>
+
+    <section class="menu-section">
+      <div class="menu-title">
+        <h2>Caffè Amari</h2>
+        <span class="plus">+</span>
+      </div>
+    </section>
+
+    <section class="menu-section">
+      <div class="menu-title">
+        <h2>Dolci</h2>
+        <span class="plus">+</span>
+      </div>
+    </section>
+
   </main>
 
-  <script src="app.js"></script>
+  <!-- FOOTER NOTE -->
+  <footer class="note">
+    <p>*Attualmente il menu non dispone di opzioni senza glutine.</p>
+  </footer>
+
 </body>
 </html>
