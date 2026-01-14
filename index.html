@@ -3,32 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GREENWOOD</title>
-
-  <link rel="stylesheet" href="/css/styles.css?v=2">
+  <title>Quattrocento Gradi</title>
+  <link rel="stylesheet" href="/css/styles.css?v=3">
 </head>
 <body>
 
   <!-- HEADER -->
   <header class="header">
-    <button id="jsHamburger"
-            class="menu-btn"
-            aria-label="Apri menu"
-            aria-expanded="false">
-      ☰
-    </button>
+    <button id="jsHamburger" class="menu-btn" aria-label="Apri menu" aria-expanded="false">☰</button>
 
     <div class="logo">
-      <span class="logo-mark">GW•</span>
-      <span class="logo-text">GREENWOOD</span>
+      <span class="logo-mark">+400°</span>
+      <span class="logo-text">QUATTROCENTO GRADI</span>
     </div>
   </header>
 
-  <!-- BACKDROP -->
+  <!-- MENU MOBILE (overlay) -->
   <div id="jsMenuBackdrop" class="menu-backdrop" hidden></div>
 
-  <!-- MENU MOBILE -->
-  <nav id="jsMobileMenu" class="mobile-menu" aria-label="Menu principale">
+  <nav id="jsMobileMenu" class="mobile-menu" aria-label="Menu principale" hidden>
     <div class="mobile-menu__head">
       <div class="mobile-logo">
         <span class="mobile-logo__mark">+400°</span>
@@ -37,14 +30,10 @@
     </div>
 
     <ul class="mobile-menu__list">
-      <!-- QUESTO PORTA AL MENU -->
-      <li>
-        <a class="mobile-menu__link" href="#menu-digitale">
-          MENU DIGITALE
-        </a>
-      </li>
+      <!-- QUI: apre una pagina nuova -->
+      <li><a class="mobile-menu__link" href="/menu/">MENU DIGITALE</a></li>
 
-      <!-- gli altri per ora NON fanno nulla -->
+      <!-- per ora lasciali così (poi li farai) -->
       <li><a class="mobile-menu__link" href="#">ENGLISH MENU</a></li>
       <li><a class="mobile-menu__link" href="#">COME FUNZIONA</a></li>
       <li><a class="mobile-menu__link" href="#">PRENOTA</a></li>
@@ -54,22 +43,41 @@
     </ul>
   </nav>
 
-  <!-- HERO -->
+  <!-- HERO (HOME) -->
   <section class="hero">
     <h1>All you need<br>is love<br>and food</h1>
   </section>
 
-  <!-- MENU DIGITALE (TARGET) -->
-  <main class="menu" id="menu-digitale"></main>
+  <!-- JS: apertura/chiusura menu -->
+  <script>
+    (function(){
+      const btn = document.getElementById("jsHamburger");
+      const menu = document.getElementById("jsMobileMenu");
+      const back = document.getElementById("jsMenuBackdrop");
+      if(!btn || !menu || !back) return;
 
-  <!-- FOOTER -->
-  <footer class="note">
-    <p>*Attualmente il menu non dispone di opzioni senza glutine.</p>
-  </footer>
+      function openMenu(){
+        menu.hidden = false;
+        back.hidden = false;
+        btn.setAttribute("aria-expanded","true");
+      }
+      function closeMenu(){
+        menu.hidden = true;
+        back.hidden = true;
+        btn.setAttribute("aria-expanded","false");
+      }
 
-  <!-- JS -->
-  <script src="/js/config.js"></script>
-  <script src="/js/menu.js?v=2"></script>
+      btn.addEventListener("click", () => {
+        const isOpen = btn.getAttribute("aria-expanded") === "true";
+        isOpen ? closeMenu() : openMenu();
+      });
+
+      back.addEventListener("click", closeMenu);
+
+      // chiudi anche quando clicchi un link
+      menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
+    })();
+  </script>
 
 </body>
 </html>
