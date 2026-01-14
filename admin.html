@@ -3,33 +3,31 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Admin Menu</title>
+  <title>Admin +400°</title>
   <link rel="stylesheet" href="/css/styles.css?v=1" />
   <style>
-    .wrap{ max-width: 980px; margin: 0 auto; padding: 18px; }
-    .card{ background:#fff6ee; border:1px solid rgba(0,0,0,.12); border-radius:14px; padding:14px; }
+    .wrap{ max-width:980px; margin:0 auto; padding:18px; }
+    .card{ background:#fff6ee; border:1px solid rgba(0,0,0,.12); border-radius:14px; padding:16px; margin-bottom:18px; }
     .row{ display:flex; gap:12px; flex-wrap:wrap; }
     input, select, textarea{
       width:100%; padding:10px 12px; border-radius:12px;
       border:1px solid rgba(0,0,0,.18); background:#fff; font:inherit;
     }
-    textarea{ min-height:70px; resize:vertical; }
+    textarea{ min-height:80px; resize:vertical; }
     .btn{
       padding:10px 14px; border-radius:12px; border:1px solid rgba(0,0,0,.18);
-      background:#151515; color:#fff; cursor:pointer; font:inherit;
+      background:#151515; color:#fff; cursor:pointer;
     }
     .btn.secondary{ background:#fff; color:#151515; }
     .btn.danger{ background:#b42318; border-color:#b42318; }
-    .grid{ display:grid; grid-template-columns: 1fr; gap:12px; margin-top:14px; }
-    @media (min-width: 900px){
-      .grid{ grid-template-columns: 1fr 1fr; }
-    }
-    .item-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
-    note{ display:block; opacity:.7; font-size:14px; margin-top:8px; }
-    .topbar{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
-    .pill{ padding:6px 10px; border-radius:999px; border:1px solid rgba(0,0,0,.12); background: rgba(246,241,234,.92); }
-    .hidden{ display:none !important; }
-    .lang{ font-size:12px; opacity:.7; margin:6px 0 -6px; }
+    .grid{ display:grid; grid-template-columns:1fr; gap:12px; margin-top:14px; }
+    @media (min-width:900px){ .grid{ grid-template-columns:1fr 1fr; } }
+    .topbar{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+    .pill{ padding:6px 10px; border-radius:999px; border:1px solid rgba(0,0,0,.12); background:#f6f1ea; }
+    .hidden{ display:none!important; }
+    .lang{ font-size:12px; opacity:.7; margin-bottom:4px; }
+    note{ display:block; font-size:13px; opacity:.7; margin-top:6px; }
+    hr{ border:0; border-top:1px solid rgba(0,0,0,.12); margin:18px 0; }
   </style>
 </head>
 <body>
@@ -41,6 +39,7 @@
 
 <div class="wrap">
 
+  <!-- TOP BAR -->
   <div class="topbar">
     <div class="pill" id="status">Non connesso</div>
     <button class="btn secondary" id="logoutBtn">Esci</button>
@@ -48,12 +47,12 @@
 
   <!-- LOGIN -->
   <section class="card" id="loginCard">
-    <h2 style="margin:0 0 10px;">Accesso</h2>
+    <h2>Accesso Admin</h2>
     <div class="row">
-      <div style="flex:1; min-width:240px;">
+      <div style="flex:1;min-width:240px;">
         <label>Token Admin</label>
-        <input id="tokenInput" type="password" placeholder="Incolla il token (ADMIN_TOKEN)" />
-        <note>Questo token lo decidi tu in Cloudflare Worker → Variables → ADMIN_TOKEN</note>
+        <input id="tokenInput" type="password" placeholder="ADMIN_TOKEN" />
+        <note>Impostato nel Cloudflare Worker</note>
       </div>
       <div style="align-self:flex-end;">
         <button class="btn" id="loginBtn">Entra</button>
@@ -63,85 +62,128 @@
 
   <!-- APP -->
   <section class="card hidden" id="appCard">
-    <h2 style="margin:0 0 10px;">Aggiungi prodotto</h2>
+
+    <!-- ===================== -->
+    <!-- BLOCCO 1: MENU -->
+    <!-- ===================== -->
+    <h2>Menu digitale</h2>
+    <note>Aggiungi, modifica o rimuovi i prodotti del menu</note>
 
     <div class="row">
-      <!-- IT -->
-      <div style="flex:1; min-width:220px;">
-        <div class="lang">Italiano</div>
-        <label>Nome (IT) *</label>
-        <input id="name" placeholder="Es. Margherita" />
+      <div style="flex:1">
+        <div class="lang">IT</div>
+        <label>Nome</label>
+        <input id="name" />
       </div>
-
-      <div style="flex:1; min-width:220px;">
-        <div class="lang">Italiano</div>
+      <div style="flex:1">
+        <div class="lang">EN</div>
+        <label>Name</label>
+        <input id="name_en" />
+      </div>
+      <div style="width:140px">
+        <label>Prezzo €</label>
+        <input id="price" type="number" step="0.01" />
+      </div>
+      <div style="flex:1">
         <label>Categoria (IT)</label>
-        <input id="category" placeholder="Es. Pizze" />
+        <input id="category" />
       </div>
-
-      <div style="flex:1; min-width:280px;">
-        <div class="lang">Italiano</div>
-        <label>Descrizione (IT)</label>
-        <textarea id="description" placeholder="Ingredienti / note"></textarea>
+      <div style="flex:1">
+        <label>Categoria (EN)</label>
+        <input id="category_en" />
       </div>
-
-      <!-- EN -->
-      <div style="flex:1; min-width:220px;">
-        <div class="lang">English</div>
-        <label>Name (EN) *</label>
-        <input id="name_en" placeholder="e.g. Margherita" />
+      <div style="width:120px">
+        <label>Pos</label>
+        <input id="position" type="number" value="0" />
       </div>
-
-      <div style="flex:1; min-width:220px;">
-        <div class="lang">English</div>
-        <label>Category (EN)</label>
-        <input id="category_en" placeholder="e.g. Pizzas" />
+      <div style="flex:1">
+        <label>Immagine URL</label>
+        <input id="image_url" />
       </div>
-
-      <div style="flex:1; min-width:280px;">
-        <div class="lang">English</div>
-        <label>Description (EN)</label>
-        <textarea id="description_en" placeholder="Ingredients / notes"></textarea>
-      </div>
-
-      <!-- COMMON -->
-      <div style="width:180px; min-width:160px;">
-        <label>Prezzo (€) *</label>
-        <input id="price" type="number" step="0.01" placeholder="6.50" />
-      </div>
-
-      <div style="width:140px; min-width:120px;">
-        <label>Posizione</label>
-        <input id="position" type="number" step="1" value="0" />
-      </div>
-
-      <div style="flex:1; min-width:240px;">
-        <label>Immagine (URL)</label>
-        <input id="image_url" placeholder="https://..." />
-      </div>
-
-      <div style="width:180px; min-width:160px;">
+      <div style="width:160px">
         <label>Disponibile</label>
         <select id="is_available">
-          <option value="true" selected>Si</option>
+          <option value="true">Si</option>
           <option value="false">No</option>
         </select>
       </div>
-
       <div style="align-self:flex-end;">
         <button class="btn" id="createBtn">Aggiungi</button>
       </div>
     </div>
 
-    <hr style="border:0;border-top:1px solid rgba(0,0,0,.12); margin:14px 0;"/>
-
-    <h2 style="margin:0 0 10px;">Prodotti</h2>
     <div class="grid" id="itemsGrid"></div>
-  </section>
 
+    <!-- ===================== -->
+    <!-- BLOCCO 2: COME FUNZIONA -->
+    <!-- ===================== -->
+    <hr>
+    <h2>Come funziona</h2>
+    <note>Contenuti della pagina /come-funziona</note>
+
+    <div class="row">
+      <div style="flex:1">
+        <label>Telefono</label>
+        <input id="cf_phone">
+      </div>
+      <div style="flex:1">
+        <label>Indirizzo</label>
+        <textarea id="cf_address"></textarea>
+      </div>
+      <div style="flex:1">
+        <label>Orari (IT)</label>
+        <textarea id="cf_hours_it"></textarea>
+      </div>
+      <div style="flex:1">
+        <label>Orari (EN)</label>
+        <textarea id="cf_hours_en"></textarea>
+      </div>
+      <div style="flex:1">
+        <label>Take Away</label>
+        <textarea id="cf_takeaway"></textarea>
+      </div>
+      <div style="flex:1">
+        <label>Glutine</label>
+        <textarea id="cf_gluten"></textarea>
+      </div>
+      <div style="flex:1">
+        <label>Lattosio</label>
+        <textarea id="cf_lactose"></textarea>
+      </div>
+      <div style="flex:1">
+        <label>Animali</label>
+        <textarea id="cf_pets"></textarea>
+      </div>
+      <div>
+        <button class="btn" id="saveComeFunziona">Salva</button>
+      </div>
+    </div>
+
+    <!-- ===================== -->
+    <!-- BLOCCO 3: LA TUA STORIA -->
+    <!-- ===================== -->
+    <hr>
+    <h2>La tua storia</h2>
+    <note>Testo della pagina “La nostra storia”</note>
+
+    <div class="row">
+      <div style="flex:1">
+        <label>Testo (IT)</label>
+        <textarea id="story_it"></textarea>
+      </div>
+      <div style="flex:1">
+        <label>Testo (EN)</label>
+        <textarea id="story_en"></textarea>
+      </div>
+      <div>
+        <button class="btn">Salva</button>
+      </div>
+    </div>
+
+  </section>
 </div>
 
 <script src="/js/config.js"></script>
-<script src="/js/admin.js?v=2"></script>
+<script src="/js/admin.js?v=3"></script>
 </body>
 </html>
