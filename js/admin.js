@@ -16,6 +16,10 @@
 
   // COME FUNZIONA
   const cfSaveBtn = $("saveComeFunziona");
+    // PRENOTAZIONI
+  const reservationsGrid = $("reservationsGrid");
+  const refreshReservationsBtn = $("refreshReservations");
+  const reservationsMsg = $("reservationsMsg");
   const cf_phone = $("cf_phone");
   const cf_address = $("cf_address");
   const cf_hours_it = $("cf_hours_it");
