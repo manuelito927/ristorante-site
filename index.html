@@ -11,7 +11,12 @@
 
   <!-- HEADER -->
   <header class="header">
-    <button id="jsHamburger" class="menu-btn" aria-label="Apri menu" aria-expanded="false">☰</button>
+    <button id="jsHamburger"
+            class="menu-btn"
+            aria-label="Apri menu"
+            aria-expanded="false">
+      ☰
+    </button>
 
     <div class="logo">
       <span class="logo-mark">GW•</span>
@@ -19,9 +24,10 @@
     </div>
   </header>
 
-  <!-- MENU MOBILE (overlay) -->
+  <!-- BACKDROP -->
   <div id="jsMenuBackdrop" class="menu-backdrop" hidden></div>
 
+  <!-- MENU MOBILE -->
   <nav id="jsMobileMenu" class="mobile-menu" aria-label="Menu principale">
     <div class="mobile-menu__head">
       <div class="mobile-logo">
@@ -31,13 +37,20 @@
     </div>
 
     <ul class="mobile-menu__list">
-      <li><a class="mobile-menu__link" href="#menu-digitale">MENU DIGITALE</a></li>
-      <li><a class="mobile-menu__link" href="#english-menu">ENGLISH MENU</a></li>
-      <li><a class="mobile-menu__link" href="#come-funziona">COME FUNZIONA</a></li>
-      <li><a class="mobile-menu__link" href="#prenota">PRENOTA</a></li>
-      <li><a class="mobile-menu__link" href="#gallery">GALLERY</a></li>
-      <li><a class="mobile-menu__link" href="#contatti">CONTATTI</a></li>
-      <li><a class="mobile-menu__link" href="#riconoscimenti">RICONOSCIMENTI</a></li>
+      <!-- QUESTO PORTA AL MENU -->
+      <li>
+        <a class="mobile-menu__link" href="#menu-digitale">
+          MENU DIGITALE
+        </a>
+      </li>
+
+      <!-- gli altri per ora NON fanno nulla -->
+      <li><a class="mobile-menu__link" href="#">ENGLISH MENU</a></li>
+      <li><a class="mobile-menu__link" href="#">COME FUNZIONA</a></li>
+      <li><a class="mobile-menu__link" href="#">PRENOTA</a></li>
+      <li><a class="mobile-menu__link" href="#">GALLERY</a></li>
+      <li><a class="mobile-menu__link" href="#">CONTATTI</a></li>
+      <li><a class="mobile-menu__link" href="#">RICONOSCIMENTI</a></li>
     </ul>
   </nav>
 
@@ -46,8 +59,8 @@
     <h1>All you need<br>is love<br>and food</h1>
   </section>
 
-  <!-- MENU (DINAMICO) -->
-  <main class="menu" id="menu-digitale">
+  <!-- MENU DIGITALE (TARGET) -->
+  <main class="menu" id="menu-digitale"></main>
 
   <!-- FOOTER -->
   <footer class="note">
@@ -57,5 +70,6 @@
   <!-- JS -->
   <script src="/js/config.js"></script>
   <script src="/js/menu.js?v=2"></script>
+
 </body>
 </html>
