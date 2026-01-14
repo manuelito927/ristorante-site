@@ -43,33 +43,156 @@
     <h1>All you need<br>is love<br>and food</h1>
   </section>
 
-  <script>
-    (function(){
-      const btn = document.getElementById("jsHamburger");
-      const menu = document.getElementById("jsMobileMenu");
-      const back = document.getElementById("jsMenuBackdrop");
-      if(!btn || !menu || !back) return;
+<script>
+  (function(){
+    // ====== CONFIG ======
+    const API = (window.API_BASE || "").trim();  // arriva da /js/config.js se lo hai
+    const WHATSAPP_NUMBER = "+393921541210";      // <-- METTI QUI IL NUMERO DEL RISTORANTE (solo cifre, es: 39...)
+    // ====================
 
-      function openMenu(){
-        menu.classList.add("is-open");
-        back.hidden = false;
-        btn.setAttribute("aria-expanded","true");
-      }
-      function closeMenu(){
-        menu.classList.remove("is-open");
-        back.hidden = true;
-        btn.setAttribute("aria-expanded","false");
-      }
+    // MENU MOBILE (uguale a prima)
+    const btn = document.getElementById("jsHamburger");
+    const menu = document.getElementById("jsMobileMenu");
+    const back = document.getElementById("jsMenuBackdrop");
 
+    function openMenu(){
+      menu.classList.add("is-open");
+      back.hidden = false;
+      btn.setAttribute("aria-expanded","true");
+    }
+    function closeMenu(){
+      menu.classList.remove("is-open");
+      back.hidden = true;
+      btn.setAttribute("aria-expanded","false");
+    }
+
+    if(btn && menu && back){
       btn.addEventListener("click", () => {
         const isOpen = btn.getAttribute("aria-expanded") === "true";
         isOpen ? closeMenu() : openMenu();
       });
-
       back.addEventListener("click", closeMenu);
       menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
-    })();
-  </script>
+    }
+
+    // ====== PRENOTA LOGIC ======
+    const form = document.getElementById("prenotaForm");
+    if(!form) return;
+
+    // Crea (una volta) una sezione "success" sotto al form
+    const successBox = document.createElement("div");
+    successBox.style.display = "none";
+    successBox.style.marginTop = "14px";
+    successBox.innerHTML = `
+      <div style="padding:14px;border:1px solid rgba(0,0,0,.12);border-radius:14px;background:#f6f1ea;">
+        <div style="font-weight:700; font-size:16px; margin-bottom:6px;">✅ Richiesta inviata</div>
+        <div style="opacity:.8; font-size:14px; line-height:1.4;">
+          Ora premi il bottone qui sotto per inviare la richiesta anche su WhatsApp al ristorante.
+        </div>
+
+        <a id="waLink"
+           href="#"
+           target="_blank"
+           rel="noopener"
+           style="display:block;text-align:center;margin-top:12px;padding:12px 14px;border-radius:14px;
+                  border:1px solid rgba(0,0,0,.18);background:#151515;color:#fff;text-decoration:none;">
+          Invia su WhatsApp al ristorante
+        </a>
+
+        <div style="margin-top:10px; font-size:13px; opacity:.75;">
+          * La conferma/cancellazione verrà gestita dal ristorante. Se vuoi, puoi lasciare WhatsApp aperto.
+        </div>
+      </div>
+    `;
+    form.appendChild(successBox);
+
+    const waLink = successBox.querySelector("#waLink");
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    function buildWhatsAppText(payload, reservationId){
+      // Messaggio precompilato chiaro e compatto
+      const lines = [
+        "📌 *Richiesta prenotazione +400°*",
+        reservationId ? `ID richiesta: #${reservationId}` : "",
+        `Nome: ${payload.name}`,
+        `Tel: ${payload.phone}`,
+        `Persone: ${payload.people}`,
+        `Quando: ${payload.date} • ${payload.time}`,
+        payload.notes ? `Note: ${payload.notes}` : "Note: —",
+      ].filter(Boolean);
+
+      return lines.join("\n");
+    }
+
+    function openWhatsApp(text){
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+      return url;
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      // Leggi i campi
+      const fd = new FormData(form);
+      const payload = {
+        date: String(fd.get("date") || "").trim(),
+        time: String(fd.get("time") || "").trim(),
+        people: Number(fd.get("people") || 2),
+        phone: String(fd.get("phone") || "").trim(),
+        name: String(fd.get("name") || "").trim(),
+        notes: String(fd.get("notes") || "").trim()
+      };
+
+      // Validazioni base
+      if(!payload.date || !payload.time || !payload.phone || !payload.name){
+        alert("Compila data, ora, telefono e nome.");
+        return;
+      }
+      if(!Number.isFinite(payload.people) || payload.people < 1) payload.people = 1;
+
+      // Disabilita bottone
+      if(submitBtn){
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Invio...";
+      }
+
+      try {
+        // Se API_BASE non c'è, proviamo stesso dominio (ma nel tuo caso c'è)
+        const base = API || "";
+        const res = await fetch(base + "/api/reservations", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json().catch(() => ({}));
+        if(!res.ok) throw new Error(data.error || ("HTTP " + res.status));
+
+        // Mostra box e prepara link WA
+        const reservationId = data?.reservation?.id || null;
+        const text = buildWhatsAppText(payload, reservationId);
+        waLink.href = openWhatsApp(text);
+
+        successBox.style.display = "block";
+
+        // (opzionale) scroll fino al bottone WA
+        successBox.scrollIntoView({ behavior: "smooth", block: "start" });
+
+        // Reset form (così non lo reinvia per sbaglio)
+        form.reset();
+
+      } catch (err) {
+        alert("❌ Errore invio: " + (err.message || err));
+      } finally {
+        if(submitBtn){
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Invia richiesta";
+        }
+      }
+    });
+
+  })();
+</script>
 
 </body>
 </html>
