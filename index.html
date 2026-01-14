@@ -5,124 +5,57 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GREENWOOD</title>
 
-  <!-- CSS -->
   <link rel="stylesheet" href="/css/styles.css?v=2">
 </head>
-
 <body>
 
-  <!-- TOP BAR (hamburger + logo) -->
-  <header class="topbar">
-    <button class="hamburger" id="menuBtn" aria-label="Apri menu" aria-expanded="false" type="button">
-      <span></span><span></span><span></span>
-    </button>
+  <!-- HEADER -->
+  <header class="header">
+    <button id="jsHamburger" class="menu-btn" aria-label="Apri menu" aria-expanded="false">☰</button>
 
-    <div class="brand">
-      <div class="brand-mark">+400°</div>
-      <div class="brand-sub">QUATTROCENTO GRADI</div>
+    <div class="logo">
+      <span class="logo-mark">+400°</span>
+      <span class="logo-text">QUATTROCENTO GRADI</span>
     </div>
   </header>
 
-  <!-- MENU A TENDINA (come in foto) -->
-  <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
-    <div class="mobile-menu__header">
-      <div class="brand brand--menu">
-        <div class="brand-mark">+400°</div>
-        <div class="brand-sub">QUATTROCENTO GRADI</div>
+  <!-- MENU MOBILE (overlay) -->
+  <div id="jsMenuBackdrop" class="menu-backdrop" hidden></div>
+
+  <nav id="jsMobileMenu" class="mobile-menu" aria-label="Menu principale">
+    <div class="mobile-menu__head">
+      <div class="mobile-logo">
+        <span class="mobile-logo__mark">+400°</span>
+        <span class="mobile-logo__text">QUATTROCENTO GRADI</span>
       </div>
     </div>
 
     <ul class="mobile-menu__list">
-      <li><a href="#menu" class="mobile-menu__link">MENU DIGITALE</a></li>
-      <li><a href="#english" class="mobile-menu__link">ENGLISH MENU</a></li>
-      <li><a href="#come-funziona" class="mobile-menu__link">COME FUNZIONA</a></li>
-      <li><a href="#prenota" class="mobile-menu__link">PRENOTA</a></li>
-      <li><a href="#gallery" class="mobile-menu__link">GALLERY</a></li>
-      <li><a href="#contatti" class="mobile-menu__link">CONTATTI</a></li>
-      <li><a href="#riconoscimenti" class="mobile-menu__link">RICONOSCIMENTI</a></li>
+      <li><a class="mobile-menu__link" href="#menu-digitale">MENU DIGITALE</a></li>
+      <li><a class="mobile-menu__link" href="#english-menu">ENGLISH MENU</a></li>
+      <li><a class="mobile-menu__link" href="#come-funziona">COME FUNZIONA</a></li>
+      <li><a class="mobile-menu__link" href="#prenota">PRENOTA</a></li>
+      <li><a class="mobile-menu__link" href="#gallery">GALLERY</a></li>
+      <li><a class="mobile-menu__link" href="#contatti">CONTATTI</a></li>
+      <li><a class="mobile-menu__link" href="#riconoscimenti">RICONOSCIMENTI</a></li>
     </ul>
   </nav>
-  <div class="menu-backdrop" id="menuBackdrop" hidden></div>
 
-  <!-- HERO (può restare, non è prioritaria) -->
+  <!-- HERO -->
   <section class="hero">
     <h1>All you need<br>is love<br>and food</h1>
   </section>
 
-  <!-- MENU -->
-  <main class="menu" id="menu">
-
-    <!-- ANTIPASTI -->
-    <section class="menu-section">
-      <button class="menu-title js-toggle" type="button" aria-expanded="false">
-        <h2>Antipasti</h2>
-        <span class="plus">+</span>
-      </button>
-
-      <div class="menu-content" hidden>
-        <div class="item">
-          <div class="item-row">
-            <span>Siamo fritti</span>
-            <span>10.00</span>
-          </div>
-          <div class="item-desc">Arancini, crocchette, polpette</div>
-        </div>
-
-        <div class="item">
-          <div class="item-row">
-            <span>Arancino al pistacchio</span>
-            <span>8.00</span>
-          </div>
-          <div class="item-desc">Mortadella, pistacchio, fior di latte</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PIZZE -->
-    <section class="menu-section">
-      <button class="menu-title js-toggle" type="button" aria-expanded="false">
-        <h2>Pizze</h2>
-        <span class="plus">+</span>
-      </button>
-
-      <div class="menu-content" hidden>
-        <div class="item">
-          <div class="item-row">
-            <span>Margherita</span>
-            <span>6.00</span>
-          </div>
-          <div class="item-desc">Pomodoro, fior di latte, basilico</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- BEVANDE -->
-    <section class="menu-section">
-      <button class="menu-title js-toggle" type="button" aria-expanded="false">
-        <h2>Bevande</h2>
-        <span class="plus">+</span>
-      </button>
-
-      <div class="menu-content" hidden>
-        <div class="item">
-          <div class="item-row">
-            <span>Acqua</span>
-            <span>2.00</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
+  <!-- MENU (DINAMICO) -->
+  <main class="menu" id="menu-digitale"></main>
 
   <!-- FOOTER -->
-  <footer class="note" id="contatti">
+  <footer class="note">
     <p>*Attualmente il menu non dispone di opzioni senza glutine.</p>
   </footer>
 
   <!-- JS -->
   <script src="/js/config.js"></script>
-  <script src="/js/menu.js?v=2" defer></script>
-
+  <script src="/js/menu.js?v=2"></script>
 </body>
 </html>
