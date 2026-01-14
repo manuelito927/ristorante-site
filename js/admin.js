@@ -55,7 +55,6 @@
     grid.innerHTML = "Caricamento...";
     const { items } = await api("/api/menu");
 
-    // raggruppa per categoria
     grid.innerHTML = "";
     items.forEach((it) => {
       const card = document.createElement("div");
@@ -66,38 +65,65 @@
           <strong>${escapeHtml(it.name)}</strong>
           <span>€ ${fromCents(it.price_cents)}</span>
         </div>
+
         <div style="opacity:.75; font-size:14px; margin-top:6px;">
-          ${escapeHtml(it.category || "")} • pos ${it.position}
+          IT: ${escapeHtml(it.category || "")} • pos ${it.position}
         </div>
+        <div style="opacity:.7; font-size:13px; margin-top:4px;">
+          EN: ${escapeHtml(it.category_en || "")}
+        </div>
+
         <div style="margin-top:8px; font-size:14px; opacity:.85;">
-          ${escapeHtml(it.description || "")}
+          <div><strong>IT</strong> — ${escapeHtml(it.description || "")}</div>
+          <div style="margin-top:6px;"><strong>EN</strong> — ${escapeHtml(it.description_en || "")}</div>
         </div>
 
         <div class="row" style="margin-top:12px;">
           <div style="flex:1; min-width:180px;">
-            <label>Nome</label>
+            <label>Nome (IT)</label>
             <input data-k="name" value="${escapeAttr(it.name)}"/>
           </div>
+
+          <div style="flex:1; min-width:180px;">
+            <label>Name (EN)</label>
+            <input data-k="name_en" value="${escapeAttr(it.name_en || "")}"/>
+          </div>
+
           <div style="width:160px; min-width:140px;">
             <label>Prezzo (€)</label>
             <input data-k="price" type="number" step="0.01" value="${fromCents(it.price_cents)}"/>
           </div>
+
           <div style="flex:1; min-width:180px;">
-            <label>Categoria</label>
+            <label>Categoria (IT)</label>
             <input data-k="category" value="${escapeAttr(it.category || "")}"/>
           </div>
+
+          <div style="flex:1; min-width:180px;">
+            <label>Category (EN)</label>
+            <input data-k="category_en" value="${escapeAttr(it.category_en || "")}"/>
+          </div>
+
           <div style="width:130px; min-width:110px;">
             <label>Pos</label>
             <input data-k="position" type="number" step="1" value="${it.position}"/>
           </div>
+
           <div style="flex:1; min-width:240px;">
             <label>Immagine URL</label>
             <input data-k="image_url" value="${escapeAttr(it.image_url || "")}"/>
           </div>
+
           <div style="flex:1; min-width:240px;">
-            <label>Descrizione</label>
+            <label>Descrizione (IT)</label>
             <textarea data-k="description">${escapeHtml(it.description || "")}</textarea>
           </div>
+
+          <div style="flex:1; min-width:240px;">
+            <label>Description (EN)</label>
+            <textarea data-k="description_en">${escapeHtml(it.description_en || "")}</textarea>
+          </div>
+
           <div style="width:170px; min-width:150px;">
             <label>Disponibile</label>
             <select data-k="is_available">
@@ -151,9 +177,16 @@
     const get = (k) => card.querySelector(`[data-k="${k}"]`);
     return {
       name: get("name").value.trim(),
+      name_en: get("name_en").value.trim(),
+
       description: get("description").value.trim(),
+      description_en: get("description_en").value.trim(),
+
       price_cents: toCents(get("price").value),
+
       category: get("category").value.trim(),
+      category_en: get("category_en").value.trim(),
+
       position: Number(get("position").value || 0),
       is_available: get("is_available").value === "true",
       image_url: get("image_url").value.trim() || null
@@ -172,8 +205,6 @@
     token = tokenInput.value.trim();
     localStorage.setItem("admin_token", token);
     try {
-      // test: prova a leggere menu (pubblico) e poi salva un update finto? no.
-      // Qui basta caricare items e se admin token è sbagliato lo scopri quando salvi.
       showApp(true);
       await loadItems();
     } catch (e) {
@@ -193,26 +224,42 @@
   createBtn.onclick = async () => {
     const payload = {
       name: $("name").value.trim(),
+      name_en: ($("name_en") ? $("name_en").value.trim() : ""),
+
       description: $("description").value.trim(),
+      description_en: ($("description_en") ? $("description_en").value.trim() : ""),
+
       price_cents: toCents($("price").value),
+
       category: $("category").value.trim(),
+      category_en: ($("category_en") ? $("category_en").value.trim() : ""),
+
       position: Number($("position").value || 0),
       is_available: $("is_available").value === "true",
       image_url: $("image_url").value.trim() || null
     };
 
-    if (!payload.name) return alert("Nome obbligatorio");
+    if (!payload.name) return alert("Nome (IT) obbligatorio");
+    if (!payload.name_en) return alert("Name (EN) obbligatorio");
     if (!Number.isFinite(payload.price_cents)) return alert("Prezzo non valido");
 
     try {
       await api("/api/admin/menu", { method: "POST", body: JSON.stringify(payload) });
+
       $("name").value = "";
+      if ($("name_en")) $("name_en").value = "";
+
       $("description").value = "";
+      if ($("description_en")) $("description_en").value = "";
+
       $("price").value = "";
       $("category").value = "";
+      if ($("category_en")) $("category_en").value = "";
+
       $("position").value = "0";
       $("image_url").value = "";
       $("is_available").value = "true";
+
       await loadItems();
       alert("✅ Aggiunto");
     } catch (e) {
