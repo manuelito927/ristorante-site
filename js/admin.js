@@ -454,6 +454,7 @@
     showApp(true);
     loadItems()
       .then(loadComeFunziona)
+      .then(loadReservations)
       .catch(() => showApp(false));
   } else {
     showApp(false);
