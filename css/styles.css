@@ -53,12 +53,13 @@ body{
 .hero{
   /* 1. Altezza della foto: occupa il 70% della schermata del cellulare */
   min-height: 70vh; 
-  padding: var(--pad);
+  /* Padding aumentato in basso (60px) per distanziare la scritta dal bordo */
+  padding: var(--pad) var(--pad) 60px var(--pad);
   
-  /* 2. Centratura perfetta del testo */
+  /* 2. Allineamento spostato in basso */
   display: flex;
-  align-items: center;    /* Centra verticalmente */
-  justify-content: center; /* Centra orizzontalmente */
+  align-items: flex-end;    /* Sposta il testo verso il basso */
+  justify-content: center;  /* Mantiene il testo centrato orizzontalmente */
   text-align: center;
 
   /* 3. Sfondo: rimosso il gradiente chiaro, messo un overlay scuro per far leggere il bianco */
