@@ -9,7 +9,7 @@ html,body{ margin:0; padding:0; }
 body{
   background:#f6f1ea;
   color:#151515;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Cambiato in Sans-Serif per uniformità */
 }
 
 /* HEADER */
@@ -47,15 +47,23 @@ body{
   opacity: .9;
 }
 
-/* HERO */
+/* ============================================================
+   HERO (MODIFICATA PER ESSERE COME 400 GRADI)
+   ============================================================ */
 .hero{
-  min-height: 260px;
-  padding: 46px var(--pad) 22px;
-  display:flex;
-  align-items:flex-end;
+  /* 1. Altezza della foto: occupa il 70% della schermata del cellulare */
+  min-height: 70vh; 
+  padding: var(--pad);
+  
+  /* 2. Centratura perfetta del testo */
+  display: flex;
+  align-items: center;    /* Centra verticalmente */
+  justify-content: center; /* Centra orizzontalmente */
+  text-align: center;
 
-  background-image:
-    linear-gradient(to bottom, rgba(246,241,234,.10), rgba(246,241,234,.85)),
+  /* 3. Sfondo: rimosso il gradiente chiaro, messo un overlay scuro per far leggere il bianco */
+  background-image: 
+    linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
     url("/assets/img/hero.jpg");
   background-size: cover;
   background-position: center;
@@ -63,12 +71,15 @@ body{
 }
 
 .hero h1{
-  margin:0;
-  font-weight: 700;
-  line-height: .92;
-  letter-spacing: -.5px;
-  font-size: 54px;
-  color:#151515;
+  margin: 0;
+  /* 4. Font: Bold, Sans-Serif e Bianco come in foto */
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 800; 
+  line-height: 0.95;
+  letter-spacing: -1.5px;
+  font-size: 62px; /* Dimensione grande */
+  color: #ffffff;  /* Testo bianco */
+  text-transform: none;
 }
 
 /* MENU (accordion) */
@@ -151,25 +162,23 @@ body{
    MENU MOBILE A TENDINA (STILE 400 GRADI)
    ============================================================ */
 
-/* Overlay scuro dietro il menu */
 .menu-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.3); /* Leggermente più scuro per far risaltare il bianco */
+  background: rgba(0,0,0,.3);
   z-index: 60;
   backdrop-filter: blur(2px);
 }
 
-/* Pannello del menu */
 .mobile-menu {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 70;
-  background: #ffffff; /* Bianco puro come in foto */
+  background: #ffffff;
   transform: translateY(-105%);
-  transition: transform .3s cubic-bezier(0.4, 0, 0.2, 1); /* Animazione più fluida */
+  transition: transform .3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
@@ -177,12 +186,11 @@ body{
   transform: translateY(0);
 }
 
-/* Logo all'interno del menu (Centrato) */
 .mobile-menu__head {
-  padding: 40px 0 30px 0; /* Più spazio verticale come nell'originale */
+  padding: 40px 0 30px 0;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centra il logo perfettamente */
+  align-items: center;
   border-bottom: 1px solid #f2f2f2; 
 }
 
@@ -195,8 +203,8 @@ body{
 
 .mobile-logo__mark {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: 300; /* Più sottile e leggero */
-  font-size: 56px;   /* Molto grande come nella foto */
+  font-weight: 300;
+  font-size: 56px; 
   letter-spacing: -3px;
   line-height: 1;
   color: #000;
@@ -204,15 +212,14 @@ body{
 
 .mobile-logo__text {
   font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 11px;   /* Più piccolo */
-  letter-spacing: 0.3em; /* Molto spaziato */
+  font-size: 11px; 
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   color: #000;
   margin-top: 8px;
   font-weight: 400;
 }
 
-/* Lista delle voci del menu */
 .mobile-menu__list {
   list-style: none;
   margin: 0;
@@ -220,22 +227,21 @@ body{
 }
 
 .mobile-menu__list li {
-  border-bottom: 1px solid #f2f2f2; /* Linea grigio chiarissimo */
+  border-bottom: 1px solid #f2f2f2;
 }
 
 .mobile-menu__link {
   display: block;
-  padding: 22px var(--pad); /* Padding generoso */
+  padding: 22px var(--pad);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  font-size: 13px; /* Dimensione precisa per il look minimal */
-  color: #444;    /* Grigio scuro, non nero assoluto */
+  font-size: 13px;
+  color: #444;    
   text-decoration: none;
   transition: background 0.2s;
 }
 
-/* Effetto al tocco */
 .mobile-menu__link:active {
   background: #fafafa;
   color: #000;
