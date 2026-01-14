@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Come funziona - Quattrocento Gradi</title>
   <link rel="stylesheet" href="/css/styles.css?v=3">
+
   <style>
-    /* Mini-stile “poster” per assomigliare alle tue foto */
     .poster-wrap{ max-width: 980px; margin: 0 auto; padding: 36px 18px 80px; }
     .poster{ padding: 48px 0; border-bottom: 1px solid rgba(0,0,0,.10); }
     .poster:last-child{ border-bottom: 0; }
@@ -21,6 +21,7 @@
       font-size: clamp(22px, 3.6vw, 40px);
       line-height: 1.05;
       letter-spacing: -0.01em;
+      white-space: pre-line; /* IMPORTANTISSIMO: rispetta i \n dal DB */
     }
     .bar{ width: 90px; height: 6px; background:#111; margin: 26px 0 0; }
     .muted{ opacity:.9; }
@@ -28,17 +29,14 @@
 </head>
 <body>
 
-  <!-- HEADER -->
   <header class="header">
     <button id="jsHamburger" class="menu-btn" aria-label="Apri menu" aria-expanded="false">☰</button>
-
     <div class="logo">
       <span class="logo-mark">+400°</span>
       <span class="logo-text">QUATTROCENTO GRADI</span>
     </div>
   </header>
 
-  <!-- MENU MOBILE -->
   <div id="jsMenuBackdrop" class="menu-backdrop" hidden></div>
 
   <nav id="jsMobileMenu" class="mobile-menu" aria-label="Menu principale" hidden>
@@ -56,107 +54,91 @@
     </ul>
   </nav>
 
-  <!-- HERO -->
   <section class="hero">
     <h1>Come funziona</h1>
   </section>
 
-  <!-- CONTENUTO “POSTER” -->
+  <!-- CONTENUTO: ora viene dal DB -->
   <main class="poster-wrap">
 
-    <!-- ORARI -->
     <section class="poster">
-      <h2>Orari di<br>apertura</h2>
+      <h2 id="hours_it_title">Orari di apertura</h2>
 
-      <p class="muted">
-        Dal Lunedì al Venerdì dalle 19.30<br>
-        Sabato e Domenica dalle 19.00
-      </p>
+      <p id="hours_it_text" class="muted"></p>
+      <p id="hours_en_text" class="muted" style="margin-top:22px;"></p>
 
-      <p style="margin-top:22px;" class="muted">
-        Open Every day from 7.30 p.m.<br>
-        Saturday and Sunday from 7.00 pm
-      </p>
-
-      <p style="margin-top:22px;" class="muted">
-        391.3318359
-      </p>
-
-      <p style="margin-top:22px;" class="muted">
-        Viale Porta d’Europa, 65<br>
-        LECCE
-      </p>
+      <p id="phone" class="muted" style="margin-top:22px;"></p>
+      <p id="address" class="muted" style="margin-top:22px;"></p>
 
       <div class="bar"></div>
     </section>
 
-    <!-- TAKE AWAY -->
     <section class="poster">
-      <h2>Take Away//<br>Servizio di asporto</h2>
-
-      <p class="muted">
-        È possibile ordinare le nostre pizze da asporto
-        direttamente presso la nostra sede.
-      </p>
-
+      <h2 id="takeaway_title">Take Away// Servizio di asporto</h2>
+      <p id="takeaway_text" class="muted"></p>
       <div class="bar"></div>
     </section>
 
-    <!-- GLUTINE/LATTOSIO -->
     <section class="poster">
-      <h2>Senza glutine e<br>senza lattosio//</h2>
-
-      <p class="muted">
-        Attualmente il menu non dispone di opzione senza glutine
-        e di impasti con farine alternative.
-      </p>
-
-      <p style="margin-top:22px;" class="muted">
-        **Opzioni senza lattosio disponibili
-      </p>
-
+      <h2 id="gluten_title">Senza glutine e senza lattosio//</h2>
+      <p id="gluten_text" class="muted"></p>
+      <p id="lactose_text" class="muted" style="margin-top:22px;"></p>
       <div class="bar"></div>
     </section>
 
-    <!-- ANIMALI -->
     <section class="poster">
-      <h2>Amici a 4 zampe //</h2>
-
-      <p class="muted">
-        Sono ammessi gli animali di piccola taglia.
-      </p>
-
+      <h2 id="pets_title">Amici a 4 zampe //</h2>
+      <p id="pets_text" class="muted"></p>
       <div class="bar"></div>
     </section>
 
   </main>
 
-  <!-- JS menu -->
   <script>
+    // Menu mobile open/close
     (function(){
       const btn = document.getElementById("jsHamburger");
       const menu = document.getElementById("jsMobileMenu");
       const back = document.getElementById("jsMenuBackdrop");
       if(!btn || !menu || !back) return;
 
-      function openMenu(){
-        menu.hidden = false;
-        back.hidden = false;
-        btn.setAttribute("aria-expanded","true");
-      }
-      function closeMenu(){
-        menu.hidden = true;
-        back.hidden = true;
-        btn.setAttribute("aria-expanded","false");
-      }
+      function openMenu(){ menu.hidden = false; back.hidden = false; btn.setAttribute("aria-expanded","true"); }
+      function closeMenu(){ menu.hidden = true; back.hidden = true; btn.setAttribute("aria-expanded","false"); }
 
       btn.addEventListener("click", () => {
         const isOpen = btn.getAttribute("aria-expanded") === "true";
         isOpen ? closeMenu() : openMenu();
       });
-
       back.addEventListener("click", closeMenu);
       menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
+    })();
+
+    // ✅ Carica contenuti dal Worker
+    (async function(){
+      const API = "https://still-haze-01c8.filosofiaefficace.workers.dev";
+      const res = await fetch(API + "/api/page/come-funziona?t=" + Date.now(), { cache: "no-store" });
+      const json = await res.json();
+      const d = json.data || {};
+
+      // helper: set text if exists
+      const set = (id, val) => {
+        const el = document.getElementById(id);
+        if(!el) return;
+        el.textContent = val || "";
+      };
+
+      set("hours_it_title", d.hours_it_title);
+      set("hours_it_text", d.hours_it_text);
+      set("hours_en_text", d.hours_en_text);
+      set("phone", d.phone);
+      set("address", d.address);
+      set("takeaway_title", d.takeaway_title);
+      set("takeaway_text", d.takeaway_text);
+      set("gluten_title", d.gluten_title);
+      set("gluten_text", d.gluten_text);
+      set("lactose_text", d.lactose_text);
+      set("pets_title", d.pets_title);
+      set("pets_text", d.pets_text);
     })();
   </script>
 
