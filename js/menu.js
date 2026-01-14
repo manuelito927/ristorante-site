@@ -3,94 +3,142 @@
     (window.API_BASE && String(window.API_BASE).replace(/\/$/, "")) ||
     "https://still-haze-01c8.filosofiaefficace.workers.dev";
 
-  // 1) Recupero dati dal Worker
+  // ============================
+  // 1) RECUPERO DATI DAL WORKER
+  // ============================
+  let items = [];
   try {
     const res = await fetch(`${API}/api/menu?t=${Date.now()}`, { cache: "no-store" });
     const data = await res.json();
-    const items = data.items || [];
-
-    // 2) Raggruppamento per categoria
-    const byCat = new Map();
-    for (const it of items) {
-      const cat = it.category || "Altro";
-      if (!byCat.has(cat)) byCat.set(cat, []);
-      byCat.get(cat).push(it);
-    }
-
-    // Ordinamento interno alle categorie
-    for (const [cat, arr] of byCat.entries()) {
-      arr.sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
-    }
-
-    // 3) Rendering dinamico del menu (Accordion)
-    const menuEl = document.querySelector("main.menu") || document.querySelector(".menu");
-    if (menuEl) {
-      menuEl.innerHTML = "";
-      for (const [cat, arr] of byCat.entries()) {
-        const sec = document.createElement("section");
-        sec.className = "menu-section";
-
-        sec.innerHTML = `
-          <button class="menu-title js-toggle" type="button" aria-expanded="false">
-            <h2>${escapeHtml(cat)}</h2>
-            <span class="plus">+</span>
-          </button>
-          <div class="menu-content" hidden>
-            ${arr.map(it => `
-              <div class="item">
-                <div class="item-row">
-                  <span>${escapeHtml(it.name)}</span>
-                  <span>€ ${formatEuro(it.price_cents)}</span>
-                </div>
-                ${it.description ? `<div class="item-desc">${escapeHtml(it.description)}</div>` : ``}
-              </div>
-            `).join("")}
-          </div>
-        `;
-        menuEl.appendChild(sec);
-      }
-
-      // Attivazione click Accordion
-      document.querySelectorAll(".js-toggle").forEach((btn) => {
-        const content = btn.nextElementSibling;
-        const plus = btn.querySelector(".plus");
-
-        btn.addEventListener("click", () => {
-          const isOpen = btn.getAttribute("aria-expanded") === "true";
-          btn.setAttribute("aria-expanded", String(!isOpen));
-          if (content) content.hidden = isOpen;
-          if (plus) plus.textContent = isOpen ? "+" : "–";
-        });
-      });
-    }
+    items = data.items || [];
   } catch (err) {
     console.error("Errore nel caricamento del menu:", err);
   }
 
+  // ============================
+  // 2) LINGUA (IT / EN)
+  // ============================
+  let LANG = localStorage.getItem("lang") || "it";
+  const langBtns = Array.from(document.querySelectorAll(".langbtn"));
+
+  function paintLang() {
+    langBtns.forEach(b => b.classList.toggle("is-active", b.dataset.lang === LANG));
+  }
+
+  function pickText(it, itField, enField) {
+    if (LANG === "en") {
+      const v = it[enField];
+      if (v && String(v).trim()) return String(v);
+    }
+    return String(it[itField] || "");
+  }
+
+  langBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      LANG = btn.dataset.lang || "it";
+      localStorage.setItem("lang", LANG);
+      paintLang();
+      renderMenu();
+    });
+  });
+
+  paintLang();
+
+  // ============================
+  // 3) RENDER MENU (ACCORDION)
+  // ============================
+  const menuEl = document.querySelector("main.menu") || document.querySelector(".menu");
+
+  function renderMenu() {
+    if (!menuEl) return;
+
+    // Raggruppa per categoria (in base alla lingua)
+    const byCat = new Map();
+    for (const it of items) {
+      const cat = pickText(it, "category", "category_en") || "Altro";
+      if (!byCat.has(cat)) byCat.set(cat, []);
+      byCat.get(cat).push(it);
+    }
+
+    // Ordina per position dentro categoria
+    for (const arr of byCat.values()) {
+      arr.sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+    }
+
+    // Render HTML
+    menuEl.innerHTML = "";
+    for (const [cat, arr] of byCat.entries()) {
+      const sec = document.createElement("section");
+      sec.className = "menu-section";
+
+      sec.innerHTML = `
+        <button class="menu-title js-toggle" type="button" aria-expanded="false">
+          <h2>${escapeHtml(cat)}</h2>
+          <span class="plus">+</span>
+        </button>
+        <div class="menu-content" hidden>
+          ${arr.map(it => {
+            const name = pickText(it, "name", "name_en");
+            const desc = pickText(it, "description", "description_en");
+            return `
+              <div class="item">
+                <div class="item-row">
+                  <span>${escapeHtml(name)}</span>
+                  <span>€ ${formatEuro(it.price_cents)}</span>
+                </div>
+                ${desc ? `<div class="item-desc">${escapeHtml(desc)}</div>` : ``}
+              </div>
+            `;
+          }).join("")}
+        </div>
+      `;
+      menuEl.appendChild(sec);
+    }
+
+    // Attiva accordion
+    document.querySelectorAll(".js-toggle").forEach((btn) => {
+      const content = btn.nextElementSibling;
+      const plus = btn.querySelector(".plus");
+
+      btn.addEventListener("click", () => {
+        const isOpen = btn.getAttribute("aria-expanded") === "true";
+        btn.setAttribute("aria-expanded", String(!isOpen));
+        if (content) content.hidden = isOpen;
+        if (plus) plus.textContent = isOpen ? "+" : "–";
+      });
+    });
+  }
+
+  renderMenu();
+
   /* ==========================================
-     GESTIONE MENU MOBILE (STILE 400 GRADI)
+     4) GESTIONE MENU MOBILE (STILE 400 GRADI)
      ========================================== */
   const burger = document.getElementById("jsHamburger");
   const mobileMenu = document.getElementById("jsMobileMenu");
   const backdrop = document.getElementById("jsMenuBackdrop");
 
   function openMenu() {
+    if (!mobileMenu) return;
     mobileMenu.classList.add("is-open");
     if (backdrop) backdrop.hidden = false;
-    document.body.style.overflow = "hidden"; // Blocca lo scroll sotto
-    burger.setAttribute("aria-expanded", "true");
+    document.body.style.overflow = "hidden";
+    if (burger) burger.setAttribute("aria-expanded", "true");
   }
 
   function closeMenu() {
+    if (!mobileMenu) return;
     mobileMenu.classList.remove("is-open");
-    // Aspettiamo la fine della transizione CSS prima di nascondere il backdrop
+
+    // aspetta fine transizione
     setTimeout(() => {
-        if (!mobileMenu.classList.contains("is-open") && backdrop) {
-            backdrop.hidden = true;
-        }
-    }, 300); 
-    document.body.style.overflow = ""; // Riattiva lo scroll
-    burger.setAttribute("aria-expanded", "false");
+      if (backdrop && !mobileMenu.classList.contains("is-open")) {
+        backdrop.hidden = true;
+      }
+    }, 300);
+
+    document.body.style.overflow = "";
+    if (burger) burger.setAttribute("aria-expanded", "false");
   }
 
   if (burger && mobileMenu) {
@@ -101,21 +149,23 @@
     });
 
     if (backdrop) {
-        backdrop.addEventListener("click", closeMenu);
+      backdrop.addEventListener("click", closeMenu);
     }
 
-    // Chiudi il menu quando clicchi su un link (es. #gallery, #contatti)
+    // Chiudi menu quando clicchi un link
     mobileMenu.querySelectorAll("a").forEach((a) => {
       a.addEventListener("click", closeMenu);
     });
 
-    // Chiudi con tasto ESC
+    // Chiudi con ESC
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closeMenu();
     });
   }
 
-  // Utility functions
+  // ============================
+  // Utility
+  // ============================
   function formatEuro(cents) {
     const n = Number(cents || 0) / 100;
     return n.toFixed(2);
