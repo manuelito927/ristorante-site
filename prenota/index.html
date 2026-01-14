@@ -170,20 +170,22 @@
 
         <button class="btn-primary" type="submit">Invia richiesta</button>
 
-        <div class="note-small">
-          * Per ora questa pagina è solo grafica. Nel prossimo step colleghiamo l’invio al Worker e la vedrai nell’Admin.
+        <div class="note-small" id="noteMsg">
+          * La richiesta verrà inviata al sistema del locale.
         </div>
       </form>
     </div>
   </main>
 
-  <!-- JS: menu mobile + blocco submit (per ora) -->
+  <!-- ✅ serve per window.API_BASE -->
+  <script src="/js/config.js"></script>
+
+  <!-- JS: menu mobile + INVIO al Worker -->
   <script>
     (function(){
       const btn = document.getElementById("jsHamburger");
       const menu = document.getElementById("jsMobileMenu");
       const back = document.getElementById("jsMenuBackdrop");
-      if(!btn || !menu || !back) return;
 
       function openMenu(){
         menu.classList.add("is-open");
@@ -196,20 +198,75 @@
         btn.setAttribute("aria-expanded","false");
       }
 
-      btn.addEventListener("click", () => {
-        const isOpen = btn.getAttribute("aria-expanded") === "true";
-        isOpen ? closeMenu() : openMenu();
-      });
+      if(btn && menu && back){
+        btn.addEventListener("click", () => {
+          const isOpen = btn.getAttribute("aria-expanded") === "true";
+          isOpen ? closeMenu() : openMenu();
+        });
 
-      back.addEventListener("click", closeMenu);
-      menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
+        back.addEventListener("click", closeMenu);
+        menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
+      }
 
-      // Per ora: non invia nulla (lo colleghiamo al Worker nel prossimo step)
+      // ===== INVIO REALE =====
       const form = document.getElementById("prenotaForm");
+      const noteMsg = document.getElementById("noteMsg");
+
       if(form){
-        form.addEventListener("submit", (e) => {
+        form.addEventListener("submit", async (e) => {
           e.preventDefault();
-          alert("✅ Pagina OK. Nel prossimo step colleghiamo l’invio e la prenotazione arriva nell’Admin.");
+
+          const API = window.API_BASE || ""; // se non c'è, usa relative path
+          const btnSubmit = form.querySelector('button[type="submit"]');
+
+          const fd = new FormData(form);
+          const payload = {
+            name: String(fd.get("name") || "").trim(),
+            phone: String(fd.get("phone") || "").trim(),
+            people: Number(fd.get("people") || 2),
+            date: String(fd.get("date") || "").trim(), // YYYY-MM-DD
+            time: String(fd.get("time") || "").trim(), // HH:MM
+            notes: String(fd.get("notes") || "").trim()
+          };
+
+          if (!payload.name || !payload.phone || !payload.date || !payload.time) {
+            alert("Compila tutti i campi obbligatori.");
+            return;
+          }
+          if (!Number.isFinite(payload.people) || payload.people < 1 || payload.people > 30) {
+            alert("Numero persone non valido.");
+            return;
+          }
+
+          try {
+            if(btnSubmit){
+              btnSubmit.disabled = true;
+              btnSubmit.textContent = "Invio...";
+            }
+            if(noteMsg) noteMsg.textContent = "Invio in corso...";
+
+            const res = await fetch(API + "/api/reservations", {
+              method: "POST",
+              headers: { "content-type": "application/json" },
+              body: JSON.stringify(payload)
+            });
+
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.error || ("HTTP " + res.status));
+
+            alert("✅ Richiesta inviata! Ti contatteremo per conferma.");
+            form.reset();
+            form.querySelector('[name="people"]').value = 2;
+            if(noteMsg) noteMsg.textContent = "✅ Inviata correttamente.";
+          } catch (err) {
+            alert("❌ Errore invio: " + (err.message || "sconosciuto"));
+            if(noteMsg) noteMsg.textContent = "❌ Errore durante l'invio.";
+          } finally {
+            if(btnSubmit){
+              btnSubmit.disabled = false;
+              btnSubmit.textContent = "Invia richiesta";
+            }
+          }
         });
       }
     })();
