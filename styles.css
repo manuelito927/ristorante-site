@@ -1,132 +1,50 @@
-/* RESET */
 *{ box-sizing:border-box; }
 html,body{ margin:0; padding:0; }
 
 :root{
   --pad: 18px;
   --line: rgba(0,0,0,.12);
-  --bg: #f6f1ea;
-  --ink: #151515;
-  --muted: rgba(0,0,0,.55);
-  --menuLine: rgba(0,0,0,.10);
 }
 
 body{
-  background: var(--bg);
-  color: var(--ink);
+  background:#f6f1ea;
+  color:#151515;
   font-family: Georgia, "Times New Roman", serif;
 }
 
-/* TOP BAR */
-.topbar{
+/* HEADER */
+.header{
   position: sticky;
   top: 0;
-  z-index: 30;
+  z-index: 50;
   display:flex;
   align-items:center;
-  gap: 14px;
+  gap: 12px;
   padding: 14px var(--pad);
   background: rgba(246,241,234,.92);
   backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
 }
 
-/* HAMBURGER (3 linee) */
-.hamburger{
+.menu-btn{
   border:0;
   background: transparent;
-  padding: 8px 10px;
+  font-size: 22px;
   cursor: pointer;
+  padding: 6px 8px;
+  line-height: 1;
+}
+
+.logo{
   display:flex;
-  flex-direction: column;
-  gap: 5px;
-  -webkit-appearance: none;
-  appearance: none;
+  align-items: baseline;
+  gap: 10px;
 }
-.hamburger span{
-  width: 18px;
-  height: 2px;
-  background: #111;
-  display:block;
-}
-
-/* Logo stile moderno */
-.brand{
-  display:flex;
-  flex-direction: column;
-  line-height: 1.05;
-  gap: 4px;
-}
-.brand-mark{
-  font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  font-weight: 700;
-  letter-spacing: .02em;
-  font-size: 26px;
-}
-.brand-sub{
-  font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  font-size: 11px;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  opacity: .85;
-}
-
-/* MENU MOBILE A TENDINA (come foto) */
-.mobile-menu{
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 40;
-
-  background: #fff;
-  color: #111;
-
-  transform: translateY(-100%);
-  transition: transform .25s ease;
-  box-shadow: 0 10px 30px rgba(0,0,0,.10);
-}
-.mobile-menu.is-open{
-  transform: translateY(0);
-}
-
-.mobile-menu__header{
-  padding: 16px var(--pad) 12px;
-}
-
-.brand--menu .brand-mark{ font-size: 44px; font-weight: 600; }
-.brand--menu .brand-sub{ font-size: 11px; letter-spacing: .30em; opacity: .9; }
-
-.mobile-menu__list{
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  border-top: 1px solid var(--menuLine);
-}
-.mobile-menu__list li{
-  border-bottom: 1px solid var(--menuLine);
-}
-.mobile-menu__link{
-  display:block;
-  padding: 18px var(--pad);
-  text-decoration: none;
-  color: #111;
-
-  font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+.logo-mark{ font-size: 18px; }
+.logo-text{
   font-size: 14px;
-  letter-spacing: .18em;
+  letter-spacing: .8px;
   text-transform: uppercase;
-}
-.mobile-menu__link:active{
-  background: rgba(0,0,0,.04);
-}
-
-/* backdrop dietro al menu */
-.menu-backdrop{
-  position: fixed;
-  inset: 0;
-  z-index: 35;
-  background: rgba(0,0,0,.25);
+  opacity: .9;
 }
 
 /* HERO */
@@ -136,19 +54,24 @@ body{
   display:flex;
   align-items:flex-end;
 
-  /* se vuoi rimetti l’immagine come prima */
-  background:#ddd;
+  background-image:
+    linear-gradient(to bottom, rgba(246,241,234,.10), rgba(246,241,234,.85)),
+    url("/assets/img/hero.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
+
 .hero h1{
   margin:0;
   font-weight: 700;
-  line-height: .95;
+  line-height: .92;
   letter-spacing: -.5px;
   font-size: 54px;
-  color: var(--ink);
+  color:#151515;
 }
 
-/* MENU (sezioni a fisarmonica) */
+/* MENU (accordion) */
 .menu{
   padding: 10px var(--pad);
 }
@@ -171,7 +94,6 @@ body{
   font: inherit;
   cursor: pointer;
 
-  /* FIX iPhone button default */
   -webkit-appearance: none;
   appearance: none;
   border-radius: 0;
@@ -183,13 +105,13 @@ body{
   margin:0;
   font-size: 34px;
   font-weight: 700;
-  color: var(--ink);
+  color:#151515;
 }
 
 .plus{
   font-size: 34px;
   font-weight: 300;
-  color: var(--ink);
+  color:#151515;
 }
 
 .menu-content{
@@ -223,11 +145,99 @@ body{
   color: rgba(0,0,0,.45);
   font-size: 16px;
 }
+.note p{ margin:0; }
 
-/* DESKTOP (opzionale) */
+/* =========================
+   MENU MOBILE A TENDINA
+   ========================= */
+
+/* overlay scuro */
+.menu-backdrop{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.25);
+  z-index: 60;
+}
+
+/* pannello */
+.mobile-menu{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 70;
+
+  background: #fff;
+  transform: translateY(-105%);
+  transition: transform .22s ease;
+  box-shadow: 0 20px 60px rgba(0,0,0,.18);
+}
+
+/* stato aperto */
+.mobile-menu.is-open{
+  transform: translateY(0);
+}
+
+.mobile-menu__head{
+  padding: 18px var(--pad) 8px;
+}
+
+.mobile-logo{
+  display:flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mobile-logo__mark{
+  font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-weight: 700;
+  font-size: 34px;
+  letter-spacing: -1px;
+  color:#151515;
+}
+
+.mobile-logo__text{
+  font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size: 12px;
+  letter-spacing: .35em;
+  text-transform: uppercase;
+  color:#151515;
+  opacity: .75;
+}
+
+.mobile-menu__list{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid rgba(0,0,0,.08);
+}
+
+.mobile-menu__list li{
+  border-bottom: 1px solid rgba(0,0,0,.08);
+}
+
+.mobile-menu__link{
+  display:block;
+  padding: 18px var(--pad);
+  font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-size: 14px;
+  color: #151515;
+  text-decoration: none;
+}
+
+.mobile-menu__link:active{
+  background: rgba(0,0,0,.04);
+}
+
 @media (min-width: 900px){
   :root{ --pad: 26px; }
   .hero{ min-height: 280px; padding-top: 70px; }
-  .hero h1{ font-size: 64px; }
+  .hero h1{
+    font-size: 64px;
+    color: #fff;
+    text-shadow: 0 10px 30px rgba(0,0,0,.35);
+  }
   .menu-title h2{ font-size: 38px; }
 }
