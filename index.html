@@ -8,7 +8,6 @@
 </head>
 <body>
 
-  <!-- HEADER -->
   <header class="header">
     <button id="jsHamburger" class="menu-btn" aria-label="Apri menu" aria-expanded="false">☰</button>
 
@@ -18,10 +17,10 @@
     </div>
   </header>
 
-  <!-- MENU MOBILE (overlay) -->
   <div id="jsMenuBackdrop" class="menu-backdrop" hidden></div>
 
-<nav id="jsMobileMenu" class="mobile-menu" aria-label="Menu principale">
+  <!-- ✅ tolto hidden -->
+  <nav id="jsMobileMenu" class="mobile-menu" aria-label="Menu principale">
     <div class="mobile-menu__head">
       <div class="mobile-logo">
         <span class="mobile-logo__mark">+400°</span>
@@ -30,10 +29,7 @@
     </div>
 
     <ul class="mobile-menu__list">
-      <!-- QUI: apre una pagina nuova -->
       <li><a class="mobile-menu__link" href="/menu/">MENU DIGITALE</a></li>
-
-      <!-- per ora lasciali così (poi li farai) -->
       <li><a class="mobile-menu__link" href="#">ENGLISH MENU</a></li>
       <li><a class="mobile-menu__link" href="#">COME FUNZIONA</a></li>
       <li><a class="mobile-menu__link" href="#">PRENOTA</a></li>
@@ -43,12 +39,10 @@
     </ul>
   </nav>
 
-  <!-- HERO (HOME) -->
   <section class="hero">
     <h1>All you need<br>is love<br>and food</h1>
   </section>
 
-  <!-- JS: apertura/chiusura menu -->
   <script>
     (function(){
       const btn = document.getElementById("jsHamburger");
@@ -57,12 +51,12 @@
       if(!btn || !menu || !back) return;
 
       function openMenu(){
-        menu.hidden = false;
+        menu.classList.add("is-open");
         back.hidden = false;
         btn.setAttribute("aria-expanded","true");
       }
       function closeMenu(){
-        menu.hidden = true;
+        menu.classList.remove("is-open");
         back.hidden = true;
         btn.setAttribute("aria-expanded","false");
       }
@@ -73,8 +67,6 @@
       });
 
       back.addEventListener("click", closeMenu);
-
-      // chiudi anche quando clicchi un link
       menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
     })();
   </script>
