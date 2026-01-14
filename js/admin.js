@@ -10,12 +10,26 @@
   const loginBtn = $("loginBtn");
   const logoutBtn = $("logoutBtn");
 
+  // MENU
   const createBtn = $("createBtn");
   const grid = $("itemsGrid");
 
+  // COME FUNZIONA
+  const cfSaveBtn = $("saveComeFunziona");
+  const cf_phone = $("cf_phone");
+  const cf_address = $("cf_address");
+  const cf_hours_it = $("cf_hours_it");
+  const cf_hours_en = $("cf_hours_en");
+  const cf_takeaway = $("cf_takeaway");
+  const cf_gluten = $("cf_gluten");
+  const cf_lactose = $("cf_lactose");
+  const cf_pets = $("cf_pets");
+
   let token = localStorage.getItem("admin_token") || "";
 
-  function setStatus(text) { statusEl.textContent = text; }
+  function setStatus(text) {
+    if (statusEl) statusEl.textContent = text;
+  }
 
   function authHeaders() {
     return token ? { authorization: "Bearer " + token } : {};
@@ -37,8 +51,8 @@
   }
 
   function showApp(yes) {
-    loginCard.classList.toggle("hidden", yes);
-    appCard.classList.toggle("hidden", !yes);
+    if (loginCard) loginCard.classList.toggle("hidden", yes);
+    if (appCard) appCard.classList.toggle("hidden", !yes);
     setStatus(yes ? "Connesso" : "Non connesso");
   }
 
@@ -51,8 +65,13 @@
     return (c / 100).toFixed(2);
   }
 
+  /* =========================================================
+     MENU DIGITALE - CRUD
+     ========================================================= */
+
   async function loadItems() {
     grid.innerHTML = "Caricamento...";
+    // Nota: /api/menu è pubblico, quindi non serve token per leggere
     const { items } = await api("/api/menu");
 
     grid.innerHTML = "";
@@ -61,7 +80,7 @@
       card.className = "card";
 
       card.innerHTML = `
-        <div class="item-head">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
           <strong>${escapeHtml(it.name)}</strong>
           <span>€ ${fromCents(it.price_cents)}</span>
         </div>
@@ -100,7 +119,7 @@
           </div>
 
           <div style="flex:1; min-width:180px;">
-            <label>Category (EN)</label>
+            <label>Categoria (EN)</label>
             <input data-k="category_en" value="${escapeAttr(it.category_en || "")}"/>
           </div>
 
@@ -145,7 +164,10 @@
         msg.textContent = "Salvataggio...";
         try {
           const payload = readPayload(card);
-          await api("/api/admin/menu/" + it.id, { method: "PUT", body: JSON.stringify(payload) });
+          await api("/api/admin/menu/" + it.id, {
+            method: "PUT",
+            body: JSON.stringify(payload)
+          });
           msg.textContent = "✅ Salvato";
           await loadItems();
         } catch (e) {
@@ -178,101 +200,168 @@
     return {
       name: get("name").value.trim(),
       name_en: get("name_en").value.trim(),
-
       description: get("description").value.trim(),
       description_en: get("description_en").value.trim(),
-
       price_cents: toCents(get("price").value),
-
       category: get("category").value.trim(),
       category_en: get("category_en").value.trim(),
-
       position: Number(get("position").value || 0),
       is_available: get("is_available").value === "true",
       image_url: get("image_url").value.trim() || null
     };
   }
 
-  function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, (c) => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
-    }[c]));
+  // CREA nuovo prodotto
+  if (createBtn) {
+    createBtn.onclick = async () => {
+      const payload = {
+        name: $("name").value.trim(),
+        name_en: ($("name_en") ? $("name_en").value.trim() : ""),
+        description: $("description") ? $("description").value.trim() : "",
+        description_en: $("description_en") ? $("description_en").value.trim() : "",
+        price_cents: toCents($("price").value),
+        category: $("category").value.trim(),
+        category_en: $("category_en") ? $("category_en").value.trim() : "",
+        position: Number($("position").value || 0),
+        is_available: $("is_available").value === "true",
+        image_url: $("image_url").value.trim() || null
+      };
+
+      if (!payload.name) return alert("Nome (IT) obbligatorio");
+      if (!payload.name_en) return alert("Name (EN) obbligatorio");
+      if (!Number.isFinite(payload.price_cents)) return alert("Prezzo non valido");
+
+      try {
+        await api("/api/admin/menu", { method: "POST", body: JSON.stringify(payload) });
+
+        $("name").value = "";
+        if ($("name_en")) $("name_en").value = "";
+        if ($("description")) $("description").value = "";
+        if ($("description_en")) $("description_en").value = "";
+        $("price").value = "";
+        $("category").value = "";
+        if ($("category_en")) $("category_en").value = "";
+        $("position").value = "0";
+        $("image_url").value = "";
+        $("is_available").value = "true";
+
+        await loadItems();
+        alert("✅ Aggiunto");
+      } catch (e) {
+        alert("❌ " + e.message);
+      }
+    };
   }
-  function escapeAttr(s){ return escapeHtml(s).replace(/"/g, "&quot;"); }
 
-  // LOGIN
-  loginBtn.onclick = async () => {
-    token = tokenInput.value.trim();
-    localStorage.setItem("admin_token", token);
-    try {
-      showApp(true);
-      await loadItems();
-    } catch (e) {
-      showApp(false);
-      alert("Errore: " + e.message);
-    }
-  };
+  /* =========================================================
+     COME FUNZIONA - CARICA + SALVA
+     ========================================================= */
 
-  logoutBtn.onclick = () => {
-    token = "";
-    localStorage.removeItem("admin_token");
-    tokenInput.value = "";
-    showApp(false);
-  };
+  async function loadComeFunziona() {
+    // GET pubblico: /api/page/come-funziona
+    const res = await api("/api/page/come-funziona");
+    const d = (res && res.data) ? res.data : {};
 
-  // CREA
-  createBtn.onclick = async () => {
+    if (cf_phone) cf_phone.value = d.phone || "";
+    if (cf_address) cf_address.value = d.address || "";
+
+    if (cf_hours_it) cf_hours_it.value = d.hours_it_text || "";
+    if (cf_hours_en) cf_hours_en.value = d.hours_en_text || "";
+
+    if (cf_takeaway) cf_takeaway.value = d.takeaway_text || "";
+    if (cf_gluten) cf_gluten.value = d.gluten_text || "";
+    if (cf_lactose) cf_lactose.value = d.lactose_text || "";
+    if (cf_pets) cf_pets.value = d.pets_text || "";
+  }
+
+  async function saveComeFunziona() {
     const payload = {
-      name: $("name").value.trim(),
-      name_en: ($("name_en") ? $("name_en").value.trim() : ""),
+      phone: cf_phone ? cf_phone.value.trim() : "",
+      address: cf_address ? cf_address.value.trim() : "",
 
-      description: $("description").value.trim(),
-      description_en: ($("description_en") ? $("description_en").value.trim() : ""),
+      hours_it_title: "Orari di apertura",
+      hours_it_text: cf_hours_it ? cf_hours_it.value.trim() : "",
 
-      price_cents: toCents($("price").value),
+      hours_en_text: cf_hours_en ? cf_hours_en.value.trim() : "",
 
-      category: $("category").value.trim(),
-      category_en: ($("category_en") ? $("category_en").value.trim() : ""),
+      takeaway_title: "Take Away// Servizio di asporto",
+      takeaway_text: cf_takeaway ? cf_takeaway.value.trim() : "",
 
-      position: Number($("position").value || 0),
-      is_available: $("is_available").value === "true",
-      image_url: $("image_url").value.trim() || null
+      gluten_title: "Senza glutine e senza lattosio//",
+      gluten_text: cf_gluten ? cf_gluten.value.trim() : "",
+
+      lactose_text: cf_lactose ? cf_lactose.value.trim() : "",
+
+      pets_title: "Amici a 4 zampe //",
+      pets_text: cf_pets ? cf_pets.value.trim() : ""
     };
 
-    if (!payload.name) return alert("Nome (IT) obbligatorio");
-    if (!payload.name_en) return alert("Name (EN) obbligatorio");
-    if (!Number.isFinite(payload.price_cents)) return alert("Prezzo non valido");
+    await api("/api/admin/page/come-funziona", {
+      method: "PUT",
+      body: JSON.stringify(payload)
+    });
 
-    try {
-      await api("/api/admin/menu", { method: "POST", body: JSON.stringify(payload) });
+    alert("✅ Salvato (Come funziona)");
+  }
 
-      $("name").value = "";
-      if ($("name_en")) $("name_en").value = "";
+  if (cfSaveBtn) {
+    cfSaveBtn.onclick = async () => {
+      try {
+        await saveComeFunziona();
+      } catch (e) {
+        alert("❌ " + e.message);
+      }
+    };
+  }
 
-      $("description").value = "";
-      if ($("description_en")) $("description_en").value = "";
+  /* =========================================================
+     LOGIN / LOGOUT
+     ========================================================= */
 
-      $("price").value = "";
-      $("category").value = "";
-      if ($("category_en")) $("category_en").value = "";
+  if (loginBtn) {
+    loginBtn.onclick = async () => {
+      token = tokenInput.value.trim();
+      localStorage.setItem("admin_token", token);
+      try {
+        showApp(true);
+        await loadItems();
+        await loadComeFunziona();
+      } catch (e) {
+        showApp(false);
+        alert("Errore: " + e.message);
+      }
+    };
+  }
 
-      $("position").value = "0";
-      $("image_url").value = "";
-      $("is_available").value = "true";
-
-      await loadItems();
-      alert("✅ Aggiunto");
-    } catch (e) {
-      alert("❌ " + e.message);
-    }
-  };
+  if (logoutBtn) {
+    logoutBtn.onclick = () => {
+      token = "";
+      localStorage.removeItem("admin_token");
+      if (tokenInput) tokenInput.value = "";
+      showApp(false);
+    };
+  }
 
   // AUTO START se token già salvato
   if (token) {
-    tokenInput.value = token;
+    if (tokenInput) tokenInput.value = token;
     showApp(true);
-    loadItems().catch(() => showApp(false));
+    loadItems()
+      .then(loadComeFunziona)
+      .catch(() => showApp(false));
   } else {
     showApp(false);
   }
+
+  // Utils
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      "\"": "&quot;",
+      "'": "&#039;"
+    }[c]));
+  }
+  function escapeAttr(s) { return escapeHtml(s).replace(/"/g, "&quot;"); }
 })();
