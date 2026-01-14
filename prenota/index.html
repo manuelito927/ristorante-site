@@ -1,1 +1,219 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prenota - Quattrocento Gradi</title>
+  <link rel="stylesheet" href="/css/styles.css?v=3">
+  <style>
+    .prenota-wrap{
+      padding: 18px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
 
+    .prenota-card{
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.12);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .prenota-title{
+      margin: 0 0 10px;
+      font-size: 28px;
+      letter-spacing: .02em;
+    }
+
+    .prenota-sub{
+      margin: 0 0 14px;
+      opacity: .75;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .form-row{
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .field{
+      flex: 1;
+      min-width: 160px;
+    }
+
+    label{
+      display:block;
+      font-size: 12px;
+      opacity: .7;
+      margin: 0 0 6px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    input, select, textarea{
+      width: 100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,.18);
+      background: #fff;
+      font: inherit;
+      outline: none;
+    }
+
+    textarea{ min-height: 90px; resize: vertical; }
+
+    .btn-primary{
+      width: 100%;
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,.18);
+      background: #151515;
+      color: #fff;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .note-small{
+      margin-top: 10px;
+      font-size: 13px;
+      opacity: .7;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <button id="jsHamburger" class="menu-btn" aria-label="Apri menu" aria-expanded="false">☰</button>
+
+    <div class="logo">
+      <span class="logo-mark">+400°</span>
+      <span class="logo-text">QUATTROCENTO GRADI</span>
+    </div>
+  </header>
+
+  <!-- MENU MOBILE -->
+  <div id="jsMenuBackdrop" class="menu-backdrop" hidden></div>
+
+  <nav id="jsMobileMenu" class="mobile-menu" aria-label="Menu principale">
+    <div class="mobile-menu__head">
+      <div class="mobile-logo">
+        <span class="mobile-logo__mark">+400°</span>
+        <span class="mobile-logo__text">QUATTROCENTO GRADI</span>
+      </div>
+    </div>
+
+    <ul class="mobile-menu__list">
+      <li><a class="mobile-menu__link" href="/menu/">MENU DIGITALE</a></li>
+      <li><a class="mobile-menu__link" href="/come-funziona/">COME FUNZIONA</a></li>
+      <li><a class="mobile-menu__link" href="/prenota/">PRENOTA</a></li>
+      <li><a class="mobile-menu__link" href="#">GALLERY</a></li>
+      <li><a class="mobile-menu__link" href="#">RECENSIONI</a></li>
+      <li><a class="mobile-menu__link" href="/">HOME</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Prenota</h1>
+  </section>
+
+  <!-- CONTENT -->
+  <main class="prenota-wrap">
+    <div class="prenota-card">
+      <h2 class="prenota-title">Richiedi un tavolo</h2>
+      <p class="prenota-sub">
+        Compila i dati qui sotto. La prenotazione verrà confermata dal locale.
+      </p>
+
+      <form id="prenotaForm">
+        <div class="form-row">
+          <div class="field">
+            <label>Data</label>
+            <input name="date" type="date" required>
+          </div>
+          <div class="field">
+            <label>Ora</label>
+            <input name="time" type="time" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Persone</label>
+            <input name="people" type="number" min="1" value="2" required>
+          </div>
+          <div class="field">
+            <label>Telefono</label>
+            <input name="phone" type="tel" placeholder="Es. 3331234567" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Nome e cognome</label>
+            <input name="name" type="text" placeholder="Es. Mario Rossi" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Note (opzionale)</label>
+            <textarea name="notes" placeholder="Allergie, passeggino, richiesta tavolo, ecc."></textarea>
+          </div>
+        </div>
+
+        <button class="btn-primary" type="submit">Invia richiesta</button>
+
+        <div class="note-small">
+          * Per ora questa pagina è solo grafica. Nel prossimo step colleghiamo l’invio al Worker e la vedrai nell’Admin.
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- JS: menu mobile + blocco submit (per ora) -->
+  <script>
+    (function(){
+      const btn = document.getElementById("jsHamburger");
+      const menu = document.getElementById("jsMobileMenu");
+      const back = document.getElementById("jsMenuBackdrop");
+      if(!btn || !menu || !back) return;
+
+      function openMenu(){
+        menu.classList.add("is-open");
+        back.hidden = false;
+        btn.setAttribute("aria-expanded","true");
+      }
+      function closeMenu(){
+        menu.classList.remove("is-open");
+        back.hidden = true;
+        btn.setAttribute("aria-expanded","false");
+      }
+
+      btn.addEventListener("click", () => {
+        const isOpen = btn.getAttribute("aria-expanded") === "true";
+        isOpen ? closeMenu() : openMenu();
+      });
+
+      back.addEventListener("click", closeMenu);
+      menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
+
+      // Per ora: non invia nulla (lo colleghiamo al Worker nel prossimo step)
+      const form = document.getElementById("prenotaForm");
+      if(form){
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          alert("✅ Pagina OK. Nel prossimo step colleghiamo l’invio e la prenotazione arriva nell’Admin.");
+        });
+      }
+    })();
+  </script>
+
+</body>
+</html>
