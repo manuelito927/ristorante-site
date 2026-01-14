@@ -1,5 +1,242 @@
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+
+:root{
+  --pad: 18px;
+  --line: rgba(0,0,0,.12);
+}
+
+body{
+  background:#f6f1ea;
+  color:#151515;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+/* HEADER */
+.header{
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display:flex;
+  align-items:center;
+  gap: 12px;
+  padding: 14px var(--pad);
+  background: rgba(246,241,234,.92);
+  backdrop-filter: blur(6px);
+}
+
+.menu-btn{
+  border:0;
+  background: transparent;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 6px 8px;
+  line-height: 1;
+}
+
+.logo{
+  display:flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.logo-mark{ font-size: 18px; }
+.logo-text{
+  font-size: 14px;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  opacity: .9;
+}
+
+/* HERO */
 .hero{
-  background-image: url("/assets/img/hero.jpg");
+  min-height: 260px;
+  padding: 46px var(--pad) 22px;
+  display:flex;
+  align-items:flex-end;
+
+  background-image:
+    linear-gradient(to bottom, rgba(246,241,234,.10), rgba(246,241,234,.85)),
+    url("/assets/img/hero.jpg");
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
+}
+
+.hero h1{
+  margin:0;
+  font-weight: 700;
+  line-height: .92;
+  letter-spacing: -.5px;
+  font-size: 54px;
+  color:#151515;
+}
+
+/* MENU (accordion) */
+.menu{
+  padding: 10px var(--pad);
+}
+
+.menu-section{
+  border-top: 1px solid var(--line);
+}
+.menu-section:last-child{
+  border-bottom: 1px solid var(--line);
+}
+
+.menu-title{
+  width:100%;
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  padding: 22px 0;
+  background: transparent;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 0;
+  color: inherit;
+  text-align: left;
+}
+
+.menu-title h2{
+  margin:0;
+  font-size: 34px;
+  font-weight: 700;
+  color:#151515;
+}
+
+.plus{
+  font-size: 34px;
+  font-weight: 300;
+  color:#151515;
+}
+
+.menu-content{
+  padding-bottom: 14px;
+}
+
+.item{
+  padding: 12px 0;
+  border-top: 1px solid rgba(0,0,0,.08);
+}
+
+.item-row{
+  display:flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.item-desc{
+  margin-top: 6px;
+  font-size: 13px;
+  color: rgba(0,0,0,.55);
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+
+/* FOOTER */
+.note{
+  padding: 18px var(--pad) 34px;
+  color: rgba(0,0,0,.45);
+  font-size: 16px;
+}
+.note p{ margin:0; }
+
+/* ============================================================
+   MENU MOBILE A TENDINA (STILE 400 GRADI)
+   ============================================================ */
+
+/* Overlay scuro dietro il menu */
+.menu-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.3); /* Leggermente più scuro per far risaltare il bianco */
+  z-index: 60;
+  backdrop-filter: blur(2px);
+}
+
+/* Pannello del menu */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 70;
+  background: #ffffff; /* Bianco puro come in foto */
+  transform: translateY(-105%);
+  transition: transform .3s cubic-bezier(0.4, 0, 0.2, 1); /* Animazione più fluida */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.mobile-menu.is-open {
+  transform: translateY(0);
+}
+
+/* Logo all'interno del menu (Centrato) */
+.mobile-menu__head {
+  padding: 40px 0 30px 0; /* Più spazio verticale come nell'originale */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra il logo perfettamente */
+  border-bottom: 1px solid #f2f2f2; 
+}
+
+.mobile-logo {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mobile-logo__mark {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 300; /* Più sottile e leggero */
+  font-size: 56px;   /* Molto grande come nella foto */
+  letter-spacing: -3px;
+  line-height: 1;
+  color: #000;
+}
+
+.mobile-logo__text {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 11px;   /* Più piccolo */
+  letter-spacing: 0.3em; /* Molto spaziato */
+  text-transform: uppercase;
+  color: #000;
+  margin-top: 8px;
+  font-weight: 400;
+}
+
+/* Lista delle voci del menu */
+.mobile-menu__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mobile-menu__list li {
+  border-bottom: 1px solid #f2f2f2; /* Linea grigio chiarissimo */
+}
+
+.mobile-menu__link {
+  display: block;
+  padding: 22px var(--pad); /* Padding generoso */
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 13px; /* Dimensione precisa per il look minimal */
+  color: #444;    /* Grigio scuro, non nero assoluto */
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+/* Effetto al tocco */
+.mobile-menu__link:active {
+  background: #fafafa;
+  color: #000;
 }
