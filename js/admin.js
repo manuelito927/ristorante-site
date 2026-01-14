@@ -319,6 +319,107 @@
   }
 
   /* =========================================================
+     PRENOTAZIONI - CARICA + MOSTRA
+     ========================================================= */
+
+  function fmtDate(d) {
+    if (!d) return "";
+    try {
+      const x = new Date(d);
+      return x.toLocaleString("it-IT", {
+        year: "numeric", month: "2-digit", day: "2-digit",
+        hour: "2-digit", minute: "2-digit"
+      });
+    } catch {
+      return String(d);
+    }
+  }
+
+  async function loadReservations() {
+    if (!reservationsGrid) return;
+
+    if (reservationsMsg) reservationsMsg.textContent = "Caricamento...";
+    reservationsGrid.innerHTML = "Caricamento...";
+
+    try {
+      const { reservations } = await api("/api/admin/reservations?limit=50");
+
+      reservationsGrid.innerHTML = "";
+      (reservations || []).forEach((r) => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+            <strong>${escapeHtml(r.full_name || "")}</strong>
+            <span style="opacity:.75;">#${r.id}</span>
+          </div>
+
+          <div style="opacity:.8; font-size:14px; margin-top:6px;">
+            📞 ${escapeHtml(r.phone || "")} • 👥 ${r.people}
+          </div>
+
+          <div style="opacity:.8; font-size:14px; margin-top:6px;">
+            📅 ${fmtDate(r.reserved_at)}
+          </div>
+
+          <div style="margin-top:8px; font-size:14px; opacity:.85;">
+            <strong>Note:</strong> ${escapeHtml(r.notes || "—")}
+          </div>
+
+          <div class="row" style="margin-top:10px; align-items:center;">
+            <div style="flex:1; min-width:180px;">
+              <label>Stato</label>
+              <select data-k="status">
+                <option value="new" ${r.status === "new" ? "selected" : ""}>new</option>
+                <option value="confirmed" ${r.status === "confirmed" ? "selected" : ""}>confirmed</option>
+                <option value="cancelled" ${r.status === "cancelled" ? "selected" : ""}>cancelled</option>
+              </select>
+            </div>
+
+            <div style="align-self:flex-end;">
+              <button class="btn" data-act="saveStatus">Salva</button>
+            </div>
+          </div>
+
+          <div style="margin-top:10px; opacity:.7; font-size:14px;" data-msg=""></div>
+        `;
+
+        card.querySelector('[data-act="saveStatus"]').onclick = async () => {
+          const msg = card.querySelector('[data-msg=""]');
+          msg.textContent = "Salvataggio...";
+          try {
+            const status = card.querySelector('[data-k="status"]').value;
+            await api("/api/admin/reservations/" + r.id, {
+              method: "PUT",
+              body: JSON.stringify({ status })
+            });
+            msg.textContent = "✅ Salvato";
+            await loadReservations();
+          } catch (e) {
+            msg.textContent = "❌ " + e.message;
+          }
+        };
+
+        reservationsGrid.appendChild(card);
+      });
+
+      if (!reservations || reservations.length === 0) {
+        reservationsGrid.innerHTML = "<div class='card'>Nessuna prenotazione al momento.</div>";
+      }
+
+      if (reservationsMsg) reservationsMsg.textContent = "OK";
+    } catch (e) {
+      reservationsGrid.innerHTML = `<div class="card">❌ Errore: ${escapeHtml(e.message)}</div>`;
+      if (reservationsMsg) reservationsMsg.textContent = "Errore";
+    }
+  }
+
+  if (refreshReservationsBtn) {
+    refreshReservationsBtn.onclick = () => loadReservations();
+  }
+
+  /* =========================================================
      LOGIN / LOGOUT
      ========================================================= */
 
