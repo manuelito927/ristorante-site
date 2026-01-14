@@ -48,14 +48,17 @@ body{
 }
 
 /* HERO */
-.hero{
-  min-height: 260px;
-  padding: 46px var(--pad) 22px;
-  display:flex;
-  align-items:flex-end;
+.hero {
+  min-height: 70vh; 
+  padding: 40px var(--pad); /* Aumentato il padding per non far toccare il fondo alla scritta */
+  
+  display: flex;
+  align-items: flex-end;    /* <--- Questa riga sposta il testo in basso */
+  justify-content: center; 
+  text-align: center;
 
-  background-image:
-    linear-gradient(to bottom, rgba(246,241,234,.10), rgba(246,241,234,.85)),
+  background-image: 
+    linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
     url("/assets/img/hero.jpg");
   background-size: cover;
   background-position: center;
