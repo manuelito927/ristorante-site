@@ -3,22 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quattrocento Gradi</title>
+  <title>GREENWOOD</title>
 
   <!-- CSS -->
-<link rel="stylesheet" href="/css/styles.css?v=1">
+  <link rel="stylesheet" href="/css/styles.css?v=2">
 </head>
+
 <body>
 
-  <!-- HEADER -->
-  <header class="header">
-    <button class="menu-btn">☰</button>
+  <!-- TOP BAR (hamburger + logo) -->
+  <header class="topbar">
+    <button class="hamburger" id="menuBtn" aria-label="Apri menu" aria-expanded="false" type="button">
+      <span></span><span></span><span></span>
+    </button>
 
-    <div class="logo">
-      +400°
-      <span>QUATTROCENTO GRADI</span>
+    <div class="brand">
+      <div class="brand-mark">+400°</div>
+      <div class="brand-sub">QUATTROCENTO GRADI</div>
     </div>
   </header>
+
+  <!-- MENU A TENDINA (come in foto) -->
+  <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="mobile-menu__header">
+      <div class="brand brand--menu">
+        <div class="brand-mark">+400°</div>
+        <div class="brand-sub">QUATTROCENTO GRADI</div>
+      </div>
+    </div>
+
+    <ul class="mobile-menu__list">
+      <li><a href="#menu" class="mobile-menu__link">MENU DIGITALE</a></li>
+      <li><a href="#english" class="mobile-menu__link">ENGLISH MENU</a></li>
+      <li><a href="#come-funziona" class="mobile-menu__link">COME FUNZIONA</a></li>
+      <li><a href="#prenota" class="mobile-menu__link">PRENOTA</a></li>
+      <li><a href="#gallery" class="mobile-menu__link">GALLERY</a></li>
+      <li><a href="#contatti" class="mobile-menu__link">CONTATTI</a></li>
+      <li><a href="#riconoscimenti" class="mobile-menu__link">RICONOSCIMENTI</a></li>
+    </ul>
+  </nav>
+  <div class="menu-backdrop" id="menuBackdrop" hidden></div>
 
   <!-- HERO (può restare, non è prioritaria) -->
   <section class="hero">
@@ -26,7 +50,7 @@
   </section>
 
   <!-- MENU -->
-  <main class="menu">
+  <main class="menu" id="menu">
 
     <!-- ANTIPASTI -->
     <section class="menu-section">
@@ -92,12 +116,13 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="note">
+  <footer class="note" id="contatti">
     <p>*Attualmente il menu non dispone di opzioni senza glutine.</p>
   </footer>
 
   <!-- JS -->
-<script src="/js/config.js"></script>
-<script src="/js/menu.js?v=1"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/menu.js?v=2" defer></script>
+
 </body>
 </html>
