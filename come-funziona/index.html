@@ -1,1 +1,164 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Come funziona - Quattrocento Gradi</title>
+  <link rel="stylesheet" href="/css/styles.css?v=3">
+  <style>
+    /* Mini-stile “poster” per assomigliare alle tue foto */
+    .poster-wrap{ max-width: 980px; margin: 0 auto; padding: 36px 18px 80px; }
+    .poster{ padding: 48px 0; border-bottom: 1px solid rgba(0,0,0,.10); }
+    .poster:last-child{ border-bottom: 0; }
+    .poster h2{
+      margin: 0 0 18px;
+      font-size: clamp(44px, 8vw, 92px);
+      line-height: .95;
+      letter-spacing: -0.02em;
+    }
+    .poster p{
+      margin: 0;
+      font-size: clamp(22px, 3.6vw, 40px);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+    }
+    .bar{ width: 90px; height: 6px; background:#111; margin: 26px 0 0; }
+    .muted{ opacity:.9; }
+  </style>
+</head>
+<body>
 
+  <!-- HEADER -->
+  <header class="header">
+    <button id="jsHamburger" class="menu-btn" aria-label="Apri menu" aria-expanded="false">☰</button>
+
+    <div class="logo">
+      <span class="logo-mark">+400°</span>
+      <span class="logo-text">QUATTROCENTO GRADI</span>
+    </div>
+  </header>
+
+  <!-- MENU MOBILE -->
+  <div id="jsMenuBackdrop" class="menu-backdrop" hidden></div>
+
+  <nav id="jsMobileMenu" class="mobile-menu" aria-label="Menu principale" hidden>
+    <div class="mobile-menu__head">
+      <div class="mobile-logo">
+        <span class="mobile-logo__mark">+400°</span>
+        <span class="mobile-logo__text">QUATTROCENTO GRADI</span>
+      </div>
+    </div>
+
+    <ul class="mobile-menu__list">
+      <li><a class="mobile-menu__link" href="/menu/">MENU DIGITALE</a></li>
+      <li><a class="mobile-menu__link" href="/come-funziona/">COME FUNZIONA</a></li>
+      <li><a class="mobile-menu__link" href="/">HOME</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Come funziona</h1>
+  </section>
+
+  <!-- CONTENUTO “POSTER” -->
+  <main class="poster-wrap">
+
+    <!-- ORARI -->
+    <section class="poster">
+      <h2>Orari di<br>apertura</h2>
+
+      <p class="muted">
+        Dal Lunedì al Venerdì dalle 19.30<br>
+        Sabato e Domenica dalle 19.00
+      </p>
+
+      <p style="margin-top:22px;" class="muted">
+        Open Every day from 7.30 p.m.<br>
+        Saturday and Sunday from 7.00 pm
+      </p>
+
+      <p style="margin-top:22px;" class="muted">
+        391.3318359
+      </p>
+
+      <p style="margin-top:22px;" class="muted">
+        Viale Porta d’Europa, 65<br>
+        LECCE
+      </p>
+
+      <div class="bar"></div>
+    </section>
+
+    <!-- TAKE AWAY -->
+    <section class="poster">
+      <h2>Take Away//<br>Servizio di asporto</h2>
+
+      <p class="muted">
+        È possibile ordinare le nostre pizze da asporto
+        direttamente presso la nostra sede.
+      </p>
+
+      <div class="bar"></div>
+    </section>
+
+    <!-- GLUTINE/LATTOSIO -->
+    <section class="poster">
+      <h2>Senza glutine e<br>senza lattosio//</h2>
+
+      <p class="muted">
+        Attualmente il menu non dispone di opzione senza glutine
+        e di impasti con farine alternative.
+      </p>
+
+      <p style="margin-top:22px;" class="muted">
+        **Opzioni senza lattosio disponibili
+      </p>
+
+      <div class="bar"></div>
+    </section>
+
+    <!-- ANIMALI -->
+    <section class="poster">
+      <h2>Amici a 4 zampe //</h2>
+
+      <p class="muted">
+        Sono ammessi gli animali di piccola taglia.
+      </p>
+
+      <div class="bar"></div>
+    </section>
+
+  </main>
+
+  <!-- JS menu -->
+  <script>
+    (function(){
+      const btn = document.getElementById("jsHamburger");
+      const menu = document.getElementById("jsMobileMenu");
+      const back = document.getElementById("jsMenuBackdrop");
+      if(!btn || !menu || !back) return;
+
+      function openMenu(){
+        menu.hidden = false;
+        back.hidden = false;
+        btn.setAttribute("aria-expanded","true");
+      }
+      function closeMenu(){
+        menu.hidden = true;
+        back.hidden = true;
+        btn.setAttribute("aria-expanded","false");
+      }
+
+      btn.addEventListener("click", () => {
+        const isOpen = btn.getAttribute("aria-expanded") === "true";
+        isOpen ? closeMenu() : openMenu();
+      });
+
+      back.addEventListener("click", closeMenu);
+      menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
+    })();
+  </script>
+
+</body>
+</html>
