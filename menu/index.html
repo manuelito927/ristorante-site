@@ -1,1 +1,86 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menu Digitale - Quattrocento Gradi</title>
 
+  <link rel="stylesheet" href="/css/styles.css?v=3">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <button id="jsHamburger" class="menu-btn" aria-label="Apri menu" aria-expanded="false">☰</button>
+
+    <div class="logo">
+      <span class="logo-mark">+400°</span>
+      <span class="logo-text">QUATTROCENTO GRADI</span>
+    </div>
+  </header>
+
+  <!-- MENU MOBILE (overlay) -->
+  <div id="jsMenuBackdrop" class="menu-backdrop" hidden></div>
+
+  <nav id="jsMobileMenu" class="mobile-menu" aria-label="Menu principale" hidden>
+    <div class="mobile-menu__head">
+      <div class="mobile-logo">
+        <span class="mobile-logo__mark">+400°</span>
+        <span class="mobile-logo__text">QUATTROCENTO GRADI</span>
+      </div>
+    </div>
+
+    <ul class="mobile-menu__list">
+      <li><a class="mobile-menu__link" href="/menu/">MENU DIGITALE</a></li>
+      <li><a class="mobile-menu__link" href="/">HOME</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO (MENU) -->
+  <section class="hero">
+    <h1>Menu digitale</h1>
+  </section>
+
+  <!-- MENU (DINAMICO) -->
+  <main class="menu" id="menu-digitale"></main>
+
+  <!-- FOOTER -->
+  <footer class="note">
+    <p>*Attualmente il menu non dispone di opzioni senza glutine.</p>
+  </footer>
+
+  <!-- JS -->
+  <script src="/js/config.js"></script>
+  <script src="/js/menu.js?v=3"></script>
+
+  <!-- JS: apertura/chiusura menu -->
+  <script>
+    (function(){
+      const btn = document.getElementById("jsHamburger");
+      const menu = document.getElementById("jsMobileMenu");
+      const back = document.getElementById("jsMenuBackdrop");
+      if(!btn || !menu || !back) return;
+
+      function openMenu(){
+        menu.hidden = false;
+        back.hidden = false;
+        btn.setAttribute("aria-expanded","true");
+      }
+      function closeMenu(){
+        menu.hidden = true;
+        back.hidden = true;
+        btn.setAttribute("aria-expanded","false");
+      }
+
+      btn.addEventListener("click", () => {
+        const isOpen = btn.getAttribute("aria-expanded") === "true";
+        isOpen ? closeMenu() : openMenu();
+      });
+
+      back.addEventListener("click", closeMenu);
+      menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
+    })();
+  </script>
+
+</body>
+</html>
