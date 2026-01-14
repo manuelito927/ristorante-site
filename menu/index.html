@@ -47,33 +47,45 @@
   <script src="/js/config.js"></script>
   <script src="/js/menu.js?v=3"></script>
 
-  <script>
-    (function(){
-      const btn = document.getElementById("jsHamburger");
-      const menu = document.getElementById("jsMobileMenu");
-      const back = document.getElementById("jsMenuBackdrop");
-      if(!btn || !menu || !back) return;
+<script>
+  (function(){
+    const btn  = document.getElementById("jsHamburger");
+    const menu = document.getElementById("jsMobileMenu");
+    const back = document.getElementById("jsMenuBackdrop");
+    if(!btn || !menu || !back) return;
 
-      function openMenu(){
-        menu.classList.add("is-open");
-        back.hidden = false;
-        btn.setAttribute("aria-expanded","true");
-      }
-      function closeMenu(){
-        menu.classList.remove("is-open");
-        back.hidden = true;
-        btn.setAttribute("aria-expanded","false");
-      }
+    function openMenu(){
+      // assicura che sia visibile e sopra
+      menu.hidden = false;
+      back.hidden = false;
+      menu.style.display = "block";
+      back.style.display = "block";
+      btn.setAttribute("aria-expanded","true");
+    }
 
-      btn.addEventListener("click", () => {
-        const isOpen = btn.getAttribute("aria-expanded") === "true";
-        isOpen ? closeMenu() : openMenu();
-      });
+    function closeMenu(){
+      btn.setAttribute("aria-expanded","false");
+      menu.hidden = true;
+      back.hidden = true;
+      menu.style.display = "";
+      back.style.display = "";
+    }
 
-      back.addEventListener("click", closeMenu);
-      menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
-    })();
-  </script>
+    // sicurezza: quando carichi /menu/ chiudi sempre eventuali stati sporchi
+    closeMenu();
+
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const isOpen = btn.getAttribute("aria-expanded") === "true";
+      isOpen ? closeMenu() : openMenu();
+    });
+
+    back.addEventListener("click", closeMenu);
+
+    // chiudi anche se tocchi un link nel menu
+    menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
+  })();
+</script>
 
 </body>
 </html>
