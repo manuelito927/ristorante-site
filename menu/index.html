@@ -4,12 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Menu Digitale - Quattrocento Gradi</title>
-
   <link rel="stylesheet" href="/css/styles.css?v=3">
 </head>
 <body>
 
-  <!-- HEADER -->
   <header class="header">
     <button id="jsHamburger" class="menu-btn" aria-label="Apri menu" aria-expanded="false">☰</button>
 
@@ -19,10 +17,10 @@
     </div>
   </header>
 
-  <!-- MENU MOBILE (overlay) -->
   <div id="jsMenuBackdrop" class="menu-backdrop" hidden></div>
 
-<nav id="jsMobileMenu" class="mobile-menu" aria-label="Menu principale">
+  <!-- ✅ tolto hidden -->
+  <nav id="jsMobileMenu" class="mobile-menu" aria-label="Menu principale">
     <div class="mobile-menu__head">
       <div class="mobile-logo">
         <span class="mobile-logo__mark">+400°</span>
@@ -36,24 +34,19 @@
     </ul>
   </nav>
 
-  <!-- HERO (MENU) -->
   <section class="hero">
     <h1>Menu digitale</h1>
   </section>
 
-  <!-- MENU (DINAMICO) -->
   <main class="menu" id="menu-digitale"></main>
 
-  <!-- FOOTER -->
   <footer class="note">
     <p>*Attualmente il menu non dispone di opzioni senza glutine.</p>
   </footer>
 
-  <!-- JS -->
   <script src="/js/config.js"></script>
   <script src="/js/menu.js?v=3"></script>
 
-  <!-- JS: apertura/chiusura menu -->
   <script>
     (function(){
       const btn = document.getElementById("jsHamburger");
@@ -62,12 +55,12 @@
       if(!btn || !menu || !back) return;
 
       function openMenu(){
-        menu.hidden = false;
+        menu.classList.add("is-open");
         back.hidden = false;
         btn.setAttribute("aria-expanded","true");
       }
       function closeMenu(){
-        menu.hidden = true;
+        menu.classList.remove("is-open");
         back.hidden = true;
         btn.setAttribute("aria-expanded","false");
       }
