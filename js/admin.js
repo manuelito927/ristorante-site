@@ -427,46 +427,68 @@ const galPreview = $("galPreview");   // div dove mostriamo anteprime (opzionale
     refreshReservationsBtn.onclick = () => loadReservations();
   }
 
-  /* =========================================================
-     GALLERY - CARICA + SALVA (lista URL)
-     ========================================================= */
+/* =========================================================
+   GALLERY - UPLOAD FILES (da libreria) + SALVA
+   Richiede endpoint Worker: POST /api/admin/gallery/upload
+   ========================================================= */
 
-  async function loadGallery() {
-    if (!gal_urls) return;
+function renderGalleryPreview(files) {
+  if (!galPreview) return;
+  galPreview.innerHTML = "";
+  [...files].forEach((file) => {
+    const img = document.createElement("img");
+    img.style.width = "100%";
+    img.style.borderRadius = "12px";
+    img.style.border = "1px solid rgba(0,0,0,.12)";
+    img.style.objectFit = "cover";
+    img.style.aspectRatio = "4 / 3";
+    img.src = URL.createObjectURL(file);
+    galPreview.appendChild(img);
+  });
+}
 
-    const res = await api("/api/page/gallery");
-    const d = (res && res.data) ? res.data : {};
-    const urls = Array.isArray(d.urls) ? d.urls : [];
-    gal_urls.value = urls.join("\n");
+if (gal_files) {
+  gal_files.addEventListener("change", () => {
+    if (gal_files.files && gal_files.files.length) {
+      renderGalleryPreview(gal_files.files);
+    }
+  });
+}
+
+async function uploadGalleryFiles() {
+  if (!gal_files || !gal_files.files || gal_files.files.length === 0) {
+    alert("Seleziona almeno una foto");
+    return;
   }
 
-  async function saveGallery() {
-    if (!gal_urls) return;
+  const fd = new FormData();
+  [...gal_files.files].forEach((f) => fd.append("files", f));
 
-    const urls = String(gal_urls.value || "")
-      .split("\n")
-      .map(s => s.trim())
-      .filter(Boolean);
+  const res = await fetch(API + "/api/admin/gallery/upload", {
+    method: "POST",
+    headers: { ...authHeaders() }, // ⚠️ NON mettere content-type qui!
+    body: fd
+  });
 
-    const payload = { urls };
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || ("HTTP " + res.status));
 
-    await api("/api/admin/page/gallery", {
-      method: "PUT",
-      body: JSON.stringify(payload)
-    });
+  // se vuoi: data.urls (array) con gli URL caricati
+  alert("✅ Foto caricate");
+}
 
-    alert("✅ Salvato (Gallery)");
-  }
-
-  if (galSaveBtn) {
-    galSaveBtn.onclick = async () => {
-      try {
-        await saveGallery();
-      } catch (e) {
-        alert("❌ " + e.message);
-      }
-    };
-  }
+if (galSaveBtn) {
+  galSaveBtn.onclick = async () => {
+    try {
+      await uploadGalleryFiles();
+      // reset
+      if (gal_files) gal_files.value = "";
+      if (galPreview) galPreview.innerHTML = "";
+    } catch (e) {
+      alert("❌ " + e.message);
+    }
+  };
+}
 
   /* =========================================================
      LOGIN / LOGOUT
