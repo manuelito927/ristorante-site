@@ -95,20 +95,32 @@
   </main>
 
   <script>
-    // Menu mobile open/close
+    // ✅ Menu mobile open/close (FIX: niente più hidden fantasma/backdrop bloccato)
     (function(){
       const btn = document.getElementById("jsHamburger");
       const menu = document.getElementById("jsMobileMenu");
       const back = document.getElementById("jsMenuBackdrop");
       if(!btn || !menu || !back) return;
 
-      function openMenu(){ menu.hidden = false; back.hidden = false; btn.setAttribute("aria-expanded","true"); }
-      function closeMenu(){ menu.hidden = true; back.hidden = true; btn.setAttribute("aria-expanded","false"); }
+      function openMenu(){
+        menu.hidden = false;              // lo rendiamo visibile
+        menu.classList.add("is-open");    // animazione + stato coerente
+        back.hidden = false;
+        btn.setAttribute("aria-expanded","true");
+      }
+
+      function closeMenu(){
+        menu.classList.remove("is-open");
+        menu.hidden = true;              // lo rimettiamo hidden davvero
+        back.hidden = true;
+        btn.setAttribute("aria-expanded","false");
+      }
 
       btn.addEventListener("click", () => {
         const isOpen = btn.getAttribute("aria-expanded") === "true";
         isOpen ? closeMenu() : openMenu();
       });
+
       back.addEventListener("click", closeMenu);
       menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
     })();
