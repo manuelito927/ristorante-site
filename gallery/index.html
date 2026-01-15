@@ -75,14 +75,14 @@
       </div>
     </div>
 
-<ul class="mobile-menu__list">
-  <li><a class="mobile-menu__link" href="/menu/">MENU DIGITALE</a></li>
-  <li><a class="mobile-menu__link" href="/come-funziona/">COME FUNZIONA</a></li>
-  <li><a class="mobile-menu__link" href="/prenota/">PRENOTA</a></li>
-  <li><a class="mobile-menu__link" href="/gallery/">GALLERY</a></li>
-  <li><a class="mobile-menu__link" href="/recensioni/">RECENSIONI</a></li>
-  <li><a class="mobile-menu__link" href="/">HOME</a></li>
-</ul>
+    <ul class="mobile-menu__list">
+      <li><a class="mobile-menu__link" href="/menu/">MENU DIGITALE</a></li>
+      <li><a class="mobile-menu__link" href="/come-funziona/">COME FUNZIONA</a></li>
+      <li><a class="mobile-menu__link" href="/prenota/">PRENOTA</a></li>
+      <li><a class="mobile-menu__link" href="/gallery/">GALLERY</a></li>
+      <li><a class="mobile-menu__link" href="/recensioni/">RECENSIONI</a></li>
+      <li><a class="mobile-menu__link" href="/">HOME</a></li>
+    </ul>
   </nav>
 
   <section class="hero">
@@ -142,15 +142,17 @@
       try{
         const res = await fetch(API + "/api/page/gallery?t=" + Date.now(), { cache: "no-store" });
         const js = await res.json();
-        const d = js.data || {};
-        const photos = Array.isArray(d.photos) ? d.photos : [];
 
-        if(!photos.length){
+        // ✅ QUI: nel DB hai data.urls (NON photos)
+        const d = js.data || {};
+        const urls = Array.isArray(d.urls) ? d.urls : [];
+
+        if(!urls.length){
           grid.innerHTML = `<div class="empty">Nessuna foto ancora. Vai in Admin → Gallery e aggiungile.</div>`;
           return;
         }
 
-        grid.innerHTML = photos.map((url) => {
+        grid.innerHTML = urls.map((url) => {
           const safe = String(url || "").trim();
           if(!safe) return "";
           return `
