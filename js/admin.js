@@ -503,7 +503,6 @@ if (galSaveBtn) {
         await loadItems();
         await loadComeFunziona();
         await loadReservations();
-        await loadGallery();
       } catch (e) {
         showApp(false);
         alert("Errore: " + e.message);
