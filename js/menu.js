@@ -111,57 +111,67 @@
 
   renderMenu();
 
-  /* ==========================================
-     4) GESTIONE MENU MOBILE (STILE 400 GRADI)
-     ========================================== */
-  const burger = document.getElementById("jsHamburger");
-  const mobileMenu = document.getElementById("jsMobileMenu");
-  const backdrop = document.getElementById("jsMenuBackdrop");
+/* ==========================================
+   4) GESTIONE MENU MOBILE (STILE 400 GRADI)
+   ========================================== */
+const burger = document.getElementById("jsHamburger");
+const mobileMenu = document.getElementById("jsMobileMenu");
+const backdrop = document.getElementById("jsMenuBackdrop");
 
-  function openMenu() {
-    if (!mobileMenu) return;
-    mobileMenu.classList.add("is-open");
-    if (backdrop) backdrop.hidden = false;
-    document.body.style.overflow = "hidden";
-    if (burger) burger.setAttribute("aria-expanded", "true");
-  }
+function openMenu() {
+  if (!mobileMenu) return;
 
-  function closeMenu() {
-    if (!mobileMenu) return;
-    mobileMenu.classList.remove("is-open");
+  // mostra menu + backdrop SEMPRE
+  mobileMenu.hidden = false;
+  mobileMenu.classList.add("is-open");
 
-    // aspetta fine transizione
-    setTimeout(() => {
-      if (backdrop && !mobileMenu.classList.contains("is-open")) {
-        backdrop.hidden = true;
-      }
-    }, 300);
+  if (backdrop) backdrop.hidden = false;
 
-    document.body.style.overflow = "";
-    if (burger) burger.setAttribute("aria-expanded", "false");
-  }
+  document.body.style.overflow = "hidden";
+  if (burger) burger.setAttribute("aria-expanded", "true");
+}
 
-  if (burger && mobileMenu) {
-    burger.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const isOpen = mobileMenu.classList.contains("is-open");
-      isOpen ? closeMenu() : openMenu();
-    });
+function closeMenu() {
+  if (!mobileMenu) return;
 
-    if (backdrop) {
-      backdrop.addEventListener("click", closeMenu);
+  // chiude animazione
+  mobileMenu.classList.remove("is-open");
+
+  // chiude SEMPRE backdrop + nasconde menu dopo la transizione
+  const ms = 320; // leggermente > 300ms del css
+  setTimeout(() => {
+    // se nel frattempo non è stato riaperto
+    if (!mobileMenu.classList.contains("is-open")) {
+      mobileMenu.hidden = true;
+      if (backdrop) backdrop.hidden = true;
+      document.body.style.overflow = "";
+      if (burger) burger.setAttribute("aria-expanded", "false");
     }
+  }, ms);
+}
 
-    // Chiudi menu quando clicchi un link
-    mobileMenu.querySelectorAll("a").forEach((a) => {
-      a.addEventListener("click", closeMenu);
-    });
+// stato iniziale “pulito” (evita overlay fantasma se la pagina ricarica)
+if (mobileMenu) mobileMenu.hidden = true;
+if (backdrop) backdrop.hidden = true;
+if (burger) burger.setAttribute("aria-expanded", "false");
 
-    // Chiudi con ESC
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeMenu();
-    });
-  }
+if (burger && mobileMenu) {
+  burger.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const isOpen = mobileMenu.classList.contains("is-open");
+    isOpen ? closeMenu() : openMenu();
+  });
+
+  if (backdrop) backdrop.addEventListener("click", closeMenu);
+
+  mobileMenu.querySelectorAll("a").forEach((a) => {
+    a.addEventListener("click", closeMenu);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeMenu();
+  });
+}
 
   // ============================
   // Utility
