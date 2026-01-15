@@ -60,11 +60,21 @@
       back.hidden = false;
       btn.setAttribute("aria-expanded","true");
     }
-    function closeMenu(){
-      menu.classList.remove("is-open");
-      back.hidden = true;
-      btn.setAttribute("aria-expanded","false");
-    }
+function closeMenu(){
+  menu.classList.remove("is-open");
+  back.hidden = true;
+  back.style.display = "none";          // ✅ forza via overlay
+  btn.setAttribute("aria-expanded","false");
+  document.body.style.overflow = "";    // ✅ riattiva scroll
+}
+
+function openMenu(){
+  menu.classList.add("is-open");
+  back.hidden = false;
+  back.style.display = "block";         // ✅ mostra overlay
+  btn.setAttribute("aria-expanded","true");
+  document.body.style.overflow = "hidden"; // ✅ blocca scroll (opzionale)
+}
 
     if(btn && menu && back){
       btn.addEventListener("click", () => {
