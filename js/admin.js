@@ -32,9 +32,10 @@
   const cf_lactose = $("cf_lactose");
   const cf_pets = $("cf_pets");
 
-  // ✅ GALLERY
-  const galSaveBtn = $("saveGallery");
-  const gal_urls = $("gal_urls");
+// ✅ GALLERY (UPLOAD FILE)
+const galSaveBtn = $("saveGallery");
+const gal_files = $("gal_files");     // <input type="file" ...>
+const galPreview = $("galPreview");   // div dove mostriamo anteprime (opzionale)
 
   let token = localStorage.getItem("admin_token") || "";
 
