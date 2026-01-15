@@ -554,7 +554,6 @@ if (galSaveBtn) {
     showApp(true);
     loadItems()
       .then(loadReservations)
-      .then(loadGallery)
       .catch(() => showApp(false));
   } else {
     showApp(false);
