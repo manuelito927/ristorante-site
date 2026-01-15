@@ -524,7 +524,6 @@ if (galSaveBtn) {
     if (tokenInput) tokenInput.value = token;
     showApp(true);
     loadItems()
-      .then(loadComeFunziona)
       .then(loadReservations)
       .then(loadGallery)
       .catch(() => showApp(false));
