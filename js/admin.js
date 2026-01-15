@@ -428,8 +428,9 @@ const galPreview = $("galPreview");   // div dove mostriamo anteprime (opzionale
   }
 
 /* =========================================================
-   GALLERY - UPLOAD FILES (da libreria) + SALVA
-   Richiede endpoint Worker: POST /api/admin/gallery/upload
+   GALLERY - UPLOAD (da libreria) + SALVA URL in DB
+   Worker endpoint: POST /api/admin/gallery/upload  (field: "file")
+   DB endpoint:     PUT  /api/admin/page/gallery    { urls: [...] }
    ========================================================= */
 
 function renderGalleryPreview(files) {
@@ -451,41 +452,69 @@ if (gal_files) {
   gal_files.addEventListener("change", () => {
     if (gal_files.files && gal_files.files.length) {
       renderGalleryPreview(gal_files.files);
+    } else if (galPreview) {
+      galPreview.innerHTML = "";
     }
   });
 }
 
-async function uploadGalleryFiles() {
-  if (!gal_files || !gal_files.files || gal_files.files.length === 0) {
-    alert("Seleziona almeno una foto");
-    return;
-  }
-
+// Carica 1 file su R2 tramite Worker (ritorna {url})
+async function uploadOneFileToR2(file) {
   const fd = new FormData();
-  [...gal_files.files].forEach((f) => fd.append("files", f));
+  fd.append("file", file); // ✅ deve chiamarsi "file"
 
   const res = await fetch(API + "/api/admin/gallery/upload", {
     method: "POST",
-    headers: { ...authHeaders() }, // ⚠️ NON mettere content-type qui!
-    body: fd
+    headers: { ...authHeaders() }, // ✅ SOLO Authorization
+    body: fd                       // ✅ niente content-type manuale
   });
 
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.error || ("HTTP " + res.status));
 
-  // se vuoi: data.urls (array) con gli URL caricati
-  alert("✅ Foto caricate");
+  if (!data.url) throw new Error("Upload OK ma manca 'url' nella risposta");
+  return data.url;
+}
+
+// Salva in DB la lista URL
+async function saveGalleryUrls(urls) {
+  await api("/api/admin/page/gallery", {
+    method: "PUT",
+    body: JSON.stringify({ urls })
+  });
+}
+
+async function uploadGalleryAndSave() {
+  if (!gal_files || !gal_files.files || gal_files.files.length === 0) {
+    alert("Seleziona almeno una foto");
+    return;
+  }
+
+  const files = [...gal_files.files];
+
+  // 1) upload sequenziale (semplice e sicuro)
+  const urls = [];
+  for (const f of files) {
+    const url = await uploadOneFileToR2(f);
+    urls.push(url);
+  }
+
+  // 2) salva urls nel DB (gallery page)
+  await saveGalleryUrls(urls);
+
+  // 3) reset UI
+  gal_files.value = "";
+  if (galPreview) galPreview.innerHTML = "";
+
+  alert("✅ Gallery salvata!");
 }
 
 if (galSaveBtn) {
   galSaveBtn.onclick = async () => {
     try {
-      await uploadGalleryFiles();
-      // reset
-      if (gal_files) gal_files.value = "";
-      if (galPreview) galPreview.innerHTML = "";
+      await uploadGalleryAndSave();
     } catch (e) {
-      alert("❌ " + e.message);
+      alert("❌ " + (e.message || e));
     }
   };
 }
