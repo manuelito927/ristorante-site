@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery - Quattrocento Gradi</title>
+  <link rel="stylesheet" href="/css/styles.css?v=3">
+
+  <style>
+    .gallery-wrap{
+      padding: 18px;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+    .gallery-title{
+      margin: 6px 0 14px;
+      font-size: 28px;
+      letter-spacing: .02em;
+    }
+
+    /* griglia semplice (su mobile 1 colonna, su desktop 2) */
+    .grid{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+    @media (min-width: 820px){
+      .grid{ grid-template-columns: 1fr 1fr; }
+    }
+
+    .ph{
+      border: 1px solid rgba(0,0,0,.12);
+      border-radius: 18px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .ph img{
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .muted{
+      opacity: .75;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .empty{
+      padding: 14px;
+      border: 1px dashed rgba(0,0,0,.25);
+      border-radius: 14px;
+      background: rgba(255,255,255,.6);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <button id="jsHamburger" class="menu-btn" aria-label="Apri menu" aria-expanded="false">☰</button>
+    <div class="logo">
+      <span class="logo-mark">+400°</span>
+      <span class="logo-text">QUATTROCENTO GRADI</span>
+    </div>
+  </header>
+
+  <!-- MENU MOBILE -->
+  <div id="jsMenuBackdrop" class="menu-backdrop" hidden></div>
+
+  <nav id="jsMobileMenu" class="mobile-menu" aria-label="Menu principale">
+    <div class="mobile-menu__head">
+      <div class="mobile-logo">
+        <span class="mobile-logo__mark">+400°</span>
+        <span class="mobile-logo__text">QUATTROCENTO GRADI</span>
+      </div>
+    </div>
+
+    <ul class="mobile-menu__list">
+      <li><a class="mobile-menu__link" href="/menu/">MENU DIGITALE</a></li>
+      <li><a class="mobile-menu__link" href="/come-funziona/">COME FUNZIONA</a></li>
+      <li><a class="mobile-menu__link" href="/prenota/">PRENOTA</a></li>
+      <li><a class="mobile-menu__link" href="/gallery/">GALLERY</a></li>
+      <li><a class="mobile-menu__link" href="/">HOME</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <h1>Gallery</h1>
+  </section>
+
+  <main class="gallery-wrap">
+    <h2 class="gallery-title">Le nostre foto</h2>
+    <p class="muted">Foto gestite dall’Admin (aggiungi / togli quando vuoi).</p>
+
+    <div id="galleryGrid" class="grid" style="margin-top:16px;"></div>
+  </main>
+
+  <script>
+    // Menu mobile open/close (stile 400 gradi)
+    (function(){
+      const burger = document.getElementById("jsHamburger");
+      const mobileMenu = document.getElementById("jsMobileMenu");
+      const backdrop = document.getElementById("jsMenuBackdrop");
+      if(!burger || !mobileMenu || !backdrop) return;
+
+      function openMenu(){
+        mobileMenu.classList.add("is-open");
+        backdrop.hidden = false;
+        document.body.style.overflow = "hidden";
+        burger.setAttribute("aria-expanded","true");
+      }
+      function closeMenu(){
+        mobileMenu.classList.remove("is-open");
+        setTimeout(() => {
+          if(!mobileMenu.classList.contains("is-open")) backdrop.hidden = true;
+        }, 300);
+        document.body.style.overflow = "";
+        burger.setAttribute("aria-expanded","false");
+      }
+
+      burger.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = mobileMenu.classList.contains("is-open");
+        isOpen ? closeMenu() : openMenu();
+      });
+
+      backdrop.addEventListener("click", closeMenu);
+      mobileMenu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
+      document.addEventListener("keydown", (e) => { if(e.key === "Escape") closeMenu(); });
+    })();
+
+    // ✅ Carica gallery dal Worker (site_pages slug = "gallery")
+    (async function(){
+      const API =
+        (window.API_BASE && String(window.API_BASE).replace(/\/$/, "")) ||
+        "https://still-haze-01c8.filosofiaefficace.workers.dev";
+
+      const grid = document.getElementById("galleryGrid");
+      if(!grid) return;
+
+      try{
+        const res = await fetch(API + "/api/page/gallery?t=" + Date.now(), { cache: "no-store" });
+        const js = await res.json();
+        const d = js.data || {};
+        const photos = Array.isArray(d.photos) ? d.photos : [];
+
+        if(!photos.length){
+          grid.innerHTML = `<div class="empty">Nessuna foto ancora. Vai in Admin → Gallery e aggiungile.</div>`;
+          return;
+        }
+
+        grid.innerHTML = photos.map((url) => {
+          const safe = String(url || "").trim();
+          if(!safe) return "";
+          return `
+            <div class="ph">
+              <img src="${escapeAttr(safe)}" alt="Foto" loading="lazy">
+            </div>
+          `;
+        }).join("");
+      }catch(e){
+        grid.innerHTML = `<div class="empty">Errore nel caricamento gallery.</div>`;
+      }
+
+      function escapeAttr(s){
+        return String(s).replace(/[&<>"']/g, (c) => ({
+          "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
+        }[c]));
+      }
+    })();
+  </script>
+
+</body>
+</html>
