@@ -16,10 +16,13 @@
 
   // COME FUNZIONA
   const cfSaveBtn = $("saveComeFunziona");
-    // PRENOTAZIONI
+
+  // PRENOTAZIONI
   const reservationsGrid = $("reservationsGrid");
   const refreshReservationsBtn = $("refreshReservations");
   const reservationsMsg = $("reservationsMsg");
+
+  // COME FUNZIONA FIELDS
   const cf_phone = $("cf_phone");
   const cf_address = $("cf_address");
   const cf_hours_it = $("cf_hours_it");
@@ -28,6 +31,10 @@
   const cf_gluten = $("cf_gluten");
   const cf_lactose = $("cf_lactose");
   const cf_pets = $("cf_pets");
+
+  // ✅ GALLERY
+  const galSaveBtn = $("saveGallery");
+  const gal_urls = $("gal_urls");
 
   let token = localStorage.getItem("admin_token") || "";
 
@@ -74,12 +81,13 @@
      ========================================================= */
 
   async function loadItems() {
+    if (!grid) return;
+
     grid.innerHTML = "Caricamento...";
-    // Nota: /api/menu è pubblico, quindi non serve token per leggere
     const { items } = await api("/api/menu");
 
     grid.innerHTML = "";
-    items.forEach((it) => {
+    (items || []).forEach((it) => {
       const card = document.createElement("div");
       card.className = "card";
 
@@ -150,8 +158,8 @@
           <div style="width:170px; min-width:150px;">
             <label>Disponibile</label>
             <select data-k="is_available">
-              <option value="true" ${it.is_available ? "selected":""}>Si</option>
-              <option value="false" ${!it.is_available ? "selected":""}>No</option>
+              <option value="true" ${it.is_available ? "selected" : ""}>Si</option>
+              <option value="false" ${!it.is_available ? "selected" : ""}>No</option>
             </select>
           </div>
         </div>
@@ -196,7 +204,9 @@
       grid.appendChild(card);
     });
 
-    if (!items.length) grid.innerHTML = "<div class='card'>Nessun prodotto. Aggiungine uno sopra.</div>";
+    if (!items || items.length === 0) {
+      grid.innerHTML = "<div class='card'>Nessun prodotto. Aggiungine uno sopra.</div>";
+    }
   }
 
   function readPayload(card) {
@@ -262,7 +272,6 @@
      ========================================================= */
 
   async function loadComeFunziona() {
-    // GET pubblico: /api/page/come-funziona
     const res = await api("/api/page/come-funziona");
     const d = (res && res.data) ? res.data : {};
 
@@ -285,7 +294,6 @@
 
       hours_it_title: "Orari di apertura",
       hours_it_text: cf_hours_it ? cf_hours_it.value.trim() : "",
-
       hours_en_text: cf_hours_en ? cf_hours_en.value.trim() : "",
 
       takeaway_title: "Take Away// Servizio di asporto",
@@ -293,7 +301,6 @@
 
       gluten_title: "Senza glutine e senza lattosio//",
       gluten_text: cf_gluten ? cf_gluten.value.trim() : "",
-
       lactose_text: cf_lactose ? cf_lactose.value.trim() : "",
 
       pets_title: "Amici a 4 zampe //",
@@ -420,6 +427,47 @@
   }
 
   /* =========================================================
+     GALLERY - CARICA + SALVA (lista URL)
+     ========================================================= */
+
+  async function loadGallery() {
+    if (!gal_urls) return;
+
+    const res = await api("/api/page/gallery");
+    const d = (res && res.data) ? res.data : {};
+    const urls = Array.isArray(d.urls) ? d.urls : [];
+    gal_urls.value = urls.join("\n");
+  }
+
+  async function saveGallery() {
+    if (!gal_urls) return;
+
+    const urls = String(gal_urls.value || "")
+      .split("\n")
+      .map(s => s.trim())
+      .filter(Boolean);
+
+    const payload = { urls };
+
+    await api("/api/admin/page/gallery", {
+      method: "PUT",
+      body: JSON.stringify(payload)
+    });
+
+    alert("✅ Salvato (Gallery)");
+  }
+
+  if (galSaveBtn) {
+    galSaveBtn.onclick = async () => {
+      try {
+        await saveGallery();
+      } catch (e) {
+        alert("❌ " + e.message);
+      }
+    };
+  }
+
+  /* =========================================================
      LOGIN / LOGOUT
      ========================================================= */
 
@@ -431,7 +479,8 @@
         showApp(true);
         await loadItems();
         await loadComeFunziona();
-                await loadReservations();
+        await loadReservations();
+        await loadGallery();
       } catch (e) {
         showApp(false);
         alert("Errore: " + e.message);
@@ -455,6 +504,7 @@
     loadItems()
       .then(loadComeFunziona)
       .then(loadReservations)
+      .then(loadGallery)
       .catch(() => showApp(false));
   } else {
     showApp(false);
@@ -470,5 +520,7 @@
       "'": "&#039;"
     }[c]));
   }
-  function escapeAttr(s) { return escapeHtml(s).replace(/"/g, "&quot;"); }
+  function escapeAttr(s) {
+    return escapeHtml(s).replace(/"/g, "&quot;");
+  }
 })();
