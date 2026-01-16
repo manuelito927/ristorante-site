@@ -135,12 +135,17 @@ body{
   border-top: 1px solid rgba(0,0,0,.08);
 }
 
-.item-row{
-  display:flex;
+.item-row {
+  display: flex;
   justify-content: space-between;
   gap: 12px;
-  font-weight: 600;
-  font-size: 18px;
+  
+  /* Modifiche per lo stile della foto: */
+  font-size: 16px;            /* Dimensione ridotta come nella foto */
+  font-weight: 700;           /* Mantiene il grassetto deciso */
+  text-transform: uppercase;  /* Tutto in maiuscolo */
+  letter-spacing: 0.5px;      /* Leggermente spaziato per leggibilità */
+  color: #151515;
 }
 
 .item-desc{
