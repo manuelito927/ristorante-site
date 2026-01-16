@@ -55,7 +55,7 @@ body{
    ============================================================ */
 .hero{
   min-height: 70vh; 
-  padding: var(--pad) var(--pad) 600px var(--pad); /* Spazio per la scritta */
+  padding: var(--pad) var(--pad) 60px var(--pad);
   display: flex;
   align-items: flex-end; 
   justify-content: center; 
@@ -80,27 +80,28 @@ body{
 }
 
 /* ============================================================
-   MENU ACCORDEON (AGGIORNATO CON GRAFICA NERA)
+   MENU ACCORDEON (COLOR GREENWOOD CHIARO E MINIMAL)
    ============================================================ */
 .menu{
   padding: 10px var(--pad);
 }
 
 .menu-section{
-  margin-bottom: 8px; /* Spazio tra i blocchi neri */
+  margin-bottom: 8px; /* Spazio tra i blocchi */
 }
 
-/* Pulsante categoria - Ora nero come in foto */
+/* Pulsante categoria - NUOVO COLORE VERDE CHIARO */
 .menu-title{
   width:100%;
   display:flex;
   justify-content: space-between;
   align-items:center;
   padding: 18px 20px;
-  background: #000000; /* Fondo nero richiesto */
+  /* Codice colore verde salvia chiaro e minimal */
+  background: #8FA998; 
   border: 0;
   cursor: pointer;
-  color: #ffffff;
+  color: #ffffff; /* Testo bianco per contrasto */
   text-align: left;
   -webkit-appearance: none;
   appearance: none;
@@ -109,9 +110,9 @@ body{
 
 .menu-title h2{
   margin:0;
-  font-size: 20px;    /* Più piccolo rispetto ai 34px originali */
+  font-size: 20px;
   font-weight: 700;
-  color:#ffffff;      /* Testo bianco */
+  color:#ffffff;
   text-transform: none;
 }
 
@@ -126,7 +127,7 @@ body{
 }
 
 /* ============================================================
-   PRODOTTI (AGGIORNATI: PIÙ PICCOLI E MAIUSCOLI)
+   PRODOTTI (PICCOLI E MAIUSCOLI COME IN FOTO)
    ============================================================ */
 .item{
   padding: 12px 0;
@@ -137,7 +138,7 @@ body{
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  /* Dimensioni ridotte per farli sembrare eleganti come in foto */
+  /* Stile rimpicciolito ed elegante */
   font-size: 15px; 
   font-weight: 700; 
   text-transform: uppercase; 
