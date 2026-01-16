@@ -3,26 +3,24 @@
     (window.API_BASE && String(window.API_BASE).replace(/\/$/, "")) ||
     "https://still-haze-01c8.filosofiaefficace.workers.dev";
 
-  // ============================
-  // 1) RECUPERO DATI DAL WORKER
-  // ============================
-  let items = [];
-  try {
-const res = await fetch(`${API}/api/menu?lang=${LANG}&t=${Date.now()}`, { cache: "no-store" });
-    const data = await res.json();
-    items = data.items || [];
-  } catch (err) {
-    console.error("Errore nel caricamento del menu:", err);
-  }
-
-  // ============================
-  // 2) LINGUA (IT / EN)
-  // ============================
+  // ✅ 1) LINGUA (IT / EN) — PRIMA della fetch
   let LANG = localStorage.getItem("lang") || "it";
   const langBtns = Array.from(document.querySelectorAll(".langbtn"));
 
   function paintLang() {
     langBtns.forEach(b => b.classList.toggle("is-active", b.dataset.lang === LANG));
+  }
+
+  // ============================
+  // 2) RECUPERO DATI DAL WORKER
+  // ============================
+  let items = [];
+  try {
+    const res = await fetch(`${API}/api/menu?lang=${LANG}&t=${Date.now()}`, { cache: "no-store" });
+    const data = await res.json();
+    items = data.items || [];
+  } catch (err) {
+    console.error("Errore nel caricamento del menu:", err);
   }
 
   function pickText(it, itField, enField) {
