@@ -275,3 +275,44 @@ body{
 .langbtn.is-active{
   border-color: rgba(0,0,0,.45);
 }
+
+/* --- SEZIONE INFO PROFESSIONALE --- */
+.info-block {
+  padding: 45px 20px;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  background: transparent;
+}
+
+.info-block h2 {
+  margin: 0 0 20px 0;
+  font-size: 26px;
+  font-weight: 600;
+  color: #151515;
+  letter-spacing: -0.5px;
+}
+
+/* La linea verde salvia sotto il titolo */
+.info-block h2::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 3px;
+  background: #8FA998; /* Il tuo verde Greenwood */
+  margin-top: 12px;
+}
+
+.info-block p {
+  font-size: 16px;
+  line-height: 1.7; /* Rende la lettura molto più riposante */
+  color: #444;
+  margin-bottom: 10px;
+}
+
+.info-highlight {
+  display: block;
+  font-weight: 600;
+  margin-top: 15px;
+  color: #151515;
+  font-size: 17px;
+}
+
