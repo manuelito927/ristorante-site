@@ -7,50 +7,57 @@
   <link rel="stylesheet" href="/css/styles.css?v=3">
 
   <style>
-    /* Pulizia e Layout Professionale */
+/* Pulizia e Layout Professionale */
     .poster-wrap { 
-      max-width: 800px; 
+      max-width: 100%; /* Permette allo sfondo di andare da lato a lato */
       margin: 0 auto; 
-      padding: 40px var(--pad); 
+      padding: 0; 
     }
 
     .poster { 
-      padding: 50px 0; 
-      border-bottom: 1px solid rgba(0,0,0,0.06); 
+      padding: 60px var(--pad); 
+      border-bottom: 0; 
     }
 
-    .poster:last-child { border-bottom: 0; }
+    /* Alternanza Colori Sezioni */
+    /* Sezione 1 e 3: Crema caldissimo */
+    .poster:nth-child(odd) {
+      background-color: #fcfaf7; 
+    }
+    /* Sezione 2 e 4: Verde Greenwood chiarissimo (minimal) */
+    .poster:nth-child(even) {
+      background-color: #f1f4f2; 
+    }
 
-    /* Titoli: eleganti e non eccessivi */
+    /* Titoli: eleganti e con il colore Greenwood scuro */
     .poster h2 {
       margin: 0 0 20px;
       font-size: 32px;
       font-weight: 700;
       line-height: 1.1;
       letter-spacing: -0.5px;
-      color: #151515;
+      color: #2d3a31; /* Un verde scurissimo, quasi nero, più professionale */
     }
 
-    /* Testi: Interlinea aumentata per leggibilità professionale */
+    /* Testi */
     .poster p {
       margin: 0;
       font-size: 18px;
       line-height: 1.6;
       color: #444;
       white-space: pre-line;
-      font-weight: 300; /* Delicato come richiesto */
+      font-weight: 300; 
     }
 
-    /* La linea verde "Greenwood" sottile */
+    /* La linea verde "Greenwood" ora la facciamo risaltare di più */
     .bar { 
       width: 50px; 
       height: 3px; 
-      background: #8FA998; /* Il tuo verde salvia */
+      background: #8FA998; 
       margin: 25px 0 0; 
       border-radius: 2px;
     }
 
-    /* Spaziature specifiche per i dati dal DB */
     .db-text-block { margin-top: 20px; }
     
     .muted { opacity: 1; } /* Rimuovo l'opacità per massima chiarezza */
