@@ -32,15 +32,22 @@
   const cf_lactose = $("cf_lactose");
   const cf_pets = $("cf_pets");
 
-// ✅ GALLERY (UPLOAD FILE)
-const galSaveBtn = $("saveGallery");
-const gal_files = $("gal_files");     // <input type="file" ...>
-const galPreview = $("galPreview");   // div dove mostriamo anteprime (opzionale)
+  // ✅ GALLERY (UPLOAD FILE)
+  const galSaveBtn = $("saveGallery");
+  const gal_files = $("gal_files");     // <input type="file" ...>
+  const galPreview = $("galPreview");   // div dove mostriamo anteprime
 
   let token = localStorage.getItem("admin_token") || "";
 
+  /* =========================================================
+      UTILITIES & CORE
+     ========================================================= */
+
   function setStatus(text) {
-    if (statusEl) statusEl.textContent = text;
+    if (statusEl) {
+        statusEl.textContent = text;
+        statusEl.style.background = text === "Connesso" ? "#e6f4ea" : "#eee";
+    }
   }
 
   function authHeaders() {
@@ -78,135 +85,117 @@ const galPreview = $("galPreview");   // div dove mostriamo anteprime (opzionale
   }
 
   /* =========================================================
-     MENU DIGITALE - CRUD
+      MENU DIGITALE - CRUD
      ========================================================= */
 
   async function loadItems() {
     if (!grid) return;
 
-    grid.innerHTML = "Caricamento...";
-    const { items } = await api("/api/menu");
+    grid.innerHTML = "<div class='card'>Caricamento menu...</div>";
+    try {
+        const { items } = await api("/api/menu");
+        grid.innerHTML = "";
 
-    grid.innerHTML = "";
-    (items || []).forEach((it) => {
-      const card = document.createElement("div");
-      card.className = "card";
+        (items || []).forEach((it) => {
+            const card = document.createElement("div");
+            card.className = "item-card card";
 
-      card.innerHTML = `
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-          <strong>${escapeHtml(it.name)}</strong>
-          <span>€ ${fromCents(it.price_cents)}</span>
-        </div>
+            card.innerHTML = `
+                <div class="item-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <span class="status-badge status-${it.is_available}" style="padding:4px 8px; border-radius:4px; font-size:12px; background:${it.is_available ? '#e6f4ea' : '#ffebee'}; color:${it.is_available ? '#1e7e34' : '#c62828'};">
+                        ${it.is_available ? 'Disponibile' : 'Esaurito'}
+                    </span>
+                    <strong style="font-size:16px;">€ ${fromCents(it.price_cents)}</strong>
+                </div>
 
-        <div style="opacity:.75; font-size:14px; margin-top:6px;">
-          IT: ${escapeHtml(it.category || "")} • pos ${it.position}
-        </div>
-        <div style="opacity:.7; font-size:13px; margin-top:4px;">
-          EN: ${escapeHtml(it.category_en || "")}
-        </div>
+                <div class="form-group" style="margin-bottom:10px;">
+                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px;">NOME PRODOTTO (IT / EN)</label>
+                    <input data-k="name" value="${escapeAttr(it.name)}" style="width:100%; margin-bottom:5px;"/>
+                    <input data-k="name_en" value="${escapeAttr(it.name_en || "")}" placeholder="English name" style="width:100%;"/>
+                </div>
 
-        <div style="margin-top:8px; font-size:14px; opacity:.85;">
-          <div><strong>IT</strong> — ${escapeHtml(it.description || "")}</div>
-          <div style="margin-top:6px;"><strong>EN</strong> — ${escapeHtml(it.description_en || "")}</div>
-        </div>
+                <div class="form-group" style="margin-bottom:10px;">
+                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px;">DESCRIZIONE (IT)</label>
+                    <textarea data-k="description" style="width:100%; min-height:50px;">${escapeHtml(it.description || "")}</textarea>
+                </div>
 
-        <div class="row" style="margin-top:12px;">
-          <div style="flex:1; min-width:180px;">
-            <label>Nome (IT)</label>
-            <input data-k="name" value="${escapeAttr(it.name)}"/>
-          </div>
+                <div class="form-group" style="margin-bottom:10px;">
+                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px;">DESCRIPTION (EN)</label>
+                    <textarea data-k="description_en" style="width:100%; min-height:50px;">${escapeHtml(it.description_en || "")}</textarea>
+                </div>
 
-          <div style="flex:1; min-width:180px;">
-            <label>Name (EN)</label>
-            <input data-k="name_en" value="${escapeAttr(it.name_en || "")}"/>
-          </div>
+                <div class="row" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+                    <div>
+                        <label style="display:block; font-size:12px; font-weight:bold;">Prezzo (€)</label>
+                        <input data-k="price" type="number" step="0.01" value="${fromCents(it.price_cents)}" style="width:100%;"/>
+                    </div>
+                    <div>
+                        <label style="display:block; font-size:12px; font-weight:bold;">Posizione</label>
+                        <input data-k="position" type="number" step="1" value="${it.position}" style="width:100%;"/>
+                    </div>
+                </div>
 
-          <div style="width:160px; min-width:140px;">
-            <label>Prezzo (€)</label>
-            <input data-k="price" type="number" step="0.01" value="${fromCents(it.price_cents)}"/>
-          </div>
+                <div class="row" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+                    <div>
+                        <label style="display:block; font-size:12px; font-weight:bold;">Categoria (IT)</label>
+                        <input data-k="category" value="${escapeAttr(it.category || "")}" style="width:100%;"/>
+                    </div>
+                    <div>
+                        <label style="display:block; font-size:12px; font-weight:bold;">Disponibile</label>
+                        <select data-k="is_available" style="width:100%;">
+                            <option value="true" ${it.is_available ? "selected" : ""}>Si</option>
+                            <option value="false" ${!it.is_available ? "selected" : ""}>No</option>
+                        </select>
+                    </div>
+                </div>
 
-          <div style="flex:1; min-width:180px;">
-            <label>Categoria (IT)</label>
-            <input data-k="category" value="${escapeAttr(it.category || "")}"/>
-          </div>
+                <div class="form-group" style="margin-bottom:15px;">
+                    <label style="display:block; font-size:12px; font-weight:bold;">Immagine URL</label>
+                    <input data-k="image_url" value="${escapeAttr(it.image_url || "")}" style="width:100%;"/>
+                </div>
 
-          <div style="flex:1; min-width:180px;">
-            <label>Categoria (EN)</label>
-            <input data-k="category_en" value="${escapeAttr(it.category_en || "")}"/>
-          </div>
+                <div class="row" style="display:flex; gap:10px;">
+                    <button class="btn success" data-act="save" style="flex:2;">Salva Modifiche</button>
+                    <button class="btn danger" data-act="del" style="flex:1;">Elimina</button>
+                </div>
+                <div style="margin-top:10px; opacity:.7; font-size:13px; text-align:center;" data-msg=""></div>
+            `;
 
-          <div style="width:130px; min-width:110px;">
-            <label>Pos</label>
-            <input data-k="position" type="number" step="1" value="${it.position}"/>
-          </div>
+            card.querySelector('[data-act="save"]').onclick = async () => {
+                const msg = card.querySelector('[data-msg=""]');
+                msg.textContent = "Salvataggio...";
+                try {
+                    const payload = readPayload(card);
+                    await api("/api/admin/menu/" + it.id, {
+                        method: "PUT",
+                        body: JSON.stringify(payload)
+                    });
+                    msg.innerHTML = "<span style='color:green'>✅ Salvato</span>";
+                    setTimeout(() => { msg.textContent = ""; loadItems(); }, 1500);
+                } catch (e) {
+                    msg.textContent = "❌ " + e.message;
+                }
+            };
 
-          <div style="flex:1; min-width:240px;">
-            <label>Immagine URL</label>
-            <input data-k="image_url" value="${escapeAttr(it.image_url || "")}"/>
-          </div>
+            card.querySelector('[data-act="del"]').onclick = async () => {
+                const ok = confirm("Eliminare '" + it.name + "'?");
+                if (!ok) return;
+                try {
+                    await api("/api/admin/menu/" + it.id, { method: "DELETE" });
+                    loadItems();
+                } catch (e) {
+                    alert("❌ " + e.message);
+                }
+            };
 
-          <div style="flex:1; min-width:240px;">
-            <label>Descrizione (IT)</label>
-            <textarea data-k="description">${escapeHtml(it.description || "")}</textarea>
-          </div>
+            grid.appendChild(card);
+        });
 
-          <div style="flex:1; min-width:240px;">
-            <label>Description (EN)</label>
-            <textarea data-k="description_en">${escapeHtml(it.description_en || "")}</textarea>
-          </div>
-
-          <div style="width:170px; min-width:150px;">
-            <label>Disponibile</label>
-            <select data-k="is_available">
-              <option value="true" ${it.is_available ? "selected" : ""}>Si</option>
-              <option value="false" ${!it.is_available ? "selected" : ""}>No</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="row" style="margin-top:10px;">
-          <button class="btn" data-act="save">Salva</button>
-          <button class="btn danger" data-act="del">Elimina</button>
-        </div>
-        <div style="margin-top:10px; opacity:.7; font-size:14px;" data-msg=""></div>
-      `;
-
-      card.querySelector('[data-act="save"]').onclick = async () => {
-        const msg = card.querySelector('[data-msg=""]');
-        msg.textContent = "Salvataggio...";
-        try {
-          const payload = readPayload(card);
-          await api("/api/admin/menu/" + it.id, {
-            method: "PUT",
-            body: JSON.stringify(payload)
-          });
-          msg.textContent = "✅ Salvato";
-          await loadItems();
-        } catch (e) {
-          msg.textContent = "❌ " + e.message;
+        if (!items || items.length === 0) {
+            grid.innerHTML = "<div class='card'>Nessun prodotto presente nel menu.</div>";
         }
-      };
-
-      card.querySelector('[data-act="del"]').onclick = async () => {
-        const ok = confirm("Eliminare '" + it.name + "'?");
-        if (!ok) return;
-        const msg = card.querySelector('[data-msg=""]');
-        msg.textContent = "Eliminazione...";
-        try {
-          await api("/api/admin/menu/" + it.id, { method: "DELETE" });
-          msg.textContent = "✅ Eliminato";
-          await loadItems();
-        } catch (e) {
-          msg.textContent = "❌ " + e.message;
-        }
-      };
-
-      grid.appendChild(card);
-    });
-
-    if (!items || items.length === 0) {
-      grid.innerHTML = "<div class='card'>Nessun prodotto. Aggiungine uno sopra.</div>";
+    } catch (e) {
+        grid.innerHTML = "Errore: " + e.message;
     }
   }
 
@@ -219,7 +208,7 @@ const galPreview = $("galPreview");   // div dove mostriamo anteprime (opzionale
       description_en: get("description_en").value.trim(),
       price_cents: toCents(get("price").value),
       category: get("category").value.trim(),
-      category_en: get("category_en").value.trim(),
+      category_en: get("category").value.trim(), // Usiamo IT come base se EN manca
       position: Number(get("position").value || 0),
       is_available: get("is_available").value === "true",
       image_url: get("image_url").value.trim() || null
@@ -243,7 +232,6 @@ const galPreview = $("galPreview");   // div dove mostriamo anteprime (opzionale
       };
 
       if (!payload.name) return alert("Nome (IT) obbligatorio");
-      if (!payload.name_en) return alert("Name (EN) obbligatorio");
       if (!Number.isFinite(payload.price_cents)) return alert("Prezzo non valido");
 
       try {
@@ -261,7 +249,7 @@ const galPreview = $("galPreview");   // div dove mostriamo anteprime (opzionale
         $("is_available").value = "true";
 
         await loadItems();
-        alert("✅ Aggiunto");
+        alert("✅ Prodotto aggiunto!");
       } catch (e) {
         alert("❌ " + e.message);
       }
@@ -269,41 +257,37 @@ const galPreview = $("galPreview");   // div dove mostriamo anteprime (opzionale
   }
 
   /* =========================================================
-     COME FUNZIONA - CARICA + SALVA
+      COME FUNZIONA - CARICA + SALVA
      ========================================================= */
 
   async function loadComeFunziona() {
-    const res = await api("/api/page/come-funziona");
-    const d = (res && res.data) ? res.data : {};
+    try {
+        const res = await api("/api/page/come-funziona");
+        const d = (res && res.data) ? res.data : {};
 
-    if (cf_phone) cf_phone.value = d.phone || "";
-    if (cf_address) cf_address.value = d.address || "";
-
-    if (cf_hours_it) cf_hours_it.value = d.hours_it_text || "";
-    if (cf_hours_en) cf_hours_en.value = d.hours_en_text || "";
-
-    if (cf_takeaway) cf_takeaway.value = d.takeaway_text || "";
-    if (cf_gluten) cf_gluten.value = d.gluten_text || "";
-    if (cf_lactose) cf_lactose.value = d.lactose_text || "";
-    if (cf_pets) cf_pets.value = d.pets_text || "";
+        if (cf_phone) cf_phone.value = d.phone || "";
+        if (cf_address) cf_address.value = d.address || "";
+        if (cf_hours_it) cf_hours_it.value = d.hours_it_text || "";
+        if (cf_hours_en) cf_hours_en.value = d.hours_en_text || "";
+        if (cf_takeaway) cf_takeaway.value = d.takeaway_text || "";
+        if (cf_gluten) cf_gluten.value = d.gluten_text || "";
+        if (cf_lactose) cf_lactose.value = d.lactose_text || "";
+        if (cf_pets) cf_pets.value = d.pets_text || "";
+    } catch(e) { console.error("Errore caricamento info", e); }
   }
 
   async function saveComeFunziona() {
     const payload = {
       phone: cf_phone ? cf_phone.value.trim() : "",
       address: cf_address ? cf_address.value.trim() : "",
-
       hours_it_title: "Orari di apertura",
       hours_it_text: cf_hours_it ? cf_hours_it.value.trim() : "",
       hours_en_text: cf_hours_en ? cf_hours_en.value.trim() : "",
-
       takeaway_title: "Take Away// Servizio di asporto",
       takeaway_text: cf_takeaway ? cf_takeaway.value.trim() : "",
-
       gluten_title: "Senza glutine e senza lattosio//",
       gluten_text: cf_gluten ? cf_gluten.value.trim() : "",
       lactose_text: cf_lactose ? cf_lactose.value.trim() : "",
-
       pets_title: "Amici a 4 zampe //",
       pets_text: cf_pets ? cf_pets.value.trim() : ""
     };
@@ -313,7 +297,7 @@ const galPreview = $("galPreview");   // div dove mostriamo anteprime (opzionale
       body: JSON.stringify(payload)
     });
 
-    alert("✅ Salvato (Come funziona)");
+    alert("✅ Informazioni salvate!");
   }
 
   if (cfSaveBtn) {
@@ -327,7 +311,7 @@ const galPreview = $("galPreview");   // div dove mostriamo anteprime (opzionale
   }
 
   /* =========================================================
-     PRENOTAZIONI - CARICA + MOSTRA
+      PRENOTAZIONI - CARICA + MOSTRA
      ========================================================= */
 
   function fmtDate(d) {
@@ -345,52 +329,39 @@ const galPreview = $("galPreview");   // div dove mostriamo anteprime (opzionale
 
   async function loadReservations() {
     if (!reservationsGrid) return;
-
     if (reservationsMsg) reservationsMsg.textContent = "Caricamento...";
     reservationsGrid.innerHTML = "Caricamento...";
 
     try {
       const { reservations } = await api("/api/admin/reservations?limit=50");
-
       reservationsGrid.innerHTML = "";
+      
       (reservations || []).forEach((r) => {
         const card = document.createElement("div");
         card.className = "card";
+        card.style.marginBottom = "15px";
 
         card.innerHTML = `
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-            <strong>${escapeHtml(r.full_name || "")}</strong>
-            <span style="opacity:.75;">#${r.id}</span>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;">
+            <strong style="font-size:16px;">${escapeHtml(r.full_name || "")}</strong>
+            <span style="opacity:.6; font-size:12px;">#${r.id}</span>
           </div>
 
-          <div style="opacity:.8; font-size:14px; margin-top:6px;">
-            📞 ${escapeHtml(r.phone || "")} • 👥 ${r.people}
-          </div>
-
-          <div style="opacity:.8; font-size:14px; margin-top:6px;">
-            📅 ${fmtDate(r.reserved_at)}
-          </div>
-
-          <div style="margin-top:8px; font-size:14px; opacity:.85;">
+          <div style="font-size:14px; margin-bottom:5px;">📞 ${escapeHtml(r.phone || "")} • 👥 <strong>${r.people} persone</strong></div>
+          <div style="font-size:14px; margin-bottom:10px; color:var(--greenwood); font-weight:bold;">📅 ${fmtDate(r.reserved_at)}</div>
+          <div style="font-size:13px; background:#f5f5f5; padding:8px; border-radius:6px; margin-bottom:12px;">
             <strong>Note:</strong> ${escapeHtml(r.notes || "—")}
           </div>
 
-          <div class="row" style="margin-top:10px; align-items:center;">
-            <div style="flex:1; min-width:180px;">
-              <label>Stato</label>
-              <select data-k="status">
-                <option value="new" ${r.status === "new" ? "selected" : ""}>new</option>
-                <option value="confirmed" ${r.status === "confirmed" ? "selected" : ""}>confirmed</option>
-                <option value="cancelled" ${r.status === "cancelled" ? "selected" : ""}>cancelled</option>
-              </select>
-            </div>
-
-            <div style="align-self:flex-end;">
-              <button class="btn" data-act="saveStatus">Salva</button>
-            </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <select data-k="status" style="flex:1;">
+              <option value="new" ${r.status === "new" ? "selected" : ""}>Nuova</option>
+              <option value="confirmed" ${r.status === "confirmed" ? "selected" : ""}>Confermata</option>
+              <option value="cancelled" ${r.status === "cancelled" ? "selected" : ""}>Annullata</option>
+            </select>
+            <button class="btn success" data-act="saveStatus" style="padding:5px 15px;">Salva</button>
           </div>
-
-          <div style="margin-top:10px; opacity:.7; font-size:14px;" data-msg=""></div>
+          <div style="margin-top:5px; font-size:12px; text-align:center;" data-msg=""></div>
         `;
 
         card.querySelector('[data-act="saveStatus"]').onclick = async () => {
@@ -402,8 +373,8 @@ const galPreview = $("galPreview");   // div dove mostriamo anteprime (opzionale
               method: "PUT",
               body: JSON.stringify({ status })
             });
-            msg.textContent = "✅ Salvato";
-            await loadReservations();
+            msg.innerHTML = "<span style='color:green'>✅ Aggiornato</span>";
+            setTimeout(() => loadReservations(), 1000);
           } catch (e) {
             msg.textContent = "❌ " + e.message;
           }
@@ -413,9 +384,8 @@ const galPreview = $("galPreview");   // div dove mostriamo anteprime (opzionale
       });
 
       if (!reservations || reservations.length === 0) {
-        reservationsGrid.innerHTML = "<div class='card'>Nessuna prenotazione al momento.</div>";
+        reservationsGrid.innerHTML = "<div class='card'>Nessuna prenotazione trovata.</div>";
       }
-
       if (reservationsMsg) reservationsMsg.textContent = "OK";
     } catch (e) {
       reservationsGrid.innerHTML = `<div class="card">❌ Errore: ${escapeHtml(e.message)}</div>`;
@@ -423,104 +393,68 @@ const galPreview = $("galPreview");   // div dove mostriamo anteprime (opzionale
     }
   }
 
-  if (refreshReservationsBtn) {
-    refreshReservationsBtn.onclick = () => loadReservations();
-  }
-
-/* =========================================================
-   GALLERY - UPLOAD (da libreria) + SALVA URL in DB
-   Worker endpoint: POST /api/admin/gallery/upload  (field: "file")
-   DB endpoint:     PUT  /api/admin/page/gallery    { urls: [...] }
-   ========================================================= */
-
-function renderGalleryPreview(files) {
-  if (!galPreview) return;
-  galPreview.innerHTML = "";
-  [...files].forEach((file) => {
-    const img = document.createElement("img");
-    img.style.width = "100%";
-    img.style.borderRadius = "12px";
-    img.style.border = "1px solid rgba(0,0,0,.12)";
-    img.style.objectFit = "cover";
-    img.style.aspectRatio = "4 / 3";
-    img.src = URL.createObjectURL(file);
-    galPreview.appendChild(img);
-  });
-}
-
-if (gal_files) {
-  gal_files.addEventListener("change", () => {
-    if (gal_files.files && gal_files.files.length) {
-      renderGalleryPreview(gal_files.files);
-    } else if (galPreview) {
-      galPreview.innerHTML = "";
-    }
-  });
-}
-
-// Carica 1 file su R2 tramite Worker (ritorna {url})
-async function uploadOneFileToR2(file) {
-  const fd = new FormData();
-  fd.append("file", file); // ✅ deve chiamarsi "file"
-
-  const res = await fetch(API + "/api/admin/gallery/upload", {
-    method: "POST",
-    headers: { ...authHeaders() }, // ✅ SOLO Authorization
-    body: fd                       // ✅ niente content-type manuale
-  });
-
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.error || ("HTTP " + res.status));
-
-  if (!data.url) throw new Error("Upload OK ma manca 'url' nella risposta");
-  return data.url;
-}
-
-// Salva in DB la lista URL
-async function saveGalleryUrls(urls) {
-  await api("/api/admin/page/gallery", {
-    method: "PUT",
-    body: JSON.stringify({ urls })
-  });
-}
-
-async function uploadGalleryAndSave() {
-  if (!gal_files || !gal_files.files || gal_files.files.length === 0) {
-    alert("Seleziona almeno una foto");
-    return;
-  }
-
-  const files = [...gal_files.files];
-
-  // 1) upload sequenziale (semplice e sicuro)
-  const urls = [];
-  for (const f of files) {
-    const url = await uploadOneFileToR2(f);
-    urls.push(url);
-  }
-
-  // 2) salva urls nel DB (gallery page)
-  await saveGalleryUrls(urls);
-
-  // 3) reset UI
-  gal_files.value = "";
-  if (galPreview) galPreview.innerHTML = "";
-
-  alert("✅ Gallery salvata!");
-}
-
-if (galSaveBtn) {
-  galSaveBtn.onclick = async () => {
-    try {
-      await uploadGalleryAndSave();
-    } catch (e) {
-      alert("❌ " + (e.message || e));
-    }
-  };
-}
+  if (refreshReservationsBtn) refreshReservationsBtn.onclick = () => loadReservations();
 
   /* =========================================================
-     LOGIN / LOGOUT
+      GALLERY - UPLOAD R2 + DB
+     ========================================================= */
+
+  function renderGalleryPreview(files) {
+    if (!galPreview) return;
+    galPreview.innerHTML = "";
+    [...files].forEach((file) => {
+      const img = document.createElement("img");
+      img.style = "width:100%; border-radius:10px; aspect-ratio:4/3; object-fit:cover; border:1px solid #ddd;";
+      img.src = URL.createObjectURL(file);
+      galPreview.appendChild(img);
+    });
+  }
+
+  if (gal_files) {
+    gal_files.addEventListener("change", () => {
+      if (gal_files.files && gal_files.files.length) renderGalleryPreview(gal_files.files);
+      else if (galPreview) galPreview.innerHTML = "";
+    });
+  }
+
+  async function uploadOneFileToR2(file) {
+    const fd = new FormData();
+    fd.append("file", file);
+    const res = await fetch(API + "/api/admin/gallery/upload", {
+      method: "POST",
+      headers: { ...authHeaders() },
+      body: fd
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || ("HTTP " + res.status));
+    if (!data.url) throw new Error("Manca URL nella risposta");
+    return data.url;
+  }
+
+  async function uploadGalleryAndSave() {
+    if (!gal_files || !gal_files.files || gal_files.files.length === 0) return alert("Seleziona almeno una foto");
+    
+    const urls = [];
+    for (const f of [...gal_files.files]) {
+      const url = await uploadOneFileToR2(f);
+      urls.push(url);
+    }
+    await api("/api/admin/page/gallery", { method: "PUT", body: JSON.stringify({ urls }) });
+    
+    gal_files.value = "";
+    if (galPreview) galPreview.innerHTML = "";
+    alert("✅ Gallery aggiornata!");
+  }
+
+  if (galSaveBtn) {
+    galSaveBtn.onclick = async () => {
+      try { await uploadGalleryAndSave(); } 
+      catch (e) { alert("❌ " + (e.message || e)); }
+    };
+  }
+
+  /* =========================================================
+      LOGIN / LOGOUT / INIT
      ========================================================= */
 
   if (loginBtn) {
@@ -529,12 +463,10 @@ if (galSaveBtn) {
       localStorage.setItem("admin_token", token);
       try {
         showApp(true);
-        await loadItems();
-        await loadComeFunziona();
-        await loadReservations();
+        await Promise.all([loadItems(), loadComeFunziona(), loadReservations()]);
       } catch (e) {
         showApp(false);
-        alert("Errore: " + e.message);
+        alert("Errore Accesso: " + e.message);
       }
     };
   }
@@ -544,32 +476,23 @@ if (galSaveBtn) {
       token = "";
       localStorage.removeItem("admin_token");
       if (tokenInput) tokenInput.value = "";
-      showApp(false);
+      location.reload();
     };
   }
 
-  // AUTO START se token già salvato
   if (token) {
     if (tokenInput) tokenInput.value = token;
     showApp(true);
-    loadItems()
-      .then(loadReservations)
-      .catch(() => showApp(false));
+    loadItems().then(loadComeFunziona).then(loadReservations).catch(() => showApp(false));
   } else {
     showApp(false);
   }
 
-  // Utils
   function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, (c) => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      "\"": "&quot;",
-      "'": "&#039;"
+    return String(s || "").replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#039;"
     }[c]));
   }
-  function escapeAttr(s) {
-    return escapeHtml(s).replace(/"/g, "&quot;");
-  }
+  function escapeAttr(s) { return escapeHtml(s).replace(/"/g, "&quot;"); }
+
 })();
