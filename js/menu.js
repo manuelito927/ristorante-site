@@ -8,7 +8,7 @@
   // ============================
   let items = [];
   try {
-    const res = await fetch(`${API}/api/menu?t=${Date.now()}`, { cache: "no-store" });
+const res = await fetch(`${API}/api/menu?lang=${LANG}&t=${Date.now()}`, { cache: "no-store" });
     const data = await res.json();
     items = data.items || [];
   } catch (err) {
