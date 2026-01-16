@@ -3,221 +3,212 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Admin +400°</title>
+  <title>Admin +400° | Dashboard</title>
   <link rel="stylesheet" href="/css/styles.css?v=1" />
   <style>
-    .wrap{ max-width:980px; margin:0 auto; padding:18px; }
-    .card{ background:#fff6ee; border:1px solid rgba(0,0,0,.12); border-radius:14px; padding:16px; margin-bottom:18px; }
-    .row{ display:flex; gap:12px; flex-wrap:wrap; }
-    input, select, textarea{
-      width:100%; padding:10px 12px; border-radius:12px;
-      border:1px solid rgba(0,0,0,.18); background:#fff; font:inherit;
+    :root {
+      --greenwood: #8FA998;
+      --greenwood-dark: #2d3a31;
+      --bg-admin: #f4f1ee; /* Richiamo al crema del sito */
+      --card-bg: #ffffff;
     }
-    textarea{ min-height:80px; resize:vertical; }
-    .btn{
-      padding:10px 14px; border-radius:12px; border:1px solid rgba(0,0,0,.18);
-      background:#151515; color:#fff; cursor:pointer;
+    
+    body { background: var(--bg-admin); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; margin: 0; color: #151515; }
+    
+    /* HEADER SPECIFICO ADMIN */
+    .admin-header { background: #fff; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+    .admin-header .logo { font-weight: 700; letter-spacing: 1px; }
+    .admin-header .logo span { font-weight: 300; opacity: 0.6; margin-left: 5px; }
+
+    .wrap { max-width: 1400px; margin: 0 auto; padding: 20px; }
+    
+    /* NAVIGAZIONE A TAB */
+    .admin-nav { display: flex; gap: 8px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 5px; }
+    .nav-btn { padding: 12px 18px; background: #fff; border: 1px solid rgba(0,0,0,0.1); border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 13px; transition: 0.2s; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.5px; }
+    .nav-btn.active { background: var(--greenwood); color: white; border-color: var(--greenwood); box-shadow: 0 4px 10px rgba(143,169,152,0.3); }
+
+    /* LAYOUT PROFESSIONALE A DUE COLONNE */
+    .admin-grid-layout { display: grid; grid-template-columns: 420px 1fr; gap: 25px; align-items: start; }
+    @media (max-width: 1100px) { .admin-grid-layout { grid-template-columns: 1fr; } }
+
+    .sticky-sidebar { position: sticky; top: 90px; }
+    
+    /* CARDS */
+    .card { background: var(--card-bg); border-radius: 20px; padding: 25px; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 20px; }
+    .card h2 { margin: 0 0 20px 0; font-size: 20px; font-weight: 700; border-left: 4px solid var(--greenwood); padding-left: 12px; }
+    
+    /* FORM ELEMENTS */
+    .form-group { margin-bottom: 15px; }
+    .lang-tag { font-size: 10px; font-weight: 800; color: var(--greenwood); margin-bottom: 4px; display: block; }
+    label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 6px; color: #666; text-transform: uppercase; }
+    
+    input, select, textarea { 
+      width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #e0e0e0; 
+      background: #fafafa; font-size: 14px; transition: 0.2s; box-sizing: border-box;
     }
-    .btn.secondary{ background:#fff; color:#151515; }
-    .btn.danger{ background:#b42318; border-color:#b42318; }
-    .grid{ display:grid; grid-template-columns:1fr; gap:12px; margin-top:14px; }
-    @media (min-width:900px){ .grid{ grid-template-columns:1fr 1fr; } }
-    .topbar{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
-    .pill{ padding:6px 10px; border-radius:999px; border:1px solid rgba(0,0,0,.12); background:#f6f1ea; }
-    .hidden{ display:none!important; }
-    .lang{ font-size:12px; opacity:.7; margin-bottom:4px; }
-    note{ display:block; font-size:13px; opacity:.7; margin-top:6px; }
-    hr{ border:0; border-top:1px solid rgba(0,0,0,.12); margin:18px 0; }
+    textarea { min-height: 100px; resize: vertical; } /* Descrizioni più grandi */
+    input:focus, textarea:focus { border-color: var(--greenwood); outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(143,169,152,0.1); }
+    
+    .btn { 
+      width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; 
+      transition: 0.2s; text-transform: uppercase; letter-spacing: 1px; font-size: 13px;
+    }
+    .btn.primary { background: #151515; color: #fff; }
+    .btn.success { background: var(--greenwood); color: #fff; }
+    .btn.danger { background: #b42318; color: #fff; }
+    .btn.secondary { background: #fff; color: #151515; border: 1px solid #ddd; }
+    .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    /* LISTA PRODOTTI (Visualizzazione a schede veloci) */
+    .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px; }
+    .item-card { background: #fff; padding: 20px; border-radius: 16px; border: 1px solid rgba(0,0,0,0.05); position: relative; }
+    .item-card:hover { border-color: var(--greenwood); }
+    .item-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
+    .item-price { font-weight: 700; color: var(--greenwood-dark); }
+    .status-badge { font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 6px; text-transform: uppercase; }
+    .status-true { background: #e6f4ea; color: #1e7e34; }
+    .status-false { background: #fce8e6; color: #d93025; }
+
+    .hidden { display: none !important; }
+    hr { border: 0; border-top: 1px solid rgba(0,0,0,0.06); margin: 25px 0; }
+    note { display: block; font-size: 12px; opacity: 0.6; margin-top: 5px; line-height: 1.4; }
   </style>
 </head>
 <body>
 
-<header class="header">
-  <a href="/" style="text-decoration:none;color:inherit;">←</a>
-  <div class="logo">+400° <span>ADMIN</span></div>
+<header class="admin-header">
+  <div class="logo">+400° <span>ADMIN DASHBOARD</span></div>
+  <div style="display:flex; gap:12px; align-items:center;">
+    <div id="status" class="status-badge" style="background:#eee;">Non connesso</div>
+    <button class="btn secondary" id="logoutBtn" style="padding:8px 15px; width:auto;">Esci</button>
+  </div>
 </header>
 
 <div class="wrap">
 
-  <!-- TOP BAR -->
-  <div class="topbar">
-    <div class="pill" id="status">Non connesso</div>
-    <button class="btn secondary" id="logoutBtn">Esci</button>
-  </div>
-
-  <!-- LOGIN -->
-  <section class="card" id="loginCard">
-    <h2>Accesso Admin</h2>
-    <div class="row">
-      <div style="flex:1;min-width:240px;">
-        <label>Token Admin</label>
-        <input id="tokenInput" type="password" placeholder="ADMIN_TOKEN" />
-        <note>Impostato nel Cloudflare Worker</note>
-      </div>
-      <div style="align-self:flex-end;">
-        <button class="btn" id="loginBtn">Entra</button>
-      </div>
+  <section class="card" id="loginCard" style="max-width:400px; margin: 40px auto;">
+    <h2>Accesso Riservato</h2>
+    <div class="form-group">
+      <label>Admin Token</label>
+      <input id="tokenInput" type="password" placeholder="Inserisci il codice segreto..." />
     </div>
+    <button class="btn primary" id="loginBtn">Accedi</button>
   </section>
 
-  <!-- APP -->
-  <section class="card hidden" id="appCard">
-    <hr>
-<h2>Prenotazioni</h2>
-<note>Le richieste inviate dalla pagina /prenota</note>
+  <div id="appCard" class="hidden">
+    
+    <nav class="admin-nav">
+      <button class="nav-btn active" onclick="openTab(event, 'tab-menu')">🍴 Menu</button>
+      <button class="nav-btn" onclick="openTab(event, 'tab-info')">📖 Info Pagina</button>
+      <button class="nav-btn" onclick="openTab(event, 'tab-gallery')">📸 Gallery</button>
+      <button class="nav-btn" onclick="openTab(event, 'tab-reservations')">📅 Prenotazioni</button>
+    </nav>
 
-<div class="row" style="align-items:center;">
-  <button class="btn secondary" id="refreshReservations">Aggiorna</button>
-  <div id="reservationsMsg" style="opacity:.7;font-size:14px;"></div>
-</div>
+    <section id="tab-menu" class="tab-content">
+      <div class="admin-grid-layout">
+        <div class="sticky-sidebar">
+          <div class="card">
+            <h2>Nuovo Prodotto</h2>
+            <div class="form-group">
+              <span class="lang-tag">ITALIANO</span>
+              <label>Nome Piatto</label>
+              <input id="name" placeholder="es. Margherita">
+            </div>
+            <div class="form-group">
+              <span class="lang-tag">INGLESE</span>
+              <label>English Name</label>
+              <input id="name_en" placeholder="es. Margherita Pizza">
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <div class="form-group"><label>Prezzo €</label><input id="price" type="number" step="0.10"></div>
+              <div class="form-group"><label>Ordine (Pos)</label><input id="position" type="number" value="0"></div>
+            </div>
+            <div class="form-group">
+              <label>Categoria</label>
+              <input id="category" placeholder="es. PIZZE">
+            </div>
+            <div class="form-group">
+              <label>Stato Disponibilità</label>
+              <select id="is_available">
+                <option value="true">Disponibile ✅</option>
+                <option value="false">Esaurito ❌</option>
+              </select>
+            </div>
+            <button class="btn success" id="createBtn">Aggiungi al Menu</button>
+          </div>
+        </div>
+        
+        <div class="items-list-container">
+          <div class="items-grid" id="itemsGrid">
+            </div>
+        </div>
+      </div>
+    </section>
 
-<div class="grid" id="reservationsGrid" style="margin-top:12px;"></div>
+    <section id="tab-info" class="tab-content hidden">
+      <div class="card">
+        <h2>Contenuti "Come Funziona"</h2>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:20px;">
+          <div class="form-group"><label>Telefono</label><input id="cf_phone"></div>
+          <div class="form-group"><label>Indirizzo</label><textarea id="cf_address"></textarea></div>
+          <div class="form-group"><label>Orari (IT)</label><textarea id="cf_hours_it"></textarea></div>
+          <div class="form-group"><label>Orari (EN)</label><textarea id="cf_hours_en"></textarea></div>
+          <div class="form-group"><label>Take Away</label><textarea id="cf_takeaway"></textarea></div>
+          <div class="form-group"><label>Animali</label><textarea id="cf_pets"></textarea></div>
+          <div class="form-group"><label>Glutine</label><textarea id="cf_gluten"></textarea></div>
+          <div class="form-group"><label>Lattosio</label><textarea id="cf_lactose"></textarea></div>
+        </div>
+        <hr>
+        <h2>La nostra storia</h2>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+          <div class="form-group"><label>Testo (IT)</label><textarea id="story_it"></textarea></div>
+          <div class="form-group"><label>Testo (EN)</label><textarea id="story_en"></textarea></div>
+        </div>
+        <button class="btn success" id="saveComeFunziona" style="width:auto; padding:15px 40px;">Salva Tutte le Informazioni</button>
+      </div>
+    </section>
 
-    <!-- ===================== -->
-    <!-- BLOCCO 1: MENU -->
-    <!-- ===================== -->
-    <h2>Menu digitale</h2>
-    <note>Aggiungi, modifica o rimuovi i prodotti del menu</note>
+    <section id="tab-gallery" class="tab-content hidden">
+      <div class="card">
+        <h2>Gestione Gallery</h2>
+        <note>Trascina o seleziona più foto per caricarle direttamente nella pagina gallery.</note>
+        <div class="form-group" style="margin-top:20px;">
+          <input id="gal_files" type="file" multiple accept="image/*" style="padding:40px; border:2px dashed #ddd; background:#f9f9f9; text-align:center;">
+        </div>
+        <div class="grid" id="galPreview" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap:15px; margin-top:20px;"></div>
+        <button class="btn success" id="saveGallery" style="margin-top:20px; width:auto; padding:15px 40px;">Pubblica Foto</button>
+      </div>
+    </section>
 
-    <div class="row">
-      <div style="flex:1">
-        <div class="lang">IT</div>
-        <label>Nome</label>
-        <input id="name" />
+    <section id="tab-reservations" class="tab-content hidden">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+          <h2>Richieste di Prenotazione</h2>
+          <button class="btn secondary" id="refreshReservations" style="width:auto;">Aggiorna Lista</button>
+        </div>
+        <div id="reservationsGrid" class="items-grid">
+          </div>
       </div>
-      <div style="flex:1">
-        <div class="lang">EN</div>
-        <label>Name</label>
-        <input id="name_en" />
-      </div>
-      <div style="width:140px">
-        <label>Prezzo €</label>
-        <input id="price" type="number" step="0.01" />
-      </div>
-      <div style="flex:1">
-        <label>Categoria (IT)</label>
-        <input id="category" />
-      </div>
-      <div style="flex:1">
-        <label>Categoria (EN)</label>
-        <input id="category_en" />
-      </div>
-      <div style="width:120px">
-        <label>Pos</label>
-        <input id="position" type="number" value="0" />
-      </div>
-      <div style="flex:1">
-        <label>Immagine URL</label>
-        <input id="image_url" />
-      </div>
-      <div style="width:160px">
-        <label>Disponibile</label>
-        <select id="is_available">
-          <option value="true">Si</option>
-          <option value="false">No</option>
-        </select>
-      </div>
-      <div style="align-self:flex-end;">
-        <button class="btn" id="createBtn">Aggiungi</button>
-      </div>
-    </div>
+    </section>
 
-    <div class="grid" id="itemsGrid"></div>
-
-    <!-- ===================== -->
-    <!-- BLOCCO 2: COME FUNZIONA -->
-    <!-- ===================== -->
-    <hr>
-    <h2>Come funziona</h2>
-    <note>Contenuti della pagina /come-funziona</note>
-
-    <div class="row">
-      <div style="flex:1">
-        <label>Telefono</label>
-        <input id="cf_phone">
-      </div>
-      <div style="flex:1">
-        <label>Indirizzo</label>
-        <textarea id="cf_address"></textarea>
-      </div>
-      <div style="flex:1">
-        <label>Orari (IT)</label>
-        <textarea id="cf_hours_it"></textarea>
-      </div>
-      <div style="flex:1">
-        <label>Orari (EN)</label>
-        <textarea id="cf_hours_en"></textarea>
-      </div>
-      <div style="flex:1">
-        <label>Take Away</label>
-        <textarea id="cf_takeaway"></textarea>
-      </div>
-      <div style="flex:1">
-        <label>Glutine</label>
-        <textarea id="cf_gluten"></textarea>
-      </div>
-      <div style="flex:1">
-        <label>Lattosio</label>
-        <textarea id="cf_lactose"></textarea>
-      </div>
-      <div style="flex:1">
-        <label>Animali</label>
-        <textarea id="cf_pets"></textarea>
-      </div>
-      <div>
-        <button class="btn" id="saveComeFunziona">Salva</button>
-      </div>
-    </div>
-
-<!-- ===================== -->
-<!-- BLOCCO 4: GALLERY -->
-<!-- ===================== -->
-<hr>
-<h2>Gallery</h2>
-<note>Foto della pagina /gallery. Puoi caricare immagini dal tuo dispositivo.</note>
-
-<div class="row">
-  <div style="flex:1; min-width:260px;">
-    <label>Carica immagini</label>
-    <input
-      id="gal_files"
-      type="file"
-      multiple
-      accept="image/*"
-    />
-    <note>Puoi selezionare più foto insieme (JPG, PNG, WEBP).</note>
   </div>
 </div>
 
-<div class="grid" id="galPreview"></div>
-
-<div class="row" style="margin-top:12px;">
-  <button class="btn" id="saveGallery">Salva gallery</button>
-</div>
-
-    <!-- ===================== -->
-    <!-- BLOCCO 3: LA TUA STORIA -->
-    <!-- ===================== -->
-    <hr>
-    <h2>La tua storia</h2>
-    <note>Testo della pagina “La nostra storia”</note>
-
-    <div class="row">
-      <div style="flex:1">
-        <label>Testo (IT)</label>
-        <textarea id="story_it"></textarea>
-      </div>
-      <div style="flex:1">
-        <label>Testo (EN)</label>
-        <textarea id="story_en"></textarea>
-      </div>
-      <div>
-        <button class="btn">Salva</button>
-      </div>
-    </div>
-
-  </section>
-</div>
+<script>
+  // GESTIONE TAB VELOCE
+  function openTab(evt, tabId) {
+    const tabContents = document.getElementsByClassName("tab-content");
+    for (let i = 0; i < tabContents.length; i++) {
+      tabContents[i].classList.add("hidden");
+    }
+    const tabButtons = document.getElementsByClassName("nav-btn");
+    for (let i = 0; i < tabButtons.length; i++) {
+      tabButtons[i].classList.remove("active");
+    }
+    document.getElementById(tabId).classList.remove("hidden");
+    evt.currentTarget.classList.add("active");
+  }
+</script>
 
 <script src="/js/config.js"></script>
 <script src="/js/admin.js?v=3"></script>
