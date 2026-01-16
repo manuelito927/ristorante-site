@@ -1,3 +1,6 @@
+/* ============================================================
+   BASICS & RESET
+   ============================================================ */
 *{ box-sizing:border-box; }
 html,body{ margin:0; padding:0; }
 
@@ -9,7 +12,7 @@ html,body{ margin:0; padding:0; }
 body{
   background:#f6f1ea;
   color:#151515;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Cambiato in Sans-Serif per uniformità */
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 /* HEADER */
@@ -48,21 +51,15 @@ body{
 }
 
 /* ============================================================
-   HERO (MODIFICATA PER ESSERE COME 400 GRADI)
+   HERO (STILE 400 GRADI)
    ============================================================ */
 .hero{
-  /* 1. Altezza della foto: occupa il 70% della schermata del cellulare */
   min-height: 70vh; 
-  /* Padding aumentato in basso (60px) per distanziare la scritta dal bordo */
-  padding: var(--pad) var(--pad) 60px var(--pad);
-  
-  /* 2. Allineamento spostato in basso */
+  padding: var(--pad) var(--pad) 600px var(--pad); /* Spazio per la scritta */
   display: flex;
-  align-items: flex-end;    /* Sposta il testo verso il basso */
-  justify-content: center;  /* Mantiene il testo centrato orizzontalmente */
+  align-items: flex-end; 
+  justify-content: center; 
   text-align: center;
-
-  /* 3. Sfondo: rimosso il gradiente chiaro, messo un overlay scuro per far leggere il bianco */
   background-image: 
     linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
     url("/assets/img/hero.jpg");
@@ -73,63 +70,64 @@ body{
 
 .hero h1{
   margin: 0;
-  /* 4. Font: Bold, Sans-Serif e Bianco come in foto */
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 800; 
   line-height: 0.95;
   letter-spacing: -1.5px;
-  font-size: 62px; /* Dimensione grande */
-  color: #ffffff;  /* Testo bianco */
+  font-size: 62px;
+  color: #ffffff;
   text-transform: none;
 }
 
-/* MENU (accordion) */
+/* ============================================================
+   MENU ACCORDEON (AGGIORNATO CON GRAFICA NERA)
+   ============================================================ */
 .menu{
   padding: 10px var(--pad);
 }
 
 .menu-section{
-  border-top: 1px solid var(--line);
-}
-.menu-section:last-child{
-  border-bottom: 1px solid var(--line);
+  margin-bottom: 8px; /* Spazio tra i blocchi neri */
 }
 
+/* Pulsante categoria - Ora nero come in foto */
 .menu-title{
   width:100%;
   display:flex;
   justify-content: space-between;
   align-items:center;
-  padding: 22px 0;
-  background: transparent;
+  padding: 18px 20px;
+  background: #000000; /* Fondo nero richiesto */
   border: 0;
-  font: inherit;
   cursor: pointer;
-
+  color: #ffffff;
+  text-align: left;
   -webkit-appearance: none;
   appearance: none;
   border-radius: 0;
-  color: inherit;
-  text-align: left;
 }
 
 .menu-title h2{
   margin:0;
-  font-size: 34px;
+  font-size: 20px;    /* Più piccolo rispetto ai 34px originali */
   font-weight: 700;
-  color:#151515;
+  color:#ffffff;      /* Testo bianco */
+  text-transform: none;
 }
 
 .plus{
-  font-size: 34px;
+  font-size: 24px;
   font-weight: 300;
-  color:#151515;
+  color:#ffffff;
 }
 
 .menu-content{
   padding-bottom: 14px;
 }
 
+/* ============================================================
+   PRODOTTI (AGGIORNATI: PIÙ PICCOLI E MAIUSCOLI)
+   ============================================================ */
 .item{
   padding: 12px 0;
   border-top: 1px solid rgba(0,0,0,.08);
@@ -139,24 +137,23 @@ body{
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  
-  /* Modifiche per lo stile della foto: */
-  font-size: 16px;            /* Dimensione ridotta come nella foto */
-  font-weight: 700;           /* Mantiene il grassetto deciso */
-  text-transform: uppercase;  /* Tutto in maiuscolo */
-  letter-spacing: 0.5px;      /* Leggermente spaziato per leggibilità */
+  /* Dimensioni ridotte per farli sembrare eleganti come in foto */
+  font-size: 15px; 
+  font-weight: 700; 
+  text-transform: uppercase; 
+  letter-spacing: 0.5px;
   color: #151515;
 }
 
 .item-desc{
   margin-top: 6px;
-  font-size: 13px;
+  font-size: 11px; 
   color: rgba(0,0,0,.55);
   text-transform: uppercase;
   letter-spacing: .03em;
 }
 
-/* FOOTER */
+/* FOOTER NOTES */
 .note{
   padding: 18px var(--pad) 34px;
   color: rgba(0,0,0,.45);
@@ -165,14 +162,13 @@ body{
 .note p{ margin:0; }
 
 /* ============================================================
-   MENU MOBILE A TENDINA (STILE 400 GRADI)
+   MENU MOBILE A TENDINA (INTEGRALE)
    ============================================================ */
-
 .menu-backdrop {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,.3);
-  z-index: 60;
+  z-index: 9998;
   backdrop-filter: blur(2px);
 }
 
@@ -181,7 +177,7 @@ body{
   top: 0;
   left: 0;
   right: 0;
-  z-index: 70;
+  z-index: 9999;
   background: #ffffff;
   transform: translateY(-105%);
   transition: transform .3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -253,22 +249,7 @@ body{
   color: #000;
 }
 
-/* FIX: overlay sempre cliccabile e sopra */
-.menu-backdrop{
-  position: fixed;
-  inset: 0;
-  z-index: 9998;
-}
-
-.mobile-menu{
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 9999;
-}
-
-/* ===== Language selector (IT / EN) ===== */
+/* LANGUAGE SELECTOR */
 .langbar{
   display: flex;
   gap: 10px;
