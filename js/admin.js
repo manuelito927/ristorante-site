@@ -211,6 +211,7 @@
       category: get("category").value.trim(),
       category_en: get("category").value.trim(), // Usiamo IT come base se EN manca
       position: Number(get("position").value || 0),
+      allergens: allergens,
       is_available: get("is_available").value === "true",
       image_url: get("image_url").value.trim() || null
     };
