@@ -238,23 +238,29 @@ ${allergensHtml}
     }
   }
 
-  function readPayload(card) {
-    const get = (k) => card.querySelector(`[data-k="${k}"]`);
-    const allergens = Array.from(card.querySelectorAll('.alg:checked')).map(el => el.value);
-    return {
-      name: get("name").value.trim(),
-      name_en: get("name_en").value.trim(),
-      description: get("description").value.trim(),
-      description_en: get("description_en").value.trim(),
-      price_cents: toCents(get("price").value),
-      category: get("category").value.trim(),
-      category_en: get("category").value.trim(), // Usiamo IT come base se EN manca
-      position: Number(get("position").value || 0),
-      allergens: allergens,
-      is_available: get("is_available").value === "true",
-      image_url: get("image_url").value.trim() || null
-    };
-  }
+function readPayload(card) {
+  const get = (k) => card.querySelector(`[data-k="${k}"]`);
+
+  // ✅ prende tutte le checkbox allergeni spuntate dentro quella card
+  const allergens = Array.from(card.querySelectorAll('input.alg[type="checkbox"]:checked'))
+    .map(x => x.value);
+
+  return {
+    name: get("name").value.trim(),
+    name_en: get("name_en").value.trim(),
+    description: get("description").value.trim(),
+    description_en: get("description_en").value.trim(),
+    price_cents: toCents(get("price").value),
+    category: get("category").value.trim(),
+    category_en: get("category").value.trim(), // (poi lo sistemiamo se vuoi EN separata)
+    position: Number(get("position").value || 0),
+    is_available: get("is_available").value === "true",
+    image_url: get("image_url").value.trim() || null,
+
+    // ✅ NUOVO
+    allergens
+  };
+}
 
   // CREA nuovo prodotto
   if (createBtn) {
