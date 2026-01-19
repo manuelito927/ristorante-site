@@ -100,7 +100,7 @@ const uniqueAllergens = [...new Set(allergens)];
         category: $("category").value.trim(),
         category_en: $("category_en") ? $("category_en").value.trim() : "",
         position: Number($("position").value || 0),
-        allergens,
+        allergens: uniqueAllergens,
         is_available: $("is_available").value === "true",
         image_url: $("image_url").value.trim() || null
       };
