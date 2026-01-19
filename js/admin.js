@@ -84,6 +84,59 @@
     return (c / 100).toFixed(2);
   }
 
+  // CREA nuovo prodotto (POST /api/admin/menu)
+  if (createBtn) {
+    createBtn.onclick = async () => {
+      // prende gli allergeni spuntati nel form "Nuovo Prodotto" (tab-menu)
+      const allergens = Array.from(document.querySelectorAll("#tab-menu .alg:checked"))
+        .map(el => el.value);
+
+      const payload = {
+        name: $("name").value.trim(),
+        name_en: ($("name_en") ? $("name_en").value.trim() : ""),
+        description: $("description") ? $("description").value.trim() : "",
+        description_en: $("description_en") ? $("description_en").value.trim() : "",
+        price_cents: toCents($("price").value),
+        category: $("category").value.trim(),
+        category_en: $("category_en") ? $("category_en").value.trim() : "",
+        position: Number($("position").value || 0),
+        allergens,
+        is_available: $("is_available").value === "true",
+        image_url: $("image_url").value.trim() || null
+      };
+
+      if (!payload.name) return alert("Nome (IT) obbligatorio");
+      if (!Number.isFinite(payload.price_cents)) return alert("Prezzo non valido");
+
+      try {
+        await api("/api/admin/menu", {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+
+        // reset campi
+        $("name").value = "";
+        if ($("name_en")) $("name_en").value = "";
+        if ($("description")) $("description").value = "";
+        if ($("description_en")) $("description_en").value = "";
+        $("price").value = "";
+        $("category").value = "";
+        if ($("category_en")) $("category_en").value = "";
+        $("position").value = "0";
+        $("image_url").value = "";
+        $("is_available").value = "true";
+
+        // reset checkbox allergeni
+        document.querySelectorAll("#tab-menu .alg").forEach(c => (c.checked = false));
+
+        await loadItems();
+        alert("✅ Prodotto aggiunto!");
+      } catch (e) {
+        alert("❌ " + e.message);
+      }
+    };
+  }
+
 async function loadItems() {
   if (!grid) return;
 
