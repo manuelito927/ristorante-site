@@ -201,6 +201,7 @@
 
   function readPayload(card) {
     const get = (k) => card.querySelector(`[data-k="${k}"]`);
+    const allergens = Array.from(card.querySelectorAll('.alg:checked')).map(el => el.value);
     return {
       name: get("name").value.trim(),
       name_en: get("name_en").value.trim(),
