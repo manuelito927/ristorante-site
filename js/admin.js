@@ -192,7 +192,7 @@ function alg(value, label){
                     <label style="display:block; font-size:12px; font-weight:bold;">Immagine URL</label>
                     <input data-k="image_url" value="${escapeAttr(it.image_url || "")}" style="width:100%;"/>
                 </div>
-
+${allergensHtml}
                 <div class="row" style="display:flex; gap:10px;">
                     <button class="btn success" data-act="save" style="flex:2;">Salva Modifiche</button>
                     <button class="btn danger" data-act="del" style="flex:1;">Elimina</button>
