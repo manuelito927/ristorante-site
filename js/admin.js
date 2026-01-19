@@ -88,9 +88,9 @@
   if (createBtn) {
     createBtn.onclick = async () => {
       // prende gli allergeni spuntati nel form "Nuovo Prodotto" (tab-menu)
-      const allergens = Array.from(document.querySelectorAll("#tab-menu .sticky-sidebar .alg:checked"))
-  .map(el => el.value);
-
+      const newCard = createBtn.closest(".card"); // card "Nuovo Prodotto"
+const allergens = Array.from(newCard.querySelectorAll(".alg:checked")).map(el => el.value);
+const uniqueAllergens = [...new Set(allergens)];
       const payload = {
         name: $("name").value.trim(),
         name_en: ($("name_en") ? $("name_en").value.trim() : ""),
