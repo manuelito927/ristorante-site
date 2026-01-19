@@ -88,8 +88,8 @@
   if (createBtn) {
     createBtn.onclick = async () => {
       // prende gli allergeni spuntati nel form "Nuovo Prodotto" (tab-menu)
-      const allergens = Array.from(document.querySelectorAll("#tab-menu .alg:checked"))
-        .map(el => el.value);
+      const allergens = Array.from(document.querySelectorAll("#tab-menu .sticky-sidebar .alg:checked"))
+  .map(el => el.value);
 
       const payload = {
         name: $("name").value.trim(),
