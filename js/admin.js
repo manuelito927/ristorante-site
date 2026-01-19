@@ -632,9 +632,10 @@ function readPayload(wrap) {
   });
 
   // allergeni (checkbox)
-  payload.allergens = Array.from(
-    wrap.querySelectorAll(".alg:checked")
-  ).map(c => c.value);
+  // allergeni (checkbox) - senza duplicati
+payload.allergens = Array.from(
+  new Set(Array.from(wrap.querySelectorAll(".alg:checked")).map(c => c.value))
+);
 
   // prezzo in centesimi
   if ("price" in payload) {
