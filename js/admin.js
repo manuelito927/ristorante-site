@@ -218,6 +218,7 @@
   // CREA nuovo prodotto
   if (createBtn) {
     createBtn.onclick = async () => {
+      const allergens = Array.from(document.querySelectorAll(".alg:checked")).map(el => el.value);
       const payload = {
         name: $("name").value.trim(),
         name_en: ($("name_en") ? $("name_en").value.trim() : ""),
