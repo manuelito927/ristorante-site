@@ -221,55 +221,7 @@
 </div>
 
 <script>
-/* =========================
-   FIX MOBILE ADMIN (solo estetica)
-   ========================= */
 
-/* 1) Su mobile, togli lo sticky che crea l’effetto “sale tutto” */
-@media (max-width: 1100px) {
-  .sticky-sidebar {
-    position: static !important;
-    top: auto !important;
-  }
-}
-
-/* 2) Evita overflow orizzontale che “blocca” lo scroll */
-html, body {
-  overflow-x: hidden;
-}
-
-/* 3) Impedisce che i card dei prodotti “spingano” in modo strano */
-.items-list-container,
-.items-grid,
-.item-card {
-  max-width: 100%;
-}
-
-/* 4) CHECKBOX ALLERGENI (NUOVO PRODOTTO): label leggibili e in griglia pulita */
-#tab-menu .form-group label {
-  word-break: break-word;
-}
-
-/* La griglia allergeni del NUOVO PRODOTTO (quella in admin.html) */
-#tab-menu .form-group > div[style*="grid-template-columns"] label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 12px;
-  background: #fafafa;
-  border: 1px solid #e0e0e0;
-  border-radius: 12px;
-  font-size: 13px;
-  line-height: 1.1;
-  text-transform: none; /* evita scritte strane */
-}
-
-/* Checkbox più “pulita” */
-#tab-menu .form-group > div[style*="grid-template-columns"] input[type="checkbox"]{
-  width: 18px;
-  height: 18px;
-  flex: 0 0 18px;
-}
   // GESTIONE TAB VELOCE
   function openTab(evt, tabId) {
     const tabContents = document.getElementsByClassName("tab-content");
