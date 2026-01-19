@@ -84,227 +84,245 @@
     return (c / 100).toFixed(2);
   }
 
-  /* =========================================================
-      MENU DIGITALE - CRUD
-     ========================================================= */
+async function loadItems() {
+  if (!grid) return;
 
-  async function loadItems() {
-    if (!grid) return;
+  grid.innerHTML = "<div class='card'>Caricamento menu...</div>";
 
-    grid.innerHTML = "<div class='card'>Caricamento menu...</div>";
-    try {
-        const { items } = await api("/api/menu");
-        grid.innerHTML = "";
+  try {
+    const { items } = await api("/api/menu");
+    grid.innerHTML = "";
 
-        (items || []).forEach((it) => {
-            const card = document.createElement("div");
-            card.className = "item-card card";
-// ✅ Allergeni: pre-seleziona quelli già salvati in DB
-const selAll = new Set(Array.isArray(it.allergens) ? it.allergens : []);
+    // tiene traccia di quale prodotto è aperto
+    let openId = null;
 
-const allergensHtml = `
-  <div class="form-group" style="margin-bottom:12px;">
-    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:8px;">
-      ALLERGENI (spunta quelli presenti)
-    </label>
+    (items || []).forEach((it) => {
+      const wrap = document.createElement("div");
+      wrap.className = "item-card card";
+      wrap.style.padding = "14px"; // un po' più compatto
 
-    <div style="display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:8px;">
-      ${alg("glutine","Glutine")}
-      ${alg("crostacei","Crostacei")}
-      ${alg("uova","Uova")}
-      ${alg("pesce","Pesce")}
-      ${alg("arachidi","Arachidi")}
-      ${alg("soia","Soia")}
-      ${alg("latte","Latte")}
-      ${alg("frutta_a_guscio","Frutta a guscio")}
-      ${alg("sedano","Sedano")}
-      ${alg("senape","Senape")}
-      ${alg("sesamo","Sesamo")}
-      ${alg("solfiti","Solfiti")}
-      ${alg("lupini","Lupini")}
-      ${alg("molluschi","Molluschi")}
-      ${alg("nichel","Nichel")}
-    </div>
+      // ✅ Allergeni: pre-seleziona quelli già salvati in DB
+      const selAll = new Set(Array.isArray(it.allergens) ? it.allergens : []);
 
-    <note style="margin-top:8px;">Questi spunteranno anche nella “leggenda” del menu (passo successivo).</note>
-  </div>
-`;
+      function alg(value, label) {
+        const checked = selAll.has(value) ? "checked" : "";
+        return `
+          <label style="display:flex; gap:8px; align-items:center; font-size:13px; background:#fafafa; border:1px solid #e0e0e0; padding:8px 10px; border-radius:10px;">
+            <input class="alg" type="checkbox" value="${value}" ${checked}>
+            <span>${label}</span>
+          </label>
+        `;
+      }
 
-function alg(value, label){
-  const checked = selAll.has(value) ? "checked" : "";
-  return `
-    <label style="display:flex; gap:8px; align-items:center; font-size:13px; background:#fafafa; border:1px solid #e0e0e0; padding:8px 10px; border-radius:10px;">
-      <input class="alg" type="checkbox" value="${value}" ${checked}>
-      <span>${label}</span>
-    </label>
-  `;
-}
-            card.innerHTML = `
-                <div class="item-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                    <span class="status-badge status-${it.is_available}" style="padding:4px 8px; border-radius:4px; font-size:12px; background:${it.is_available ? '#e6f4ea' : '#ffebee'}; color:${it.is_available ? '#1e7e34' : '#c62828'};">
-                        ${it.is_available ? 'Disponibile' : 'Esaurito'}
-                    </span>
-                    <strong style="font-size:16px;">€ ${fromCents(it.price_cents)}</strong>
-                </div>
+      const allergensHtml = `
+        <div class="form-group" style="margin-bottom:12px;">
+          <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:8px;">
+            ALLERGENI (spunta quelli presenti)
+          </label>
 
-                <div class="form-group" style="margin-bottom:10px;">
-                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px;">NOME PRODOTTO (IT / EN)</label>
-                    <input data-k="name" value="${escapeAttr(it.name)}" style="width:100%; margin-bottom:5px;"/>
-                    <input data-k="name_en" value="${escapeAttr(it.name_en || "")}" placeholder="English name" style="width:100%;"/>
-                </div>
+          <div style="display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:8px;">
+            ${alg("glutine","Glutine")}
+            ${alg("crostacei","Crostacei")}
+            ${alg("uova","Uova")}
+            ${alg("pesce","Pesce")}
+            ${alg("arachidi","Arachidi")}
+            ${alg("soia","Soia")}
+            ${alg("latte","Latte")}
+            ${alg("frutta_a_guscio","Frutta a guscio")}
+            ${alg("sedano","Sedano")}
+            ${alg("senape","Senape")}
+            ${alg("sesamo","Sesamo")}
+            ${alg("solfiti","Solfiti")}
+            ${alg("lupini","Lupini")}
+            ${alg("molluschi","Molluschi")}
+            ${alg("nichel","Nichel")}
+          </div>
+        </div>
+      `;
 
-                <div class="form-group" style="margin-bottom:10px;">
-                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px;">DESCRIZIONE (IT)</label>
-                    <textarea data-k="description" style="width:100%; min-height:50px;">${escapeHtml(it.description || "")}</textarea>
-                </div>
+      // ✅ Header compatto (sempre visibile)
+      const compactHeader = `
+        <button type="button" data-act="toggle"
+          style="
+            width:100%;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:12px;
+            background:transparent;
+            border:0;
+            padding:0;
+            cursor:pointer;
+            text-align:left;
+          "
+          aria-expanded="false"
+        >
+          <div style="min-width:0; flex:1;">
+            <div style="display:flex; align-items:center; gap:10px; min-width:0;">
+              <strong style="font-size:15px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                ${escapeHtml(it.name || "")}
+              </strong>
+              <span style="opacity:.7; font-size:12px; white-space:nowrap;">
+                ${escapeHtml(it.category || "")}
+              </span>
+            </div>
+            <div style="opacity:.6; font-size:12px; margin-top:4px;">
+              ID: ${escapeHtml(String(it.id))}
+            </div>
+          </div>
 
-                <div class="form-group" style="margin-bottom:10px;">
-                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px;">DESCRIPTION (EN)</label>
-                    <textarea data-k="description_en" style="width:100%; min-height:50px;">${escapeHtml(it.description_en || "")}</textarea>
-                </div>
+          <div style="display:flex; align-items:center; gap:10px; flex:0 0 auto;">
+            <span class="status-badge status-${it.is_available}"
+              style="padding:4px 8px; border-radius:6px; font-size:10px; font-weight:800; text-transform:uppercase;
+              background:${it.is_available ? '#e6f4ea' : '#ffebee'};
+              color:${it.is_available ? '#1e7e34' : '#c62828'};">
+              ${it.is_available ? 'Disponibile' : 'Esaurito'}
+            </span>
 
-                <div class="row" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
-                    <div>
-                        <label style="display:block; font-size:12px; font-weight:bold;">Prezzo (€)</label>
-                        <input data-k="price" type="number" step="0.01" value="${fromCents(it.price_cents)}" style="width:100%;"/>
-                    </div>
-                    <div>
-                        <label style="display:block; font-size:12px; font-weight:bold;">Posizione</label>
-                        <input data-k="position" type="number" step="1" value="${it.position}" style="width:100%;"/>
-                    </div>
-                </div>
+            <strong style="font-size:14px; white-space:nowrap;">€ ${fromCents(it.price_cents)}</strong>
 
-                <div class="row" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
-                    <div>
-                        <label style="display:block; font-size:12px; font-weight:bold;">Categoria (IT)</label>
-                        <input data-k="category" value="${escapeAttr(it.category || "")}" style="width:100%;"/>
-                    </div>
-                    <div>
-                        <label style="display:block; font-size:12px; font-weight:bold;">Disponibile</label>
-                        <select data-k="is_available" style="width:100%;">
-                            <option value="true" ${it.is_available ? "selected" : ""}>Si</option>
-                            <option value="false" ${!it.is_available ? "selected" : ""}>No</option>
-                        </select>
-                    </div>
-                </div>
+            <span data-el="chev" style="font-size:18px; line-height:1; opacity:.7;">▾</span>
+          </div>
+        </button>
+      `;
 
-                <div class="form-group" style="margin-bottom:15px;">
-                    <label style="display:block; font-size:12px; font-weight:bold;">Immagine URL</label>
-                    <input data-k="image_url" value="${escapeAttr(it.image_url || "")}" style="width:100%;"/>
-                </div>
-${allergensHtml}
-                <div class="row" style="display:flex; gap:10px;">
-                    <button class="btn success" data-act="save" style="flex:2;">Salva Modifiche</button>
-                    <button class="btn danger" data-act="del" style="flex:1;">Elimina</button>
-                </div>
-                <div style="margin-top:10px; opacity:.7; font-size:13px; text-align:center;" data-msg=""></div>
-            `;
+      // ✅ Dettagli (nascosti finché non apri)
+      const details = `
+        <div data-el="details" hidden style="margin-top:14px; padding-top:14px; border-top:1px solid rgba(0,0,0,.06);">
 
-            card.querySelector('[data-act="save"]').onclick = async () => {
-                const msg = card.querySelector('[data-msg=""]');
-                msg.textContent = "Salvataggio...";
-                try {
-                    const payload = readPayload(card);
-                    await api("/api/admin/menu/" + it.id, {
-                        method: "PUT",
-                        body: JSON.stringify(payload)
-                    });
-                    msg.innerHTML = "<span style='color:green'>✅ Salvato</span>";
-                    setTimeout(() => { msg.textContent = ""; loadItems(); }, 1500);
-                } catch (e) {
-                    msg.textContent = "❌ " + e.message;
-                }
-            };
+          <div class="form-group" style="margin-bottom:10px;">
+            <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px;">NOME PRODOTTO (IT / EN)</label>
+            <input data-k="name" value="${escapeAttr(it.name)}" style="width:100%; margin-bottom:5px;"/>
+            <input data-k="name_en" value="${escapeAttr(it.name_en || "")}" placeholder="English name" style="width:100%;"/>
+          </div>
 
-            card.querySelector('[data-act="del"]').onclick = async () => {
-                const ok = confirm("Eliminare '" + it.name + "'?");
-                if (!ok) return;
-                try {
-                    await api("/api/admin/menu/" + it.id, { method: "DELETE" });
-                    loadItems();
-                } catch (e) {
-                    alert("❌ " + e.message);
-                }
-            };
+          <div class="form-group" style="margin-bottom:10px;">
+            <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px;">DESCRIZIONE (IT)</label>
+            <textarea data-k="description" style="width:100%; min-height:50px;">${escapeHtml(it.description || "")}</textarea>
+          </div>
 
-            grid.appendChild(card);
-        });
+          <div class="form-group" style="margin-bottom:10px;">
+            <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px;">DESCRIPTION (EN)</label>
+            <textarea data-k="description_en" style="width:100%; min-height:50px;">${escapeHtml(it.description_en || "")}</textarea>
+          </div>
 
-        if (!items || items.length === 0) {
-            grid.innerHTML = "<div class='card'>Nessun prodotto presente nel menu.</div>";
+          <div class="row" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+            <div>
+              <label style="display:block; font-size:12px; font-weight:bold;">Prezzo (€)</label>
+              <input data-k="price" type="number" step="0.01" value="${fromCents(it.price_cents)}" style="width:100%;"/>
+            </div>
+            <div>
+              <label style="display:block; font-size:12px; font-weight:bold;">Posizione</label>
+              <input data-k="position" type="number" step="1" value="${it.position}" style="width:100%;"/>
+            </div>
+          </div>
+
+          <div class="row" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+            <div>
+              <label style="display:block; font-size:12px; font-weight:bold;">Categoria (IT)</label>
+              <input data-k="category" value="${escapeAttr(it.category || "")}" style="width:100%;"/>
+            </div>
+            <div>
+              <label style="display:block; font-size:12px; font-weight:bold;">Disponibile</label>
+              <select data-k="is_available" style="width:100%;">
+                <option value="true" ${it.is_available ? "selected" : ""}>Si</option>
+                <option value="false" ${!it.is_available ? "selected" : ""}>No</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom:15px;">
+            <label style="display:block; font-size:12px; font-weight:bold;">Immagine URL</label>
+            <input data-k="image_url" value="${escapeAttr(it.image_url || "")}" style="width:100%;"/>
+          </div>
+
+          ${allergensHtml}
+
+          <div class="row" style="display:flex; gap:10px;">
+            <button class="btn success" data-act="save" style="flex:2;">Salva Modifiche</button>
+            <button class="btn danger" data-act="del" style="flex:1;">Elimina</button>
+          </div>
+
+          <div style="margin-top:10px; opacity:.7; font-size:13px; text-align:center;" data-msg=""></div>
+        </div>
+      `;
+
+      wrap.innerHTML = compactHeader + details;
+      grid.appendChild(wrap);
+
+      const toggleBtn = wrap.querySelector('[data-act="toggle"]');
+      const detailsEl = wrap.querySelector('[data-el="details"]');
+      const chevEl = wrap.querySelector('[data-el="chev"]');
+
+      function setOpen(isOpen) {
+        if (!toggleBtn || !detailsEl) return;
+        toggleBtn.setAttribute("aria-expanded", String(isOpen));
+        detailsEl.hidden = !isOpen;
+        if (chevEl) chevEl.textContent = isOpen ? "▴" : "▾";
+      }
+
+      // Toggle: uno aperto alla volta
+      toggleBtn.onclick = () => {
+        const willOpen = openId !== it.id;
+
+        // chiudi tutti
+        grid.querySelectorAll('[data-el="details"]').forEach((d) => (d.hidden = true));
+        grid.querySelectorAll('[data-act="toggle"]').forEach((b) => b.setAttribute("aria-expanded", "false"));
+        grid.querySelectorAll('[data-el="chev"]').forEach((c) => (c.textContent = "▾"));
+
+        if (willOpen) {
+          openId = it.id;
+          setOpen(true);
+
+          // porta il prodotto in vista (senza spararti in fondo)
+          wrap.scrollIntoView({ behavior: "smooth", block: "start" });
+        } else {
+          openId = null;
+          setOpen(false);
         }
-    } catch (e) {
-        grid.innerHTML = "Errore: " + e.message;
-    }
-  }
-
-function readPayload(card) {
-  const get = (k) => card.querySelector(`[data-k="${k}"]`);
-
-  // ✅ prende tutte le checkbox allergeni spuntate dentro quella card
-  const allergens = Array.from(card.querySelectorAll('input.alg[type="checkbox"]:checked'))
-    .map(x => x.value);
-
-  return {
-    name: get("name").value.trim(),
-    name_en: get("name_en").value.trim(),
-    description: get("description").value.trim(),
-    description_en: get("description_en").value.trim(),
-    price_cents: toCents(get("price").value),
-    category: get("category").value.trim(),
-    category_en: get("category").value.trim(), // (poi lo sistemiamo se vuoi EN separata)
-    position: Number(get("position").value || 0),
-    is_available: get("is_available").value === "true",
-    image_url: get("image_url").value.trim() || null,
-
-    // ✅ NUOVO
-    allergens
-  };
-}
-
-  // CREA nuovo prodotto
-  if (createBtn) {
-    createBtn.onclick = async () => {
-const allergens = Array.from(document.querySelectorAll("#tab-menu .alg:checked"))
-  .map(el => el.value);
-      const payload = {
-        name: $("name").value.trim(),
-        name_en: ($("name_en") ? $("name_en").value.trim() : ""),
-        description: $("description") ? $("description").value.trim() : "",
-        description_en: $("description_en") ? $("description_en").value.trim() : "",
-        price_cents: toCents($("price").value),
-        category: $("category").value.trim(),
-        category_en: $("category_en") ? $("category_en").value.trim() : "",
-        position: Number($("position").value || 0),
-        allergens: allergens,
-        is_available: $("is_available").value === "true",
-        image_url: $("image_url").value.trim() || null
       };
 
-      if (!payload.name) return alert("Nome (IT) obbligatorio");
-      if (!Number.isFinite(payload.price_cents)) return alert("Prezzo non valido");
+      // Save / Delete (identici a prima)
+      wrap.querySelector('[data-act="save"]').onclick = async () => {
+        const msg = wrap.querySelector('[data-msg=""]');
+        msg.textContent = "Salvataggio...";
+        try {
+          const payload = readPayload(wrap);
+          await api("/api/admin/menu/" + it.id, {
+            method: "PUT",
+            body: JSON.stringify(payload)
+          });
+          msg.innerHTML = "<span style='color:green'>✅ Salvato</span>";
+          setTimeout(() => {
+            msg.textContent = "";
+            openId = it.id; // riapri lo stesso dopo reload
+            loadItems();
+          }, 800);
+        } catch (e) {
+          msg.textContent = "❌ " + e.message;
+        }
+      };
 
-      try {
-        await api("/api/admin/menu", { method: "POST", body: JSON.stringify(payload) });
+      wrap.querySelector('[data-act="del"]').onclick = async () => {
+        const ok = confirm("Eliminare '" + it.name + "'?");
+        if (!ok) return;
+        try {
+          await api("/api/admin/menu/" + it.id, { method: "DELETE" });
+          openId = null;
+          loadItems();
+        } catch (e) {
+          alert("❌ " + e.message);
+        }
+      };
+    });
 
-        $("name").value = "";
-        if ($("name_en")) $("name_en").value = "";
-        if ($("description")) $("description").value = "";
-        if ($("description_en")) $("description_en").value = "";
-        $("price").value = "";
-        $("category").value = "";
-        if ($("category_en")) $("category_en").value = "";
-        $("position").value = "0";
-        $("image_url").value = "";
-        $("is_available").value = "true";
-
-        await loadItems();
-        alert("✅ Prodotto aggiunto!");
-      } catch (e) {
-        alert("❌ " + e.message);
-      }
-    };
+    if (!items || items.length === 0) {
+      grid.innerHTML = "<div class='card'>Nessun prodotto presente nel menu.</div>";
+    }
+  } catch (e) {
+    grid.innerHTML = "Errore: " + e.message;
   }
+}
 
   /* =========================================================
       COME FUNZIONA - CARICA + SALVA
