@@ -273,6 +273,8 @@ async function loadItems() {
           <div class="row" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
             <div>
               <label style="display:block; font-size:12px; font-weight:bold;">Categoria (IT)</label>
+              <label style="display:block; font-size:12px; font-weight:bold;">Category (EN)</label>
+<input data-k="category_en" value="${escapeAttr(it.category_en || "")}" style="width:100%;" placeholder="es. Pizzas"/>
               <input data-k="category" value="${escapeAttr(it.category || "")}" style="width:100%;"/>
             </div>
             <div>
