@@ -113,15 +113,22 @@
               const name = pickText(it, "name", "name_en");
               const desc = pickText(it, "description", "description_en");
 
-              const itemAll = Array.isArray(it.allergens) ? it.allergens : [];
-              itemAll.forEach((k) => usedAllergens.add(k));
+const rawAll = Array.isArray(it.allergens) ? it.allergens : [];
 
-              const iconsRow =
-                itemAll.length
-                  ? `<div class="item-allergens" style="margin-top:6px; font-size:18px; line-height:1;">
-                       ${itemAll.map((k) => `<span title="${escapeHtml(labelForAllergen(k))}">${iconForAllergen(k)}</span>`).join(" ")}
-                     </div>`
-                  : "";
+// ✅ deduplica + pulizia (niente doppioni, niente valori vuoti)
+const itemAll = Array.from(new Set(rawAll.map(String).map(s => s.trim()).filter(Boolean)));
+
+// ✅ aggiunge alla legenda (una sola volta) solo i puliti
+itemAll.forEach((k) => usedAllergens.add(k));
+
+const iconsRow =
+  itemAll.length
+    ? `<div class="item-allergens" style="margin-top:6px; font-size:18px; line-height:1;">
+         ${itemAll
+           .map((k) => `<span title="${escapeHtml(labelForAllergen(k))}">${iconForAllergen(k)}</span>`)
+           .join(" ")}
+       </div>`
+    : "";
 
               return `
                 <div class="item">
