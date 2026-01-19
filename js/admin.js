@@ -99,7 +99,46 @@
         (items || []).forEach((it) => {
             const card = document.createElement("div");
             card.className = "item-card card";
+// ✅ Allergeni: pre-seleziona quelli già salvati in DB
+const selAll = new Set(Array.isArray(it.allergens) ? it.allergens : []);
 
+const allergensHtml = `
+  <div class="form-group" style="margin-bottom:12px;">
+    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:8px;">
+      ALLERGENI (spunta quelli presenti)
+    </label>
+
+    <div style="display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:8px;">
+      ${alg("glutine","Glutine")}
+      ${alg("crostacei","Crostacei")}
+      ${alg("uova","Uova")}
+      ${alg("pesce","Pesce")}
+      ${alg("arachidi","Arachidi")}
+      ${alg("soia","Soia")}
+      ${alg("latte","Latte")}
+      ${alg("frutta_a_guscio","Frutta a guscio")}
+      ${alg("sedano","Sedano")}
+      ${alg("senape","Senape")}
+      ${alg("sesamo","Sesamo")}
+      ${alg("solfiti","Solfiti")}
+      ${alg("lupini","Lupini")}
+      ${alg("molluschi","Molluschi")}
+      ${alg("nichel","Nichel")}
+    </div>
+
+    <note style="margin-top:8px;">Questi spunteranno anche nella “leggenda” del menu (passo successivo).</note>
+  </div>
+`;
+
+function alg(value, label){
+  const checked = selAll.has(value) ? "checked" : "";
+  return `
+    <label style="display:flex; gap:8px; align-items:center; font-size:13px; background:#fafafa; border:1px solid #e0e0e0; padding:8px 10px; border-radius:10px;">
+      <input class="alg" type="checkbox" value="${value}" ${checked}>
+      <span>${label}</span>
+    </label>
+  `;
+}
             card.innerHTML = `
                 <div class="item-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                     <span class="status-badge status-${it.is_available}" style="padding:4px 8px; border-radius:4px; font-size:12px; background:${it.is_available ? '#e6f4ea' : '#ffebee'}; color:${it.is_available ? '#1e7e34' : '#c62828'};">
