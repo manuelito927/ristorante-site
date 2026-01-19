@@ -127,7 +127,7 @@ const uniqueAllergens = [...new Set(allergens)];
         $("is_available").value = "true";
 
         // reset checkbox allergeni
-document.querySelectorAll("#tab-menu .sticky-sidebar .alg").forEach(c => (c.checked = false));
+newCard.querySelectorAll(".alg").forEach(c => (c.checked = false));
 
         await loadItems();
         alert("✅ Prodotto aggiunto!");
