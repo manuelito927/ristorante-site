@@ -613,6 +613,38 @@ async function loadItems() {
     showApp(false);
   }
 
+function readPayload(wrap) {
+  const payload = {};
+
+  // campi input / textarea / select
+  wrap.querySelectorAll("[data-k]").forEach(el => {
+    const key = el.getAttribute("data-k");
+
+    if (el.tagName === "SELECT") {
+      payload[key] = el.value === "true" ? true : el.value === "false" ? false : el.value;
+    } 
+    else if (el.type === "number") {
+      payload[key] = el.value !== "" ? Number(el.value) : null;
+    } 
+    else {
+      payload[key] = el.value.trim();
+    }
+  });
+
+  // allergeni (checkbox)
+  payload.allergens = Array.from(
+    wrap.querySelectorAll(".alg:checked")
+  ).map(c => c.value);
+
+  // prezzo in centesimi
+  if ("price" in payload) {
+    payload.price_cents = Math.round(Number(payload.price) * 100);
+    delete payload.price;
+  }
+
+  return payload;
+}
+
   function escapeHtml(s) {
     return String(s || "").replace(/[&<>"']/g, (c) => ({
       "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#039;"
