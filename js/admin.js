@@ -270,21 +270,23 @@ async function loadItems() {
             </div>
           </div>
 
-          <div class="row" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
-            <div>
-              <label style="display:block; font-size:12px; font-weight:bold;">Categoria (IT)</label>
-              <label style="display:block; font-size:12px; font-weight:bold;">Category (EN)</label>
-<input data-k="category_en" value="${escapeAttr(it.category_en || "")}" style="width:100%;" placeholder="es. Pizzas"/>
-              <input data-k="category" value="${escapeAttr(it.category || "")}" style="width:100%;"/>
-            </div>
-            <div>
-              <label style="display:block; font-size:12px; font-weight:bold;">Disponibile</label>
-              <select data-k="is_available" style="width:100%;">
-                <option value="true" ${it.is_available ? "selected" : ""}>Si</option>
-                <option value="false" ${!it.is_available ? "selected" : ""}>No</option>
-              </select>
-            </div>
-          </div>
+         <div class="row" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+  <div>
+    <label style="display:block; font-size:12px; font-weight:bold;">Categoria (IT)</label>
+    <input data-k="category" value="${escapeAttr(it.category || "")}" style="width:100%;"/>
+
+    <label style="display:block; font-size:12px; font-weight:bold; margin-top:10px;">Category (EN)</label>
+    <input data-k="category_en" value="${escapeAttr(it.category_en || "")}" style="width:100%;" placeholder="es. Pizzas"/>
+  </div>
+
+  <div>
+    <label style="display:block; font-size:12px; font-weight:bold;">Disponibile</label>
+    <select data-k="is_available" style="width:100%;">
+      <option value="true" ${it.is_available ? "selected" : ""}>Si</option>
+      <option value="false" ${!it.is_available ? "selected" : ""}>No</option>
+    </select>
+  </div>
+</div>
 
           <div class="form-group" style="margin-bottom:15px;">
             <label style="display:block; font-size:12px; font-weight:bold;">Immagine URL</label>
