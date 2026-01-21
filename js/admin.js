@@ -421,8 +421,11 @@ async function loadItems() {
       gluten_title: "Senza glutine e senza lattosio//",
       gluten_text: cf_gluten ? cf_gluten.value.trim() : "",
       lactose_text: cf_lactose ? cf_lactose.value.trim() : "",
-      pets_title: "Amici a 4 zampe //",
-      pets_text: cf_pets ? cf_pets.value.trim() : ""
+            pets_title: "Amici a 4 zampe //",
+      pets_text: cf_pets ? cf_pets.value.trim() : "",
+
+      story_it: story_it ? story_it.value.trim() : "",
+      story_en: story_en ? story_en.value.trim() : ""
     };
 
     await api("/api/admin/page/come-funziona", {
