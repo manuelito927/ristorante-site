@@ -36,6 +36,10 @@
   const galSaveBtn = $("saveGallery");
   const gal_files = $("gal_files");     // <input type="file" ...>
   const galPreview = $("galPreview");   // div dove mostriamo anteprime
+// 🖼 COPERTINE
+const coverPage = $("cover_page");
+const coverFile = $("cover_file");
+const saveCoverBtn = $("saveCover");
 
   let token = localStorage.getItem("admin_token") || "";
 
