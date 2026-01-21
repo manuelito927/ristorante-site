@@ -404,6 +404,8 @@ async function loadItems() {
         if (cf_gluten) cf_gluten.value = d.gluten_text || "";
         if (cf_lactose) cf_lactose.value = d.lactose_text || "";
         if (cf_pets) cf_pets.value = d.pets_text || "";
+                if (story_it) story_it.value = d.story_it || "";
+        if (story_en) story_en.value = d.story_en || "";
     } catch(e) { console.error("Errore caricamento info", e); }
   }
 
