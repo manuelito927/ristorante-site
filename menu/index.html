@@ -50,6 +50,31 @@
   <main class="menu" id="menu-digitale"></main>
 
   <script src="/js/config.js"></script>
+  <script>
+(async function(){
+  const API = (window.API_BASE || "").replace(/\/$/, "");
+  const hero = document.getElementById("pageHero");
+  if(!hero) return;
+
+  const key = hero.dataset.coverKey || "menu";
+
+  try {
+    const res = await fetch((API || "") + "/api/page/covers", { cache: "no-store" });
+    const data = await res.json().catch(() => ({}));
+    const covers = data && data.data ? data.data : {};
+    const url = covers[key];
+
+    if(url && String(url).trim()){
+      hero.style.backgroundImage = `url("${url}")`;
+      hero.style.backgroundSize = "cover";
+      hero.style.backgroundPosition = "center";
+      hero.style.backgroundRepeat = "no-repeat";
+    }
+  } catch(e){
+    console.warn("Cover non caricata:", e);
+  }
+})();
+</script>
 <script src="/js/menu.js?v=4"></script>
 
 <script>
