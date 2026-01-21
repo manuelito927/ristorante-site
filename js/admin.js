@@ -600,56 +600,32 @@ async function loadItems() {
    ========================================================= */
 
 async function saveCover() {
-  if (!coverPage || !coverFile) {
-    alert("Campi copertina non trovati");
-    return;
-  }
-
-  if (!coverFile.files || !coverFile.files[0]) {
-    alert("Seleziona un'immagine");
-    return;
-  }
+  if (!coverPage || !coverFile) return alert("Campi copertina non trovati");
+  if (!coverFile.files || !coverFile.files[0]) return alert("Seleziona un'immagine");
 
   const file = coverFile.files[0];
 
-  // 1) Upload immagine su R2
-  const fd = new FormData();
-  fd.append("file", file);
+  try {
+    // ✅ riuso la stessa funzione di upload della gallery (già testata)
+    const imageUrl = await uploadOneFileToR2(file);
 
-  const res = await fetch(API + "/api/admin/gallery/upload", {
-    method: "POST",
-    headers: { ...authHeaders() },
-    body: fd
-  });
+    const page = coverPage.value;
 
-  const data = await res.json();
-  if (!res.ok || !data.url) {
-    alert("Errore upload immagine");
-    return;
+    await api("/api/admin/page/covers", {
+      method: "PUT",
+      body: JSON.stringify({ [page]: imageUrl })
+    });
+
+    coverFile.value = "";
+    alert("✅ Copertina salvata per: " + page.toUpperCase());
+  } catch (e) {
+    alert("❌ Upload copertina fallito: " + (e.message || e));
   }
-
-  // 2) Salva nel DB sotto slug = covers
-  const page = coverPage.value;
-  const imageUrl = data.url;
-
-  await api("/api/admin/page/covers", {
-    method: "PUT",
-    body: JSON.stringify({
-      [page]: imageUrl
-    })
-  });
-
-  coverFile.value = "";
-  alert("✅ Copertina salvata per: " + page.toUpperCase());
 }
 
 if (saveCoverBtn) {
-  saveCoverBtn.onclick = () => {
-    saveCover().catch(e => alert("❌ " + e.message));
-  };
+  saveCoverBtn.onclick = () => saveCover();
 }
-
-
   /* =========================================================
       LOGIN / LOGOUT / INIT
      ========================================================= */
