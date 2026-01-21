@@ -60,15 +60,26 @@ const saveCoverBtn = $("saveCover");
     return token ? { authorization: "Bearer " + token } : {};
   }
 
-  async function api(path, opts = {}) {
-    const res = await fetch(API + path, {
-      ...opts,
-      headers: {
-        "content-type": "application/json",
-        ...(opts.headers || {}),
-        ...authHeaders()
-      }
-    });
+async function api(path, opts = {}) {
+  const headers = {
+    ...(opts.headers || {}),
+    ...authHeaders()
+  };
+
+  // ❗️ Se il body è FormData NON forziamo content-type
+  if (!(opts.body instanceof FormData)) {
+    headers["content-type"] = "application/json";
+  }
+
+  const res = await fetch(API + path, {
+    ...opts,
+    headers
+  });
+
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || ("HTTP " + res.status));
+  return data;
+}
 
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data.error || ("HTTP " + res.status));
