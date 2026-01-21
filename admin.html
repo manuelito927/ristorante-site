@@ -9,48 +9,43 @@
     :root {
       --greenwood: #8FA998;
       --greenwood-dark: #2d3a31;
-      --bg-admin: #f4f1ee; /* Richiamo al crema del sito */
+      --bg-admin: #f4f1ee;
       --card-bg: #ffffff;
     }
-    
+
     body { background: var(--bg-admin); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; margin: 0; color: #151515; }
-    
-    /* HEADER SPECIFICO ADMIN */
+
     .admin-header { background: #fff; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
     .admin-header .logo { font-weight: 700; letter-spacing: 1px; }
     .admin-header .logo span { font-weight: 300; opacity: 0.6; margin-left: 5px; }
 
     .wrap { max-width: 1400px; margin: 0 auto; padding: 20px; }
-    
-    /* NAVIGAZIONE A TAB */
+
     .admin-nav { display: flex; gap: 8px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 5px; }
     .nav-btn { padding: 12px 18px; background: #fff; border: 1px solid rgba(0,0,0,0.1); border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 13px; transition: 0.2s; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.5px; }
     .nav-btn.active { background: var(--greenwood); color: white; border-color: var(--greenwood); box-shadow: 0 4px 10px rgba(143,169,152,0.3); }
 
-    /* LAYOUT PROFESSIONALE A DUE COLONNE */
     .admin-grid-layout { display: grid; grid-template-columns: 420px 1fr; gap: 25px; align-items: start; }
     @media (max-width: 1100px) { .admin-grid-layout { grid-template-columns: 1fr; } }
 
     .sticky-sidebar { position: sticky; top: 90px; }
-    
-    /* CARDS */
+
     .card { background: var(--card-bg); border-radius: 20px; padding: 25px; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 4px 20px rgba(0,0,0,0.02); margin-bottom: 20px; }
     .card h2 { margin: 0 0 20px 0; font-size: 20px; font-weight: 700; border-left: 4px solid var(--greenwood); padding-left: 12px; }
-    
-    /* FORM ELEMENTS */
+
     .form-group { margin-bottom: 15px; }
     .lang-tag { font-size: 10px; font-weight: 800; color: var(--greenwood); margin-bottom: 4px; display: block; }
     label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 6px; color: #666; text-transform: uppercase; }
-    
-    input, select, textarea { 
-      width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #e0e0e0; 
+
+    input, select, textarea {
+      width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #e0e0e0;
       background: #fafafa; font-size: 14px; transition: 0.2s; box-sizing: border-box;
     }
-    textarea { min-height: 100px; resize: vertical; } /* Descrizioni più grandi */
+    textarea { min-height: 100px; resize: vertical; }
     input:focus, textarea:focus { border-color: var(--greenwood); outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(143,169,152,0.1); }
-    
-    .btn { 
-      width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; 
+
+    .btn {
+      width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer;
       transition: 0.2s; text-transform: uppercase; letter-spacing: 1px; font-size: 13px;
     }
     .btn.primary { background: #151515; color: #fff; }
@@ -59,11 +54,9 @@
     .btn.secondary { background: #fff; color: #151515; border: 1px solid #ddd; }
     .btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
-    /* LISTA PRODOTTI (Visualizzazione a schede veloci) */
     .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px; }
     .item-card { background: #fff; padding: 20px; border-radius: 16px; border: 1px solid rgba(0,0,0,0.05); position: relative; }
     .item-card:hover { border-color: var(--greenwood); }
-    .item-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
     .item-price { font-weight: 700; color: var(--greenwood-dark); }
     .status-badge { font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 6px; text-transform: uppercase; }
     .status-true { background: #e6f4ea; color: #1e7e34; }
@@ -72,61 +65,28 @@
     .hidden { display: none !important; }
     hr { border: 0; border-top: 1px solid rgba(0,0,0,0.06); margin: 25px 0; }
     note { display: block; font-size: 12px; opacity: 0.6; margin-top: 5px; line-height: 1.4; }
-    
-    /* =========================
-   FIX MOBILE ADMIN (solo estetica)
-   ========================= */
 
-/* 1) Su mobile, togli lo sticky che crea l’effetto “sale tutto” */
-@media (max-width: 1100px) {
-  .sticky-sidebar {
-    position: static !important;
-    top: auto !important;
-  }
-}
+    /* FIX MOBILE */
+    @media (max-width: 1100px) {
+      .sticky-sidebar { position: static !important; top: auto !important; }
+    }
+    html, body { overflow-x: hidden; }
+    .items-list-container, .items-grid, .item-card { max-width: 100%; }
 
-/* 2) Evita overflow orizzontale che “blocca” lo scroll */
-html, body {
-  overflow-x: hidden;
-}
-
-/* 3) Impedisce che i card dei prodotti “spingano” in modo strano */
-.items-list-container,
-.items-grid,
-.item-card {
-  max-width: 100%;
-}
-
-/* 4) CHECKBOX ALLERGENI (NUOVO PRODOTTO): label leggibili e in griglia pulita */
-#tab-menu .form-group label {
-  word-break: break-word;
-}
-
-/* La griglia allergeni del NUOVO PRODOTTO (quella in admin.html) */
-#tab-menu .form-group > div[style*="grid-template-columns"] label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 12px;
-  background: #fafafa;
-  border: 1px solid #e0e0e0;
-  border-radius: 12px;
-  font-size: 13px;
-  line-height: 1.1;
-  text-transform: none; /* evita scritte strane */
-}
-
-/* Checkbox più “pulita” */
-#tab-menu .form-group > div[style*="grid-template-columns"] input[type="checkbox"]{
-  width: 18px;
-  height: 18px;
-  flex: 0 0 18px;
-}
-
+    #tab-menu .form-group label { word-break: break-word; }
+    #tab-menu .form-group > div[style*="grid-template-columns"] label {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 12px; background: #fafafa; border: 1px solid #e0e0e0;
+      border-radius: 12px; font-size: 13px; line-height: 1.1;
+      text-transform: none;
+    }
+    #tab-menu .form-group > div[style*="grid-template-columns"] input[type="checkbox"]{
+      width: 18px; height: 18px; flex: 0 0 18px;
+    }
   </style>
 </head>
-<body>
 
+<body>
 <header class="admin-header">
   <div class="logo">GW <span>ADMIN DASHBOARD</span></div>
   <div style="display:flex; gap:12px; align-items:center;">
@@ -137,17 +97,20 @@ html, body {
 
 <div class="wrap">
 
+  <!-- LOGIN -->
   <section class="card" id="loginCard" style="max-width:400px; margin: 40px auto;">
     <h2>Accesso Riservato</h2>
     <div class="form-group">
-      <label>PASSWORD</label>
+      <label>Password</label>
       <input id="tokenInput" type="password" placeholder="Inserisci il codice segreto..." />
     </div>
     <button class="btn primary" id="loginBtn">Accedi</button>
   </section>
 
+  <!-- APP -->
   <div id="appCard" class="hidden">
-    
+
+    <!-- NAV -->
     <nav class="admin-nav">
       <button class="nav-btn active" onclick="openTab(event, 'tab-menu')">🍴 Menu</button>
       <button class="nav-btn" onclick="openTab(event, 'tab-info')">📖 Info Pagina</button>
@@ -156,67 +119,74 @@ html, body {
       <button class="nav-btn" onclick="openTab(event, 'tab-reservations')">📅 Prenotazioni</button>
     </nav>
 
+    <!-- TAB MENU -->
     <section id="tab-menu" class="tab-content">
       <div class="admin-grid-layout">
         <div class="sticky-sidebar">
           <div class="card">
             <h2>Nuovo Prodotto</h2>
+
             <div class="form-group">
               <span class="lang-tag">ITALIANO</span>
               <label>Nome Piatto</label>
               <input id="name" placeholder="es. Margherita">
             </div>
+
             <div class="form-group">
               <span class="lang-tag">INGLESE</span>
               <label>English Name</label>
               <input id="name_en" placeholder="es. Margherita Pizza">
             </div>
-            <div class="form-group">
-  <span class="lang-tag">ITALIANO</span>
-  <label>Descrizione / Note (IT)</label>
-  <textarea id="description" placeholder="es. Pomodoro, mozzarella, basilico..."></textarea>
-</div>
 
-<div class="form-group">
-  <span class="lang-tag">INGLESE</span>
-  <label>Description / Notes (EN)</label>
-  <textarea id="description_en" placeholder="e.g. Tomato, mozzarella, basil..."></textarea>
-</div>
+            <div class="form-group">
+              <span class="lang-tag">ITALIANO</span>
+              <label>Descrizione / Note (IT)</label>
+              <textarea id="description" placeholder="es. Pomodoro, mozzarella, basilico..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <span class="lang-tag">INGLESE</span>
+              <label>Description / Notes (EN)</label>
+              <textarea id="description_en" placeholder="e.g. Tomato, mozzarella, basil..."></textarea>
+            </div>
+
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
               <div class="form-group"><label>Prezzo €</label><input id="price" type="number" step="0.10"></div>
               <div class="form-group"><label>Ordine (Pos)</label><input id="position" type="number" value="0"></div>
             </div>
+
             <div class="form-group">
               <label>Categoria</label>
               <input id="category" placeholder="es. PIZZE">
             </div>
+
             <div class="form-group">
-  <span class="lang-tag">INGLESE</span>
-  <label>Category (EN)</label>
-  <input id="category_en" placeholder="es. Pizzas">
-</div>
-<div class="form-group">
-  <label>Allergeni</label>
-  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;">
+              <span class="lang-tag">INGLESE</span>
+              <label>Category (EN)</label>
+              <input id="category_en" placeholder="es. Pizzas">
+            </div>
 
-    <label><input type="checkbox" class="alg" value="glutine"> Glutine</label>
-    <label><input type="checkbox" class="alg" value="latte"> Latte</label>
-    <label><input type="checkbox" class="alg" value="uova"> Uova</label>
-    <label><input type="checkbox" class="alg" value="pesce"> Pesce</label>
-    <label><input type="checkbox" class="alg" value="frutta_a_guscio"> Frutta a guscio</label>
-    <label><input type="checkbox" class="alg" value="sedano"> Sedano</label>
-    <label><input type="checkbox" class="alg" value="soia"> Soia</label>
-    <label><input type="checkbox" class="alg" value="sesamo"> Sesamo</label>
-    <label><input type="checkbox" class="alg" value="senape"> Senape</label>
-    <label><input type="checkbox" class="alg" value="lupini"> Lupini</label>
-    <label><input type="checkbox" class="alg" value="molluschi"> Molluschi</label>
-    <label><input type="checkbox" class="alg" value="crostacei"> Crostacei</label>
-    <label><input type="checkbox" class="alg" value="arachidi"> Arachidi</label>
-    <label><input type="checkbox" class="alg" value="solfiti"> Solfiti</label>
-    <label><input type="checkbox" class="alg" value="nichel"> Nichel</label>
+            <div class="form-group">
+              <label>Allergeni</label>
+              <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;">
+                <label><input type="checkbox" class="alg" value="glutine"> Glutine</label>
+                <label><input type="checkbox" class="alg" value="latte"> Latte</label>
+                <label><input type="checkbox" class="alg" value="uova"> Uova</label>
+                <label><input type="checkbox" class="alg" value="pesce"> Pesce</label>
+                <label><input type="checkbox" class="alg" value="frutta_a_guscio"> Frutta a guscio</label>
+                <label><input type="checkbox" class="alg" value="sedano"> Sedano</label>
+                <label><input type="checkbox" class="alg" value="soia"> Soia</label>
+                <label><input type="checkbox" class="alg" value="sesamo"> Sesamo</label>
+                <label><input type="checkbox" class="alg" value="senape"> Senape</label>
+                <label><input type="checkbox" class="alg" value="lupini"> Lupini</label>
+                <label><input type="checkbox" class="alg" value="molluschi"> Molluschi</label>
+                <label><input type="checkbox" class="alg" value="crostacei"> Crostacei</label>
+                <label><input type="checkbox" class="alg" value="arachidi"> Arachidi</label>
+                <label><input type="checkbox" class="alg" value="solfiti"> Solfiti</label>
+                <label><input type="checkbox" class="alg" value="nichel"> Nichel</label>
+              </div>
+            </div>
 
-  </div>
-</div>
             <div class="form-group">
               <label>Stato Disponibilità</label>
               <select id="is_available">
@@ -224,24 +194,27 @@ html, body {
                 <option value="false">Esaurito ❌</option>
               </select>
             </div>
+
             <div class="form-group">
-  <label>Immagine URL</label>
-  <input id="image_url" placeholder="https://... oppure lascia vuoto">
-</div>
+              <label>Immagine URL</label>
+              <input id="image_url" placeholder="https://... oppure lascia vuoto">
+            </div>
+
             <button class="btn success" id="createBtn">Aggiungi al Menu</button>
           </div>
         </div>
-        
+
         <div class="items-list-container">
-          <div class="items-grid" id="itemsGrid">
-            </div>
+          <div class="items-grid" id="itemsGrid"></div>
         </div>
       </div>
     </section>
 
+    <!-- TAB INFO -->
     <section id="tab-info" class="tab-content hidden">
       <div class="card">
         <h2>Contenuti "Come Funziona"</h2>
+
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:20px;">
           <div class="form-group"><label>Telefono</label><input id="cf_phone"></div>
           <div class="form-group"><label>Indirizzo</label><textarea id="cf_address"></textarea></div>
@@ -252,69 +225,81 @@ html, body {
           <div class="form-group"><label>Glutine</label><textarea id="cf_gluten"></textarea></div>
           <div class="form-group"><label>Lattosio</label><textarea id="cf_lactose"></textarea></div>
         </div>
+
         <hr>
+
         <h2>La nostra storia</h2>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
           <div class="form-group"><label>Testo (IT)</label><textarea id="story_it"></textarea></div>
           <div class="form-group"><label>Testo (EN)</label><textarea id="story_en"></textarea></div>
         </div>
-        <button class="btn success" id="saveComeFunziona" style="width:auto; padding:15px 40px;">Salva Tutte le Informazioni</button>
+
+        <button class="btn success" id="saveComeFunziona" style="width:auto; padding:15px 40px;">
+          Salva Tutte le Informazioni
+        </button>
       </div>
     </section>
 
+    <!-- TAB GALLERY -->
     <section id="tab-gallery" class="tab-content hidden">
-<section id="tab-covers" class="tab-content hidden">
-  <div class="card">
-    <h2>Copertine Pagine</h2>
-
-    <note>
-      Qui puoi impostare immagini diverse per ogni pagina
-    </note>
-
-    <div class="form-group">
-      <label>Pagina</label>
-      <select id="cover_page">
-        <option value="home">Home</option>
-        <option value="menu">Menu</option>
-        <option value="gallery">Gallery</option>
-        <option value="prenota">Prenota</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label>Carica immagine</label>
-      <input id="cover_file" type="file" accept="image/*">
-    </div>
-
-    <button class="btn success" id="saveCover">Salva Copertina</button>
-  </div>
-</section>
-
-<section id="tab-gallery" class="tab-content hidden">
-  <div class="card">
-    <h2>Gestione Gallery</h2>
-    ...
-  </div>
-</section>
       <div class="card">
+        <h2>Gestione Gallery</h2>
+        <note>Trascina o seleziona più foto per caricarle direttamente nella pagina gallery.</note>
 
+        <div class="form-group" style="margin-top:20px;">
+          <input id="gal_files" type="file" multiple accept="image/*"
+                 style="padding:40px; border:2px dashed #ddd; background:#f9f9f9; text-align:center;">
+        </div>
+
+        <div class="grid" id="galPreview"
+             style="display:grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap:15px; margin-top:20px;"></div>
+
+        <button class="btn success" id="saveGallery" style="margin-top:20px; width:auto; padding:15px 40px;">
+          Pubblica Foto
+        </button>
+      </div>
+    </section>
+
+    <!-- TAB COPERTINE -->
+    <section id="tab-covers" class="tab-content hidden">
+      <div class="card">
+        <h2>Copertine Pagine</h2>
+        <note>Qui puoi impostare immagini diverse per ogni pagina</note>
+
+        <div class="form-group" style="margin-top:20px;">
+          <label>Pagina</label>
+          <select id="cover_page">
+            <option value="home">Home</option>
+            <option value="menu">Menu</option>
+            <option value="gallery">Gallery</option>
+            <option value="prenota">Prenota</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Carica immagine</label>
+          <input id="cover_file" type="file" accept="image/*">
+        </div>
+
+        <button class="btn success" id="saveCover">Salva Copertina</button>
+      </div>
+    </section>
+
+    <!-- TAB PRENOTAZIONI -->
     <section id="tab-reservations" class="tab-content hidden">
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
           <h2>Richieste di Prenotazione</h2>
           <button class="btn secondary" id="refreshReservations" style="width:auto;">Aggiorna Lista</button>
         </div>
-        <div id="reservationsGrid" class="items-grid">
-          </div>
+        <div id="reservationsGrid" class="items-grid"></div>
       </div>
     </section>
 
-  </div>
-</div>
+  </div><!-- /appCard -->
+</div><!-- /wrap -->
 
 <script>
-
-  // GESTIONE TAB VELOCE
   function openTab(evt, tabId) {
     const tabContents = document.getElementsByClassName("tab-content");
     for (let i = 0; i < tabContents.length; i++) {
