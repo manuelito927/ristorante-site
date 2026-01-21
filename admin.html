@@ -263,6 +263,35 @@ html, body {
     </section>
 
     <section id="tab-gallery" class="tab-content hidden">
+      <section id="tab-covers" class="tab-content hidden">
+  <div class="card">
+    <h2>Copertine Pagine</h2>
+
+    <note>
+      Qui puoi impostare immagini diverse per ogni pagina
+      (Home, Menu Digitale, Gallery, ecc.)
+    </note>
+
+    <div class="form-group" style="margin-top:20px;">
+      <label>Pagina</label>
+      <select id="cover_page">
+        <option value="home">Home</option>
+        <option value="menu">Menu Digitale</option>
+        <option value="gallery">Gallery</option>
+        <option value="prenota">Prenota</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Carica immagine copertina</label>
+      <input id="cover_file" type="file" accept="image/*">
+    </div>
+
+    <button class="btn success" id="saveCover">
+      Salva Copertina
+    </button>
+  </div>
+</section>
       <div class="card">
         <h2>Gestione Gallery</h2>
         <note>Trascina o seleziona più foto per caricarle direttamente nella pagina gallery.</note>
