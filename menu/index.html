@@ -89,6 +89,7 @@
 
     function closeMenu(){
   menu.classList.remove("is-open");
+  menu.style.display = "";
   back.hidden = true;
   back.style.display = "none";          // ✅ toglie overlay
   btn.setAttribute("aria-expanded","false");
