@@ -609,7 +609,7 @@ async function saveCover() {
     // ✅ riuso la stessa funzione di upload della gallery (già testata)
     const imageUrl = await uploadOneFileToR2(file);
 
-    const page = coverPage.value;
+const page = coverPage.value.toLowerCase();
 
     await api("/api/admin/page/covers", {
       method: "PUT",
