@@ -52,20 +52,22 @@
   <script src="/js/config.js"></script>
   <script>
 (async function(){
-  const API = (window.API_BASE || "").replace(/\/$/, "");
+  
+<script>
+(async function(){
   const hero = document.getElementById("pageHero");
   if(!hero) return;
 
   const key = hero.dataset.coverKey || "menu";
 
   try {
-    const res = await fetch((API || "") + "/api/page/covers", { cache: "no-store" });
-    const data = await res.json().catch(() => ({}));
-    const covers = data && data.data ? data.data : {};
-    const url = covers[key];
+    const res = await fetch("/api/page/covers", { cache: "no-store" });
+    const json = await res.json().catch(() => ({}));
+    const url = json[key];
 
     if(url && String(url).trim()){
-      hero.style.backgroundImage = `url("${url}")`;
+      hero.style.backgroundImage =
+        `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url("${url}")`;
       hero.style.backgroundSize = "cover";
       hero.style.backgroundPosition = "center";
       hero.style.backgroundRepeat = "no-repeat";
@@ -75,9 +77,7 @@
   }
 })();
 </script>
-<script src="/js/menu.js?v=4"></script>
 
-<script>
   (function(){
     const btn  = document.getElementById("jsHamburger");
     const menu = document.getElementById("jsMobileMenu");
