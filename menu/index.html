@@ -87,21 +87,22 @@
     const back = document.getElementById("jsMenuBackdrop");
     if(!btn || !menu || !back) return;
 
-    function openMenu(){
-      menu.classList.add("is-open");
-      back.hidden = false;
-      back.style.display = "block";
-      btn.setAttribute("aria-expanded","true");
-      document.body.style.overflow = "hidden";
-    }
-
     function closeMenu(){
-      menu.classList.remove("is-open");
-      back.hidden = true;
-      back.style.display = "none";
-      btn.setAttribute("aria-expanded","false");
-      document.body.style.overflow = "";
-    }
+  menu.classList.remove("is-open");
+  back.hidden = true;
+  back.style.display = "none";          // ✅ toglie overlay
+  btn.setAttribute("aria-expanded","false");
+  document.body.style.overflow = "";    // ✅ riattiva scroll
+}
+
+function openMenu(){
+  menu.classList.add("is-open");
+  back.hidden = false;
+  back.style.display = "block";         // ✅ mostra overlay
+  btn.setAttribute("aria-expanded","true");
+  document.body.style.overflow = "hidden"; // ✅ blocca scroll
+}
+
 
     closeMenu();
 
