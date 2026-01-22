@@ -54,8 +54,7 @@
   try {
     const res = await fetch((API || "") + "/api/page/covers", { cache: "no-store" });
     const data = await res.json().catch(() => ({}));
-    const covers = data && data.data ? data.data : {};
-    const url = covers[key];
+    const url = data[key];
 
     if(url && String(url).trim()){
       hero.style.backgroundImage = `url("${url}")`;
