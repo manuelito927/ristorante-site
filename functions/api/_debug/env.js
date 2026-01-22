@@ -1,4 +1,4 @@
-.export async function onRequestGet({ env }) {
+export async function onRequestGet({ env }) {
   return new Response(
     JSON.stringify({
       hasEnv: !!env,
