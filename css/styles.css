@@ -306,3 +306,12 @@ body{
   font-size: 17px;
 }
 
+/* blocca overlay “fantasma” su iPhone */
+[hidden]{ display:none !important; }
+
+.menu-backdrop{ pointer-events:auto; }
+.menu-backdrop[hidden]{ pointer-events:none; }
+
+.mobile-menu{ pointer-events:none; }
+.mobile-menu.is-open{ pointer-events:auto; }
+
