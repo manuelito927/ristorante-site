@@ -87,13 +87,21 @@
     const back = document.getElementById("jsMenuBackdrop");
     if(!btn || !menu || !back) return;
 
-    function closeMenu(){
+function closeMenu(){
   menu.classList.remove("is-open");
-  menu.style.display = "";
+
+  // ✅ chiudi subito l’overlay e sblocca i tocchi
   back.hidden = true;
-  back.style.display = "none";          // ✅ toglie overlay
+  back.style.display = "none";
   btn.setAttribute("aria-expanded","false");
-  document.body.style.overflow = "";    // ✅ riattiva scroll
+  document.body.style.overflow = "";
+
+  // ✅ dopo l’animazione, spegni proprio il menu (così non blocca clic)
+  setTimeout(() => {
+    if (!menu.classList.contains("is-open")) {
+      menu.style.display = "none";
+    }
+  }, 320);
 }
 
 function openMenu(){
