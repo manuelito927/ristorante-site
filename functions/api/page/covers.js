@@ -1,7 +1,24 @@
 export async function onRequestGet({ env }) {
-  const home = await env.COVERS.get("HOME");
+  const [home, menu, gallery, prenota, comeFunziona, recensioni] = await Promise.all([
+    env.COVERS.get("HOME"),
+    env.COVERS.get("MENU"),
+    env.COVERS.get("GALLERY"),
+    env.COVERS.get("PRENOTA"),
+    env.COVERS.get("COME_FUNZIONA"),
+    env.COVERS.get("RECENSIONI"),
+  ]);
 
-  return new Response(JSON.stringify({ home }), {
-    headers: { "content-type": "application/json" }
+  return new Response(JSON.stringify({
+    home: home || "",
+    menu: menu || "",
+    gallery: gallery || "",
+    prenota: prenota || "",
+    "come-funziona": comeFunziona || "",
+    recensioni: recensioni || ""
+  }), {
+    headers: {
+      "content-type": "application/json",
+      "cache-control": "no-store"
+    }
   });
 }
