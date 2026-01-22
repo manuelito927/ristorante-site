@@ -79,56 +79,5 @@
   <!-- ✅ MENU DIGITALE -->
   <script src="/js/menu.js?v=4"></script>
 
-  <!-- ✅ HAMBURGER MENU -->
-  <script>
-  (function(){
-    const btn  = document.getElementById("jsHamburger");
-    const menu = document.getElementById("jsMobileMenu");
-    const back = document.getElementById("jsMenuBackdrop");
-    if(!btn || !menu || !back) return;
-
-function closeMenu(){
-  menu.classList.remove("is-open");
-
-  // ✅ chiudi subito l’overlay e sblocca i tocchi
-  back.hidden = true;
-  back.style.display = "none";
-  btn.setAttribute("aria-expanded","false");
-  document.body.style.overflow = "";
-
-  // ✅ dopo l’animazione, spegni proprio il menu (così non blocca clic)
-  setTimeout(() => {
-    if (!menu.classList.contains("is-open")) {
-      menu.style.display = "none";
-    }
-  }, 320);
-}
-
-function openMenu(){
-  menu.style.display = "block";
-  menu.classList.add("is-open");
-  back.hidden = false;
-  back.style.display = "block";
-  btn.setAttribute("aria-expanded","true");
-  document.body.style.overflow = "hidden";
-}
-
-
-  menu.style.display = "none";
-back.hidden = true;
-back.style.display = "none";
-btn.setAttribute("aria-expanded","false");
-
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      const isOpen = btn.getAttribute("aria-expanded") === "true";
-      isOpen ? closeMenu() : openMenu();
-    });
-
-    back.addEventListener("click", closeMenu);
-    menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
-  })();
-  </script>
-
 </body>
 </html>
