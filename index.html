@@ -52,7 +52,7 @@ const API = ""; // NON usare API_BASE per le cover
   const key = hero.dataset.coverKey || "home";
 
   try {
-    const res = await fetch((API || "") + "/api/page/covers", { cache: "no-store" });
+const res = await fetch("/api/page/covers", { cache: "no-store" });
 const json = await res.json().catch(() => ({}));
 const url = json[key];
     if(url && String(url).trim()){
