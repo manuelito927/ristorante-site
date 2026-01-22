@@ -569,8 +569,8 @@ async function loadItems() {
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data.error || ("HTTP " + res.status));
-if (!data.key) throw new Error("Manca KEY nella risposta");
-return data.key;
+if (!data.url) throw new Error("Manca URL nella risposta");
+return data.url;
   }
 
   async function uploadGalleryAndSave() {
