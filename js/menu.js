@@ -230,6 +230,9 @@ const iconsRow =
     }, ms);
   }
 
+window.addEventListener("pageshow", closeMenu);
+window.addEventListener("pagehide", closeMenu);
+
   if (mobileMenu) mobileMenu.hidden = true;
   if (backdrop) backdrop.hidden = true;
   if (burger) burger.setAttribute("aria-expanded", "false");
