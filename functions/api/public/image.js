@@ -1,24 +1,18 @@
 export async function onRequestGet({ request, env }) {
-  const url = new URL(request.url);
-  const key = url.searchParams.get("key");
+  const u = new URL(request.url);
+  const key = u.searchParams.get("key");
 
-  if (!key) {
-    return new Response("Missing key", { status: 400 });
-  }
+  if (!key) return new Response("Missing key", { status: 400 });
+
+  if (!env || !env.BUCKET) return new Response("BUCKET binding missing", { status: 500 });
 
   const obj = await env.BUCKET.get(key);
-
-  if (!obj) {
-    return new Response("Not found", { status: 404 });
-  }
+  if (!obj) return new Response("Not found", { status: 404 });
 
   const headers = new Headers();
-  // content-type corretto se presente
-  if (obj.httpMetadata?.contentType) {
+  if (obj.httpMetadata && obj.httpMetadata.contentType) {
     headers.set("content-type", obj.httpMetadata.contentType);
   }
-
-  // cache aggressiva (puoi cambiare dopo)
   headers.set("cache-control", "public, max-age=31536000, immutable");
 
   return new Response(obj.body, { headers });
