@@ -55,31 +55,21 @@ body{
    HERO (SCRITTA DELICATA E MINIMAL)
    ============================================================ */
 .hero{
-  min-height: 70vh; 
+  min-height: 70vh;
   padding: var(--pad) var(--pad) 60px var(--pad);
   display: flex;
-  align-items: flex-end; 
-  justify-content: center; 
+  align-items: flex-end;
+  justify-content: center;
   text-align: center;
-background-image:
-  linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3));
+
+  /* DEFAULT: nessuna immagine */
+  background-color: #111;
+
+  /* IMPORTANTISSIMO: permettiamo al JS di mettere l'immagine */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
-
-.hero h1{
-  margin: 0;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: 300; 
-  line-height: 1.1;
-  letter-spacing: 2px;
-  font-size: 42px;
-  color: #ffffff;
-  text-transform: lowercase;
-  opacity: 0.95;
-}
-
 /* ============================================================
    MENU ACCORDEON (GREENWOOD CHIARO)
    ============================================================ */
