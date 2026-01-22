@@ -17,14 +17,13 @@
     </div>
   </header>
 
-<div class="langbar" aria-label="Selettore lingua">
-  <button class="langbtn" type="button" data-lang="it" aria-label="Italiano">🇮🇹 IT</button>
-  <button class="langbtn" type="button" data-lang="en" aria-label="English">🇬🇧 EN</button>
-</div>
+  <div class="langbar" aria-label="Selettore lingua">
+    <button class="langbtn" type="button" data-lang="it" aria-label="Italiano">🇮🇹 IT</button>
+    <button class="langbtn" type="button" data-lang="en" aria-label="English">🇬🇧 EN</button>
+  </div>
 
   <div id="jsMenuBackdrop" class="menu-backdrop" hidden></div>
 
-  <!-- ✅ tolto hidden -->
   <nav id="jsMobileMenu" class="mobile-menu" aria-label="Menu principale">
     <div class="mobile-menu__head">
       <div class="mobile-logo">
@@ -33,51 +32,55 @@
       </div>
     </div>
 
-<ul class="mobile-menu__list">
-  <li><a class="mobile-menu__link" href="/menu/">MENU DIGITALE</a></li>
-  <li><a class="mobile-menu__link" href="/come-funziona/">COME FUNZIONA</a></li>
-  <li><a class="mobile-menu__link" href="/prenota/">PRENOTA</a></li>
-  <li><a class="mobile-menu__link" href="/gallery/">GALLERY</a></li>
-  <li><a class="mobile-menu__link" href="/recensioni/">RECENSIONI</a></li>
-  <li><a class="mobile-menu__link" href="/">HOME</a></li>
-</ul>
+    <ul class="mobile-menu__list">
+      <li><a class="mobile-menu__link" href="/menu/">MENU DIGITALE</a></li>
+      <li><a class="mobile-menu__link" href="/come-funziona/">COME FUNZIONA</a></li>
+      <li><a class="mobile-menu__link" href="/prenota/">PRENOTA</a></li>
+      <li><a class="mobile-menu__link" href="/gallery/">GALLERY</a></li>
+      <li><a class="mobile-menu__link" href="/recensioni/">RECENSIONI</a></li>
+      <li><a class="mobile-menu__link" href="/">HOME</a></li>
+    </ul>
   </nav>
 
-<section class="hero" id="pageHero" data-cover-key="menu">
-  <h1>Menu digitale</h1>
-</section>
+  <section class="hero" id="pageHero" data-cover-key="menu">
+    <h1>Menu digitale</h1>
+  </section>
 
   <main class="menu" id="menu-digitale"></main>
 
   <script src="/js/config.js"></script>
+
+  <!-- ✅ COVER -->
   <script>
-(async function(){
-  
-<script>
-(async function(){
-  const hero = document.getElementById("pageHero");
-  if(!hero) return;
+  (async function(){
+    const hero = document.getElementById("pageHero");
+    if (!hero) return;
 
-  const key = hero.dataset.coverKey || "menu";
+    const key = hero.dataset.coverKey || "menu";
 
-  try {
-    const res = await fetch("/api/page/covers", { cache: "no-store" });
-    const json = await res.json().catch(() => ({}));
-    const url = json[key];
+    try {
+      const res = await fetch("/api/page/covers", { cache: "no-store" });
+      const json = await res.json().catch(() => ({}));
+      const url = json[key];
 
-    if(url && String(url).trim()){
-      hero.style.backgroundImage =
-        `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url("${url}")`;
-      hero.style.backgroundSize = "cover";
-      hero.style.backgroundPosition = "center";
-      hero.style.backgroundRepeat = "no-repeat";
+      if (url && String(url).trim()) {
+        hero.style.backgroundImage =
+          `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url("${url}")`;
+        hero.style.backgroundSize = "cover";
+        hero.style.backgroundPosition = "center";
+        hero.style.backgroundRepeat = "no-repeat";
+      }
+    } catch(e){
+      console.warn("Cover non caricata:", e);
     }
-  } catch(e){
-    console.warn("Cover non caricata:", e);
-  }
-})();
-</script>
+  })();
+  </script>
 
+  <!-- ✅ MENU DIGITALE -->
+  <script src="/js/menu.js?v=4"></script>
+
+  <!-- ✅ HAMBURGER MENU -->
+  <script>
   (function(){
     const btn  = document.getElementById("jsHamburger");
     const menu = document.getElementById("jsMobileMenu");
@@ -85,23 +88,21 @@
     if(!btn || !menu || !back) return;
 
     function openMenu(){
-      // assicura che sia visibile e sopra
-      menu.hidden = false;
+      menu.classList.add("is-open");
       back.hidden = false;
-      menu.style.display = "block";
       back.style.display = "block";
       btn.setAttribute("aria-expanded","true");
+      document.body.style.overflow = "hidden";
     }
 
     function closeMenu(){
-      btn.setAttribute("aria-expanded","false");
-      menu.hidden = true;
+      menu.classList.remove("is-open");
       back.hidden = true;
-      menu.style.display = "";
-      back.style.display = "";
+      back.style.display = "none";
+      btn.setAttribute("aria-expanded","false");
+      document.body.style.overflow = "";
     }
 
-    // sicurezza: quando carichi /menu/ chiudi sempre eventuali stati sporchi
     closeMenu();
 
     btn.addEventListener("click", (e) => {
@@ -111,11 +112,9 @@
     });
 
     back.addEventListener("click", closeMenu);
-
-    // chiudi anche se tocchi un link nel menu
     menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
   })();
-</script>
+  </script>
 
 </body>
 </html>
