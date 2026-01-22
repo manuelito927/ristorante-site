@@ -26,14 +26,24 @@ export async function onRequestPut({ request, env }) {
     });
   }
 
-  // scrive e poi rilegge subito per conferma
+    const KEYMAP = {
+    home: "HOME",
+    menu: "MENU",
+    gallery: "GALLERY",
+    prenota: "PRENOTA",
+    "come-funziona": "COME_FUNZIONA",
+    recensioni: "RECENSIONI",
+  };
+
   const written = {};
   for (const page in body) {
-    const key = page.toUpperCase();
-    await env.COVERS.put(key, body[page]);
-    written[key] = await env.COVERS.get(key);
-  }
+    const kvKey = KEYMAP[page];
+    if (!kvKey) continue; // ignora chiavi sconosciute
 
+    await env.COVERS.put(kvKey, body[page]);
+    written[kvKey] = await env.COVERS.get(kvKey);
+  }
+  
   return new Response(JSON.stringify({
     ok: true,
     version: "covers-v3",
