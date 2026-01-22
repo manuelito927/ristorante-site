@@ -179,7 +179,30 @@
 
   <!-- ✅ serve per window.API_BASE -->
   <script src="/js/config.js"></script>
+<script>
+(async function(){
+  const hero = document.getElementById("pageHero");
+  if (!hero) return;
 
+  const key = hero.dataset.coverKey || "prenota";
+
+  try {
+    const res = await fetch("/api/page/covers", { cache: "no-store" });
+    const json = await res.json().catch(() => ({}));
+    const url = json[key];
+
+    if (url && String(url).trim()) {
+      hero.style.backgroundImage =
+        `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url("${url}")`;
+      hero.style.backgroundSize = "cover";
+      hero.style.backgroundPosition = "center";
+      hero.style.backgroundRepeat = "no-repeat";
+    }
+  } catch (e) {
+    console.warn("Cover non caricata:", e);
+  }
+})();
+</script>
   <!-- JS: menu mobile + INVIO al Worker -->
   <script>
     (function(){
