@@ -167,7 +167,7 @@
       if(!grid) return;
 
       try{
-        const res = await fetch(API + "/api/page/gallery?t=" + Date.now(), { cache: "no-store" });
+const res = await fetch("/api/page/gallery?t=" + Date.now(), { cache: "no-store" });
         const js = await res.json();
 console.log("GALLERY JSON:", js);
 
