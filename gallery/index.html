@@ -171,9 +171,9 @@
         const js = await res.json();
 
         // ✅ QUI: nel DB hai data.urls (NON photos)
-        const d = js.data || {};
-        const urls = Array.isArray(d.urls) ? d.urls : [];
 
+        const urls = Array.isArray(js.urls) ? js.urls : [];
+        
         if(!urls.length){
           grid.innerHTML = `<div class="empty">Nessuna foto ancora. Vai in Admin → Gallery e aggiungile.</div>`;
           return;
