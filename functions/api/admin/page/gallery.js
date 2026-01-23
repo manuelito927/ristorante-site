@@ -1,18 +1,25 @@
-export async function onRequestPut({ request, env }) {
-  const body = await request.json().catch(() => ({}));
-  const urls = Array.isArray(body.urls) ? body.urls : [];
+const CORS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
 
+export async function onRequestOptions() {
+  return new Response(null, { status: 204, headers: CORS });
+}
+
+export async function onRequestGet({ env }) {
   if (!env.COVERS) {
     return new Response(JSON.stringify({ error: "COVERS binding missing" }), {
       status: 500,
-      headers: { "content-type": "application/json" },
+      headers: { "content-type": "application/json", ...CORS },
     });
   }
 
-  // salviamo la lista foto gallery dentro KV
-  await env.COVERS.put("GALLERY_LIST", JSON.stringify(urls));
+  const raw = await env.COVERS.get("GALLERY_LIST");
+  const urls = raw ? JSON.parse(raw) : [];
 
-  return new Response(JSON.stringify({ ok: true, count: urls.length }), {
-    headers: { "content-type": "application/json" },
+  return new Response(JSON.stringify({ ok: true, urls }), {
+    headers: { "content-type": "application/json", ...CORS },
   });
 }
