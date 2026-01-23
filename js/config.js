@@ -1,1 +1,1 @@
-window.API_BASE = "https://still-haze-01c8.filosofiaefficace.workers.dev";
+window.API_BASE = "https://ristorante-site.pages.dev";
