@@ -108,20 +108,20 @@
       </div>
     </div>
 
-<ul class="mobile-menu__list">
-  <li><a class="mobile-menu__link" href="/menu/">MENU DIGITALE</a></li>
-  <li><a class="mobile-menu__link" href="/come-funziona/">COME FUNZIONA</a></li>
-  <li><a class="mobile-menu__link" href="/prenota/">PRENOTA</a></li>
-  <li><a class="mobile-menu__link" href="/gallery/">GALLERY</a></li>
-  <li><a class="mobile-menu__link" href="/recensioni/">RECENSIONI</a></li>
-  <li><a class="mobile-menu__link" href="/">HOME</a></li>
-</ul>
+    <ul class="mobile-menu__list">
+      <li><a class="mobile-menu__link" href="/menu/">MENU DIGITALE</a></li>
+      <li><a class="mobile-menu__link" href="/come-funziona/">COME FUNZIONA</a></li>
+      <li><a class="mobile-menu__link" href="/prenota/">PRENOTA</a></li>
+      <li><a class="mobile-menu__link" href="/gallery/">GALLERY</a></li>
+      <li><a class="mobile-menu__link" href="/recensioni/">RECENSIONI</a></li>
+      <li><a class="mobile-menu__link" href="/">HOME</a></li>
+    </ul>
   </nav>
 
   <!-- HERO -->
-<section class="hero" id="pageHero" data-cover-key="prenota">
-  <h1>Prenota</h1>
-</section>
+  <section class="hero" id="pageHero" data-cover-key="prenota">
+    <h1>Prenota</h1>
+  </section>
 
   <!-- CONTENT -->
   <main class="prenota-wrap">
@@ -179,31 +179,34 @@
 
   <!-- ✅ serve per window.API_BASE -->
   <script src="/js/config.js"></script>
-<script>
-(async function(){
-  const hero = document.getElementById("pageHero");
-  if (!hero) return;
 
-  const key = hero.dataset.coverKey || "prenota";
+  <script>
+  (async function(){
+    const hero = document.getElementById("pageHero");
+    if (!hero) return;
 
-  try {
-    const res = await fetch("/api/page/covers", { cache: "no-store" });
-    const json = await res.json().catch(() => ({}));
-    const url = json[key];
+    const key = hero.dataset.coverKey || "prenota";
 
-    if (url && String(url).trim()) {
-      hero.style.backgroundImage =
-        `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url("${url}")`;
-      hero.style.backgroundSize = "cover";
-      hero.style.backgroundPosition = "center";
-      hero.style.backgroundRepeat = "no-repeat";
+    try {
+      // ✅ FIX: prima era /api/page/covers
+      const res = await fetch("/page/covers", { cache: "no-store" });
+      const json = await res.json().catch(() => ({}));
+      const url = json[key];
+
+      if (url && String(url).trim()) {
+        hero.style.backgroundImage =
+          `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url("${url}")`;
+        hero.style.backgroundSize = "cover";
+        hero.style.backgroundPosition = "center";
+        hero.style.backgroundRepeat = "no-repeat";
+      }
+    } catch (e) {
+      console.warn("Cover non caricata:", e);
     }
-  } catch (e) {
-    console.warn("Cover non caricata:", e);
-  }
-})();
-</script>
-  <!-- JS: menu mobile + INVIO al Worker -->
+  })();
+  </script>
+
+  <!-- JS: menu mobile + INVIO -->
   <script>
     (function(){
       const btn = document.getElementById("jsHamburger");
@@ -239,7 +242,7 @@
         form.addEventListener("submit", async (e) => {
           e.preventDefault();
 
-          const API = window.API_BASE || ""; // se non c'è, usa relative path
+          const API = window.API_BASE || "";
           const btnSubmit = form.querySelector('button[type="submit"]');
 
           const fd = new FormData(form);
@@ -247,8 +250,8 @@
             name: String(fd.get("name") || "").trim(),
             phone: String(fd.get("phone") || "").trim(),
             people: Number(fd.get("people") || 2),
-            date: String(fd.get("date") || "").trim(), // YYYY-MM-DD
-            time: String(fd.get("time") || "").trim(), // HH:MM
+            date: String(fd.get("date") || "").trim(),
+            time: String(fd.get("time") || "").trim(),
             notes: String(fd.get("notes") || "").trim()
           };
 
@@ -268,7 +271,8 @@
             }
             if(noteMsg) noteMsg.textContent = "Invio in corso...";
 
-            const res = await fetch(API + "/api/reservations", {
+            // ✅ FIX: prima era /api/reservations
+            const res = await fetch(API + "/reservations", {
               method: "POST",
               headers: { "content-type": "application/json" },
               body: JSON.stringify(payload)
