@@ -173,7 +173,7 @@ console.log("GALLERY JSON:", js);
 
         // ✅ QUI: nel DB hai data.urls (NON photos)
 
-const urls = Array.isArray(js?.data?.urls) ? js.data.urls : [];
+const urls = Array.isArray(js.urls) ? js.urls : (Array.isArray(js.data?.urls) ? js.data.urls : []);
         
         if(!urls.length){
           grid.innerHTML = `<div class="empty">Nessuna foto ancora. Vai in Admin → Gallery e aggiungile.</div>`;
