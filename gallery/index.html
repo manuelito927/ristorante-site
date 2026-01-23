@@ -103,7 +103,8 @@
     const key = hero.dataset.coverKey || "gallery";
 
     try {
-      const res = await fetch("/api/page/covers", { cache: "no-store" });
+      // ✅ FIX: prima era /api/page/covers
+      const res = await fetch("/page/covers", { cache: "no-store" });
       const json = await res.json().catch(() => ({}));
       const url = json[key];
 
@@ -159,11 +160,12 @@
     if(!grid) return;
 
     try{
-      const res = await fetch("/api/page/gallery?t=" + Date.now(), { cache: "no-store" });
+      // ✅ FIX: prima era /api/page/gallery
+      const res = await fetch("/page/gallery?t=" + Date.now(), { cache: "no-store" });
       const js = await res.json().catch(() => ({}));
       console.log("GALLERY JSON:", js);
 
-const urls = Array.isArray(js.urls) ? js.urls : [];
+      const urls = Array.isArray(js.urls) ? js.urls : [];
       if(!urls.length){
         grid.innerHTML = `<div class="empty">Nessuna foto ancora. Vai in Admin → Gallery e aggiungile.</div>`;
         return;
