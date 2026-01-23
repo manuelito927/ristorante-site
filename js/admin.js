@@ -1,5 +1,5 @@
 (function () {
-const API = window.API_BASE || "";
+const API = "";
   const $ = (id) => document.getElementById(id);
 
   const statusEl = $("status");
