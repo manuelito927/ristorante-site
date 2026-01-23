@@ -512,3 +512,159 @@
       if (reservationsMsg) reservationsMsg.textContent = "Errore";
     }
   }
+  
+    if (refreshReservationsBtn) refreshReservationsBtn.onclick = () => loadReservations();
+
+  function renderGalleryPreview(files) {
+    if (!galPreview) return;
+    galPreview.innerHTML = "";
+    [...files].forEach((file) => {
+      const img = document.createElement("img");
+      img.style = "width:100%; border-radius:10px; aspect-ratio:4/3; object-fit:cover; border:1px solid #ddd;";
+      img.src = URL.createObjectURL(file);
+      galPreview.appendChild(img);
+    });
+  }
+
+  if (gal_files) {
+    gal_files.addEventListener("change", () => {
+      if (gal_files.files && gal_files.files.length) renderGalleryPreview(gal_files.files);
+      else if (galPreview) galPreview.innerHTML = "";
+    });
+  }
+
+  async function uploadOneFileToR2(file) {
+    const fd = new FormData();
+    fd.append("file", file);
+
+    // ✅ FIX: prima era /api/admin/gallery/upload
+    const res = await fetch(API + "/admin/gallery/upload", {
+      method: "POST",
+      headers: { ...authHeaders() },
+      body: fd
+    });
+
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || ("HTTP " + res.status));
+    if (!data.url) throw new Error("Manca URL nella risposta");
+    return data.url;
+  }
+
+  async function uploadGalleryAndSave() {
+    if (!gal_files || !gal_files.files || gal_files.files.length === 0) return alert("Seleziona almeno una foto");
+
+    const urls = [];
+    for (const f of [...gal_files.files]) {
+      const url = await uploadOneFileToR2(f);
+      urls.push(url);
+    }
+
+    // ✅ FIX: prima era /api/admin/page/gallery
+    await api("/admin/page/gallery", { method: "PUT", body: JSON.stringify({ urls }) });
+
+    gal_files.value = "";
+    if (galPreview) galPreview.innerHTML = "";
+    alert("✅ Gallery aggiornata!");
+  }
+
+  if (galSaveBtn) {
+    galSaveBtn.onclick = async () => {
+      try { await uploadGalleryAndSave(); }
+      catch (e) { alert("❌ " + (e.message || e)); }
+    };
+  }
+
+  async function saveCover() {
+    if (!coverPage || !coverFile) return alert("Campi copertina non trovati");
+    if (!coverFile.files || !coverFile.files[0]) return alert("Seleziona un'immagine");
+
+    const file = coverFile.files[0];
+
+    try {
+      const imageUrl = await uploadOneFileToR2(file);
+      const page = coverPage.value.toLowerCase();
+
+      // ✅ FIX: prima era /api/admin/page/covers
+      await api("/admin/page/covers", {
+        method: "PUT",
+        body: JSON.stringify({ [page]: imageUrl })
+      });
+
+      coverFile.value = "";
+      alert("✅ Copertina salvata per: " + page.toUpperCase());
+    } catch (e) {
+      alert("❌ Upload copertina fallito: " + (e.message || e));
+    }
+  }
+
+  if (saveCoverBtn) {
+    saveCoverBtn.onclick = () => saveCover();
+  }
+
+  if (loginBtn) {
+    loginBtn.onclick = async () => {
+      token = tokenInput.value.trim();
+      localStorage.setItem("admin_token", token);
+      try {
+        showApp(true);
+        await Promise.all([loadItems(), loadComeFunziona(), loadReservations()]);
+      } catch (e) {
+        showApp(false);
+        alert("Errore Accesso: " + e.message);
+      }
+    };
+  }
+
+  if (logoutBtn) {
+    logoutBtn.onclick = () => {
+      token = "";
+      localStorage.removeItem("admin_token");
+      if (tokenInput) tokenInput.value = "";
+      location.reload();
+    };
+  }
+
+  if (token) {
+    if (tokenInput) tokenInput.value = token;
+    showApp(true);
+    loadItems().then(loadComeFunziona).then(loadReservations).catch(() => showApp(false));
+  } else {
+    showApp(false);
+  }
+
+  function readPayload(wrap) {
+    const payload = {};
+
+    wrap.querySelectorAll("[data-k]").forEach(el => {
+      const key = el.getAttribute("data-k");
+
+      if (el.tagName === "SELECT") {
+        payload[key] = el.value === "true" ? true : el.value === "false" ? false : el.value;
+      }
+      else if (el.type === "number") {
+        payload[key] = el.value !== "" ? Number(el.value) : null;
+      }
+      else {
+        payload[key] = el.value.trim();
+      }
+    });
+
+    payload.allergens = Array.from(
+      new Set(Array.from(wrap.querySelectorAll(".alg:checked")).map(c => c.value))
+    );
+
+    if ("price" in payload) {
+      payload.price_cents = Math.round(Number(payload.price) * 100);
+      delete payload.price;
+    }
+
+    return payload;
+  }
+
+  function escapeHtml(s) {
+    return String(s || "").replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#039;"
+    }[c]));
+  }
+  function escapeAttr(s) { return escapeHtml(s).replace(/"/g, "&quot;"); }
+})();
