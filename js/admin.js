@@ -538,7 +538,7 @@ async function uploadOneFileToR2(file) {
   const fd = new FormData();
   fd.append("file", file);
 
-  const res = await fetch(API + "/api/admin/gallery/upload", {
+  const res = await fetch(API + "/admin/gallery/upload", {
     method: "POST",
     headers: { ...authHeaders() },
     body: fd
