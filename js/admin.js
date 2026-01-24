@@ -539,10 +539,10 @@ async function uploadOneFileToR2(file) {
   fd.append("file", file);
 
   const res = await fetch(API + "/admin/gallery/upload", {
-    method: "POST",
-    headers: { ...authHeaders() },
-    body: fd
-  });
+  method: "POST",
+  headers: { ...authHeaders() },
+  body: fd
+});
 
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.error || ("HTTP " + res.status));
