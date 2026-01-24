@@ -538,14 +538,12 @@ async function uploadOneFileToR2(file) {
   const fd = new FormData();
   fd.append("file", file);
 
-  const res = await fetch(API + "/admin/gallery/upload", {
-  method: "POST",
-  headers: { ...authHeaders() },
-  body: fd
-});
+  // usa la tua funzione api() così non sbagli più il path
+  const data = await api("/admin/gallery/upload", {
+    method: "POST",
+    body: fd
+  });
 
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.error || ("HTTP " + res.status));
   if (!data.url) throw new Error("Manca URL nella risposta");
   return data.url;
 }
