@@ -43,3 +43,5 @@ const url = `${origin}/api/public/image?key=${encodeURIComponent(key)}`;
   return new Response(JSON.stringify({ ok: true, key, url }), {
     headers: { "content-type": "application/json", ...CORS },
   });
+  }
+}
