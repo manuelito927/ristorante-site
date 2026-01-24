@@ -1,5 +1,5 @@
 (function () {
-  const API = (window.API_BASE || "").trim();
+const API = (window.API_BASE || "/api").trim();
   const $ = (id) => document.getElementById(id);
 
 
