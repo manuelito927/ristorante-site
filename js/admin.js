@@ -2,6 +2,7 @@
   const API = (window.API_BASE || "").trim();
   const $ = (id) => document.getElementById(id);
 
+
   const statusEl = $("status");
   const loginCard = $("loginCard");
   const appCard = $("appCard");
