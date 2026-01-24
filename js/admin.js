@@ -534,22 +534,21 @@
     });
   }
 
-  async function uploadOneFileToR2(file) {
-    const fd = new FormData();
-    fd.append("file", file);
+async function uploadOneFileToR2(file) {
+  const fd = new FormData();
+  fd.append("file", file);
 
-    // ✅ FIX: prima era /api/admin/gallery/upload
-fetch(API + "/api/admin/gallery/upload", {
-      method: "POST",
-      headers: { ...authHeaders() },
-      body: fd
-    });
+  const res = await fetch(API + "/api/admin/gallery/upload", {
+    method: "POST",
+    headers: { ...authHeaders() },
+    body: fd
+  });
 
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data.error || ("HTTP " + res.status));
-    if (!data.url) throw new Error("Manca URL nella risposta");
-    return data.url;
-  }
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || ("HTTP " + res.status));
+  if (!data.url) throw new Error("Manca URL nella risposta");
+  return data.url;
+}
 
   async function uploadGalleryAndSave() {
     if (!gal_files || !gal_files.files || gal_files.files.length === 0) return alert("Seleziona almeno una foto");
