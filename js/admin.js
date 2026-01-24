@@ -539,7 +539,7 @@
     fd.append("file", file);
 
     // ✅ FIX: prima era /api/admin/gallery/upload
-    const res = await fetch(API + "/admin/gallery/upload", {
+fetch(API + "/api/admin/gallery/upload", {
       method: "POST",
       headers: { ...authHeaders() },
       body: fd
