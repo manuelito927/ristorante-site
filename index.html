@@ -163,7 +163,7 @@
       const js = await res.json().catch(() => ({}));
       console.log("GALLERY JSON:", js);
 
-      const urls = Array.isArray(js.urls) ? js.urls : [];
+const urls = Array.isArray(js.data?.urls) ? js.data.urls : [];
       if(!urls.length){
         grid.innerHTML = `<div class="empty">Nessuna foto ancora. Vai in Admin → Gallery e aggiungile.</div>`;
         return;
