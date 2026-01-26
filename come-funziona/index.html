@@ -3,217 +3,294 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Come funziona - GREENWOOD</title>
+  <title>Prenota - GREENWOOD</title>
   <link rel="stylesheet" href="/css/styles.css?v=3">
-
   <style>
-    /* Pulizia e Layout Professionale */
-    .poster-wrap {
-      max-width: 100%;
+    .prenota-wrap{
+      padding: 18px;
+      max-width: 720px;
       margin: 0 auto;
-      padding: 0;
     }
 
-    .poster {
-      padding: 60px var(--pad);
-      border-bottom: 0;
+    .prenota-card{
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.12);
+      border-radius: 18px;
+      padding: 16px;
     }
 
-    /* Alternanza Colori Sezioni */
-    .poster:nth-child(odd) { background-color: #fcfaf7; }
-    .poster:nth-child(even) { background-color: #f1f4f2; }
-
-    .poster h2 {
-      margin: 0 0 20px;
-      font-size: 32px;
-      font-weight: 700;
-      line-height: 1.1;
-      letter-spacing: -0.5px;
-      color: #2d3a31;
+    .prenota-title{
+      margin: 0 0 10px;
+      font-size: 28px;
+      letter-spacing: .02em;
     }
 
-    .poster p {
-      margin: 0;
-      font-size: 18px;
-      line-height: 1.6;
-      color: #444;
-      white-space: pre-line;
-      font-weight: 300;
+    .prenota-sub{
+      margin: 0 0 14px;
+      opacity: .75;
+      font-size: 14px;
+      line-height: 1.4;
     }
 
-    .bar {
-      width: 50px;
-      height: 3px;
-      background: #8FA998;
-      margin: 25px 0 0;
-      border-radius: 2px;
+    .form-row{
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
     }
 
-    .db-text-block { margin-top: 20px; }
-    .muted { opacity: 1; }
+    .field{
+      flex: 1;
+      min-width: 160px;
+    }
 
-    .hero h1 {
-      font-weight: 300;
-      letter-spacing: 2px;
-      text-transform: lowercase;
+    label{
+      display:block;
+      font-size: 12px;
+      opacity: .7;
+      margin: 0 0 6px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    input, select, textarea{
+      width: 100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,.18);
+      background: #fff;
+      font: inherit;
+      outline: none;
+    }
+
+    textarea{ min-height: 90px; resize: vertical; }
+
+    .btn-primary{
+      width: 100%;
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,.18);
+      background: #151515;
+      color: #fff;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .note-small{
+      margin-top: 10px;
+      font-size: 13px;
+      opacity: .7;
+      line-height: 1.4;
     }
   </style>
 </head>
 <body>
 
+  <!-- HEADER -->
   <header class="header">
     <button id="jsHamburger" class="menu-btn" aria-label="Apri menu" aria-expanded="false">☰</button>
+
     <div class="logo">
       <span class="logo-mark">GW</span>
       <span class="logo-text">GREENWOOD</span>
     </div>
   </header>
 
+  <!-- MENU MOBILE -->
   <div id="jsMenuBackdrop" class="menu-backdrop" hidden></div>
 
-  <nav id="jsMobileMenu" class="mobile-menu" aria-label="Menu principale" hidden>
+  <nav id="jsMobileMenu" class="mobile-menu" aria-label="Menu principale">
     <div class="mobile-menu__head">
       <div class="mobile-logo">
         <span class="mobile-logo__mark">GW</span>
         <span class="mobile-logo__text">GREENWOOD</span>
       </div>
     </div>
-    <ul class="mobile-menu__list">
-      <li><a class="mobile-menu__link" href="/menu/">MENU DIGITALE</a></li>
-      <li><a class="mobile-menu__link" href="/come-funziona/">COME FUNZIONA</a></li>
-      <li><a class="mobile-menu__link" href="/prenota/">PRENOTA</a></li>
-      <li><a class="mobile-menu__link" href="/gallery/">GALLERY</a></li>
-      <li><a class="mobile-menu__link" href="/recensioni/">RECENSIONI</a></li>
-      <li><a class="mobile-menu__link" href="/">HOME</a></li>
-    </ul>
+
+<ul class="mobile-menu__list">
+  <li><a class="mobile-menu__link" href="/menu/">MENU DIGITALE</a></li>
+  <li><a class="mobile-menu__link" href="/come-funziona/">COME FUNZIONA</a></li>
+  <li><a class="mobile-menu__link" href="/prenota/">PRENOTA</a></li>
+  <li><a class="mobile-menu__link" href="/gallery/">GALLERY</a></li>
+  <li><a class="mobile-menu__link" href="/recensioni/">RECENSIONI</a></li>
+  <li><a class="mobile-menu__link" href="/">HOME</a></li>
+</ul>
   </nav>
 
-  <section class="hero" id="pageHero" data-cover-key="come-funziona">
-    <h1 id="page_main_title">come funziona</h1>
-  </section>
+  <!-- HERO -->
+<section class="hero" id="pageHero" data-cover-key="prenota">
+  <h1>Prenota</h1>
+</section>
 
-  <main class="poster-wrap">
+  <!-- CONTENT -->
+  <main class="prenota-wrap">
+    <div class="prenota-card">
+      <h2 class="prenota-title">Richiedi un tavolo</h2>
+      <p class="prenota-sub">
+        Compila i dati qui sotto. La prenotazione verrà confermata dal locale.
+      </p>
 
-    <section class="poster">
-      <h2 id="hours_it_title">Orari di apertura</h2>
-      <p id="hours_it_text"></p>
-      <p id="hours_en_text" class="db-text-block" style="font-style: italic; color: #777;"></p>
+      <form id="prenotaForm">
+        <div class="form-row">
+          <div class="field">
+            <label>Data</label>
+            <input name="date" type="date" required>
+          </div>
+          <div class="field">
+            <label>Ora</label>
+            <input name="time" type="time" required>
+          </div>
+        </div>
 
-      <div class="db-text-block">
-        <p id="phone" style="font-weight: 600; color: #151515;"></p>
-        <p id="address" style="font-weight: 500;"></p>
-      </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Persone</label>
+            <input name="people" type="number" min="1" value="2" required>
+          </div>
+          <div class="field">
+            <label>Telefono</label>
+            <input name="phone" type="tel" placeholder="Es. 3331234567" required>
+          </div>
+        </div>
 
-      <div class="bar"></div>
-    </section>
+        <div class="form-row">
+          <div class="field">
+            <label>Nome e cognome</label>
+            <input name="name" type="text" placeholder="Es. Mario Rossi" required>
+          </div>
+        </div>
 
-    <section class="poster">
-      <h2 id="takeaway_title">Servizio di asporto</h2>
-      <p id="takeaway_text"></p>
-      <div class="bar"></div>
-    </section>
+        <div class="form-row">
+          <div class="field">
+            <label>Note (opzionale)</label>
+            <textarea name="notes" placeholder="Allergie, passeggino, richiesta tavolo, ecc."></textarea>
+          </div>
+        </div>
 
-    <section class="poster">
-      <h2 id="gluten_title">Allergie e Intolleranze</h2>
-      <p id="gluten_text"></p>
-      <p id="lactose_text" class="db-text-block"></p>
-      <div class="bar"></div>
-    </section>
+        <button class="btn-primary" type="submit">Invia richiesta</button>
 
-    <section class="poster">
-      <h2 id="pets_title">Amici a 4 zampe</h2>
-      <p id="pets_text"></p>
-      <div class="bar"></div>
-    </section>
-
+        <div class="note-small" id="noteMsg">
+          * La richiesta verrà inviata al sistema del locale.
+        </div>
+      </form>
+    </div>
   </main>
 
+  <!-- ✅ serve per window.API_BASE -->
   <script src="/js/config.js"></script>
+<script>
+(async function(){
+  const hero = document.getElementById("pageHero");
+  if (!hero) return;
 
-  <script>
-  (async function(){
-    const hero = document.getElementById("pageHero");
-    if (!hero) return;
+  const key = hero.dataset.coverKey || "prenota";
 
-    const key = hero.dataset.coverKey || "come-funziona";
+  try {
+    const res = await fetch("/api/page/covers", { cache: "no-store" });
+    const json = await res.json().catch(() => ({}));
+    const url = json[key];
 
-    try {
-      // ✅ FIX: prima era /api/page/covers
-      const res = await fetch("/page/covers", { cache: "no-store" });
-      const json = await res.json().catch(() => ({}));
-      const url = json[key];
-
-      if (url && String(url).trim()) {
-        hero.style.backgroundImage =
-          `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url("${url}")`;
-        hero.style.backgroundSize = "cover";
-        hero.style.backgroundPosition = "center";
-        hero.style.backgroundRepeat = "no-repeat";
-      }
-    } catch (e) {
-      console.warn("Cover non caricata:", e);
+    if (url && String(url).trim()) {
+      hero.style.backgroundImage =
+        `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url("${url}")`;
+      hero.style.backgroundSize = "cover";
+      hero.style.backgroundPosition = "center";
+      hero.style.backgroundRepeat = "no-repeat";
     }
-  })();
-  </script>
-
+  } catch (e) {
+    console.warn("Cover non caricata:", e);
+  }
+})();
+</script>
+  <!-- JS: menu mobile + INVIO al Worker -->
   <script>
-    /* Gestione Menu Mobile */
     (function(){
       const btn = document.getElementById("jsHamburger");
       const menu = document.getElementById("jsMobileMenu");
       const back = document.getElementById("jsMenuBackdrop");
-      if(!btn || !menu || !back) return;
 
       function openMenu(){
-        menu.hidden = false;
         menu.classList.add("is-open");
         back.hidden = false;
         btn.setAttribute("aria-expanded","true");
       }
-
       function closeMenu(){
         menu.classList.remove("is-open");
-        setTimeout(() => { if(!menu.classList.contains("is-open")) menu.hidden = true; }, 300);
         back.hidden = true;
         btn.setAttribute("aria-expanded","false");
       }
 
-      btn.addEventListener("click", () => {
-        const isOpen = btn.getAttribute("aria-expanded") === "true";
-        isOpen ? closeMenu() : openMenu();
-      });
+      if(btn && menu && back){
+        btn.addEventListener("click", () => {
+          const isOpen = btn.getAttribute("aria-expanded") === "true";
+          isOpen ? closeMenu() : openMenu();
+        });
 
-      back.addEventListener("click", closeMenu);
-    })();
+        back.addEventListener("click", closeMenu);
+        menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
+      }
 
-    /* Caricamento Dati dal sito (Pages Functions) */
-    (async function(){
-      try {
-        const API = (window.API_BASE && String(window.API_BASE).replace(/\/$/, "")) || "";
-        // ✅ FIX: prima era workers.dev + /api/page/come-funziona
-        const res = await fetch(API + "/page/come-funziona?t=" + Date.now(), { cache: "no-store" });
-        const json = await res.json().catch(() => ({}));
-        const d = json.data || {};
+      // ===== INVIO REALE =====
+      const form = document.getElementById("prenotaForm");
+      const noteMsg = document.getElementById("noteMsg");
 
-        const set = (id, val) => {
-          const el = document.getElementById(id);
-          if(el) el.textContent = val || "";
-        };
+      if(form){
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
 
-        set("hours_it_title", d.hours_it_title);
-        set("hours_it_text", d.hours_it_text);
-        set("hours_en_text", d.hours_en_text);
-        set("phone", d.phone);
-        set("address", d.address);
-        set("takeaway_title", d.takeaway_title);
-        set("takeaway_text", d.takeaway_text);
-        set("gluten_title", d.gluten_title);
-        set("gluten_text", d.gluten_text);
-        set("lactose_text", d.lactose_text);
-        set("pets_title", d.pets_title);
-        set("pets_text", d.pets_text);
-      } catch (e) {
-        console.error("Errore caricamento dati:", e);
+          const API = window.API_BASE || ""; // se non c'è, usa relative path
+          const btnSubmit = form.querySelector('button[type="submit"]');
+
+          const fd = new FormData(form);
+          const payload = {
+            name: String(fd.get("name") || "").trim(),
+            phone: String(fd.get("phone") || "").trim(),
+            people: Number(fd.get("people") || 2),
+            date: String(fd.get("date") || "").trim(), // YYYY-MM-DD
+            time: String(fd.get("time") || "").trim(), // HH:MM
+            notes: String(fd.get("notes") || "").trim()
+          };
+
+          if (!payload.name || !payload.phone || !payload.date || !payload.time) {
+            alert("Compila tutti i campi obbligatori.");
+            return;
+          }
+          if (!Number.isFinite(payload.people) || payload.people < 1 || payload.people > 30) {
+            alert("Numero persone non valido.");
+            return;
+          }
+
+          try {
+            if(btnSubmit){
+              btnSubmit.disabled = true;
+              btnSubmit.textContent = "Invio...";
+            }
+            if(noteMsg) noteMsg.textContent = "Invio in corso...";
+
+            const res = await fetch(API + "/api/reservations", {
+              method: "POST",
+              headers: { "content-type": "application/json" },
+              body: JSON.stringify(payload)
+            });
+
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.error || ("HTTP " + res.status));
+
+            alert("✅ Richiesta inviata! Ti contatteremo per conferma.");
+            form.reset();
+            form.querySelector('[name="people"]').value = 2;
+            if(noteMsg) noteMsg.textContent = "✅ Inviata correttamente.";
+          } catch (err) {
+            alert("❌ Errore invio: " + (err.message || "sconosciuto"));
+            if(noteMsg) noteMsg.textContent = "❌ Errore durante l'invio.";
+          } finally {
+            if(btnSubmit){
+              btnSubmit.disabled = false;
+              btnSubmit.textContent = "Invia richiesta";
+            }
+          }
+        });
       }
     })();
   </script>
