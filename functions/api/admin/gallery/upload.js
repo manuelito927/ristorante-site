@@ -4,7 +4,6 @@ const CORS = {
 "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
-
 export async function onRequestGet() {
   return new Response("UPLOAD ROUTE OK", { status: 200 });
 }
