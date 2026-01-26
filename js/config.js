@@ -1,1 +1,0 @@
-window.API_BASE = "https://ristorante-site.pages.dev";
