@@ -189,7 +189,7 @@
 
     try {
       // ✅ FIX: prima era /api/page/covers
-      const res = await fetch("/page/covers", { cache: "no-store" });
+const res = await fetch("/api/page/covers", { cache: "no-store" });
       const json = await res.json().catch(() => ({}));
       const url = json[key];
 
