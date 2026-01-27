@@ -552,22 +552,25 @@ const enabled = s.enabled !== false;
     }
   }
 
-  if (refreshReservationsBtn) refreshReservationsBtn.onclick = () => loadReservations();
-if (toggleBookingBtn) {
+  if (toggleBookingBtn) {
   toggleBookingBtn.onclick = async () => {
     try {
-      const s = await api("/api/admin/booking/status");
-      const enabledNow = !!(s.enabled ?? s.data?.enabled);
+      const sRes = await fetch("/api/page/booking-status", { cache: "no-store" });
+      const s = await sRes.json().catch(() => ({}));
+      const enabledNow = s.enabled !== false;
 
-      await api("/api/admin/booking/status", {
+      const putRes = await fetch("/api/page/booking-status", {
         method: "PUT",
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({ enabled: !enabledNow })
       });
+      const putData = await putRes.json().catch(() => ({}));
+      if (!putRes.ok) throw new Error(putData.error || ("HTTP " + putRes.status));
 
       await loadReservations();
       alert(!enabledNow ? "✅ Prenotazioni ATTIVATE" : "❌ Prenotazioni DISATTIVATE");
     } catch (e) {
-      alert("❌ " + e.message);
+      alert("❌ " + (e.message || e));
     }
   };
 }
