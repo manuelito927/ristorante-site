@@ -155,7 +155,8 @@ async function loadItems() {
   grid.innerHTML = "<div class='card'>Caricamento menu...</div>";
 
   try {
-const { items } = await api("/api/admin/menu");
+const res = await api("/api/menu");
+const items = res.items || res.data?.items || [];
     grid.innerHTML = "";
 
     // tiene traccia di quale prodotto è aperto
