@@ -1,6 +1,6 @@
 const CORS = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, OPTIONS",
+  "Access-Control-Allow-Methods": "GET, PUT, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
@@ -9,14 +9,21 @@ export async function onRequestOptions() {
 }
 
 export async function onRequestGet({ env }) {
-  // Legge lo stato da KV (binding: COVERS)
   const raw = await env.COVERS.get("BOOKING_ENABLED");
-
-  // Default: ON se la chiave non esiste ancora
-  const enabled =
-    raw === null ? true : String(raw).toLowerCase() === "true";
+  const enabled = raw === null ? true : String(raw).toLowerCase() === "true";
 
   return new Response(JSON.stringify({ enabled }), {
+    headers: { "content-type": "application/json", ...CORS },
+  });
+}
+
+export async function onRequestPut({ request, env }) {
+  const body = await request.json().catch(() => ({}));
+  const enabled = !!body.enabled;
+
+  await env.COVERS.put("BOOKING_ENABLED", String(enabled));
+
+  return new Response(JSON.stringify({ ok: true, enabled }), {
     headers: { "content-type": "application/json", ...CORS },
   });
 }
