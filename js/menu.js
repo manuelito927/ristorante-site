@@ -1,8 +1,8 @@
 (async function () {
-  const API =
-    (window.API_BASE && String(window.API_BASE).replace(/\/$/, "")) ||
-    "https://still-haze-01c8.filosofiaefficace.workers.dev";
-
+const API =
+  (window.API_BASE && String(window.API_BASE).replace(/\/$/, "")) ||
+  "";
+  
   // ✅ 1) LINGUA (IT / EN) — PRIMA della fetch
   let LANG = localStorage.getItem("lang") || "it";
   const langBtns = Array.from(document.querySelectorAll(".langbtn"));
