@@ -478,6 +478,19 @@ const items = res.items || res.data?.items || [];
     reservationsGrid.innerHTML = "Caricamento...";
 
     try {
+      // ✅ stato prenotazioni ON/OFF
+try {
+  const s = await api("/api/admin/booking/status");
+  const enabled = !!(s.enabled ?? s.data?.enabled);
+
+  if (bookingStatusLabel) {
+    bookingStatusLabel.textContent = enabled ? "Prenotazioni: ATTIVE ✅" : "Prenotazioni: DISATTIVATE ❌";
+    bookingStatusLabel.style.background = enabled ? "#e6f4ea" : "#fce8e6";
+    bookingStatusLabel.style.color = enabled ? "#1e7e34" : "#b42318";
+  }
+} catch (e) {
+  if (bookingStatusLabel) bookingStatusLabel.textContent = "Prenotazioni: errore";
+}
       const { reservations } = await api("/api/admin/reservations?limit=50");
       reservationsGrid.innerHTML = "";
       
