@@ -459,18 +459,24 @@ const items = res.items || res.data?.items || [];
       PRENOTAZIONI - CARICA + MOSTRA
      ========================================================= */
 
-  function fmtDate(d) {
-    if (!d) return "";
-    try {
-      const x = new Date(d);
-      return x.toLocaleString("it-IT", {
-        year: "numeric", month: "2-digit", day: "2-digit",
-        hour: "2-digit", minute: "2-digit"
-      });
-    } catch {
-      return String(d);
-    }
+function fmtDate(d) {
+  if (!d) return "";
+
+  // Se arriva tipo "2026-01-27T11:30:00.000Z" o con timezone,
+  // io mi prendo SOLO "2026-01-27 11:30" e lo stampo uguale.
+  const s = String(d);
+
+  // prende YYYY-MM-DD e HH:MM
+  const m = s.match(/(\d{4}-\d{2}-\d{2}).*?(\d{2}:\d{2})/);
+  if (m) {
+    const [_, date, time] = m;
+    const [yyyy, mm, dd] = date.split("-");
+    return `${dd}/${mm}/${yyyy} ${time}`;
   }
+
+  // fallback
+  return s;
+}
 
   async function loadReservations() {
     if (!reservationsGrid) return;
