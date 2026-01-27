@@ -480,8 +480,9 @@ const items = res.items || res.data?.items || [];
     try {
       // ✅ stato prenotazioni ON/OFF
 try {
-  const s = await api("/api/admin/booking/status");
-  const enabled = !!(s.enabled ?? s.data?.enabled);
+  const sRes = await fetch("/api/page/booking-status", { cache: "no-store" });
+const s = await sRes.json().catch(() => ({}));
+const enabled = s.enabled !== false;
 
   if (bookingStatusLabel) {
     bookingStatusLabel.textContent = enabled ? "Prenotazioni: ATTIVE ✅" : "Prenotazioni: DISATTIVATE ❌";
