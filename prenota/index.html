@@ -243,10 +243,9 @@ const res = await fetch("/api/page/covers", { cache: "no-store" });
 
       async function applyBookingStatus() {
         try {
-          const res = await fetch(API + "/admin/booking/status", {
-            headers: { "authorization": "Bearer " + (localStorage.getItem("admin_token") || "") }
-          });
-
+          const res = await fetch("/api/booking-status", { cache: "no-store" });
+const data = await res.json().catch(() => ({}));
+const enabled = data.enabled !== false;
           // Se questo endpoint è pubblico nel tuo worker, ok.
           // Se è solo admin, ti do subito dopo la versione PUBLIC.
           const data = await res.json().catch(() => ({}));
