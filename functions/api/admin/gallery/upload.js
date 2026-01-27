@@ -49,3 +49,7 @@ export async function onRequestPost(ctx) {
 export async function onRequestPut(ctx) {
   return handleUpload(ctx.request, ctx.env);
 }
+
+export async function onRequestGet() {
+  return new Response("ADMIN UPLOAD OK", { status: 200, headers: CORS });
+}
