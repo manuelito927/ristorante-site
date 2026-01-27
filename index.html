@@ -3,59 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gallery - GREENWOOD</title>
+  <title>GREENWOOD</title>
   <link rel="stylesheet" href="/css/styles.css?v=3">
-
-  <style>
-    .gallery-wrap{
-      padding: 18px;
-      max-width: 980px;
-      margin: 0 auto;
-    }
-    .gallery-title{
-      margin: 6px 0 14px;
-      font-size: 28px;
-      letter-spacing: .02em;
-    }
-
-    .grid{
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 18px;
-    }
-    @media (min-width: 820px){
-      .grid{ grid-template-columns: 1fr 1fr; }
-    }
-
-    .ph{
-      border: 1px solid rgba(0,0,0,.12);
-      border-radius: 18px;
-      overflow: hidden;
-      background: #fff;
-    }
-    .ph img{
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    .muted{
-      opacity: .75;
-      font-size: 14px;
-      line-height: 1.4;
-    }
-    .empty{
-      padding: 14px;
-      border: 1px dashed rgba(0,0,0,.25);
-      border-radius: 14px;
-      background: rgba(255,255,255,.6);
-    }
-  </style>
 </head>
 <body>
 
   <header class="header">
     <button id="jsHamburger" class="menu-btn" aria-label="Apri menu" aria-expanded="false">☰</button>
+
     <div class="logo">
       <span class="logo-mark">GW</span>
       <span class="logo-text">GREENWOOD</span>
@@ -64,6 +19,7 @@
 
   <div id="jsMenuBackdrop" class="menu-backdrop" hidden></div>
 
+  <!-- ✅ tolto hidden -->
   <nav id="jsMobileMenu" class="mobile-menu" aria-label="Menu principale">
     <div class="mobile-menu__head">
       <div class="mobile-logo">
@@ -72,123 +28,201 @@
       </div>
     </div>
 
-    <ul class="mobile-menu__list">
-      <li><a class="mobile-menu__link" href="/menu/">MENU DIGITALE</a></li>
-      <li><a class="mobile-menu__link" href="/come-funziona/">COME FUNZIONA</a></li>
-      <li><a class="mobile-menu__link" href="/prenota/">PRENOTA</a></li>
-      <li><a class="mobile-menu__link" href="/gallery/">GALLERY</a></li>
-      <li><a class="mobile-menu__link" href="/recensioni/">RECENSIONI</a></li>
-      <li><a class="mobile-menu__link" href="/">HOME</a></li>
-    </ul>
+<ul class="mobile-menu__list">
+  <li><a class="mobile-menu__link" href="/menu/">MENU DIGITALE</a></li>
+  <li><a class="mobile-menu__link" href="/come-funziona/">COME FUNZIONA</a></li>
+  <li><a class="mobile-menu__link" href="/prenota/">PRENOTA</a></li>
+  <li><a class="mobile-menu__link" href="/gallery/">GALLERY</a></li>
+  <li><a class="mobile-menu__link" href="/recensioni/">RECENSIONI</a></li>
+  <li><a class="mobile-menu__link" href="/">HOME</a></li>
+</ul>
   </nav>
 
-  <section class="hero" id="pageHero" data-cover-key="gallery">
-    <h1>Gallery</h1>
-  </section>
+  <section class="hero" id="pageHero" data-cover-key="home">
+  <h1>All you need<br>is love<br>and food</h1>
+</section>
 
-  <main class="gallery-wrap">
-    <h2 class="gallery-title">Le nostre foto</h2>
-    <p class="muted">Foto gestite dall’Admin (aggiungi / togli quando vuoi).</p>
+<script src="/js/config.js"></script>
+<script>
+(async function(){
+const API = ""; // NON usare API_BASE per le cover
+  const hero = document.getElementById("pageHero");
+  if(!hero) return;
 
-    <div id="galleryGrid" class="grid" style="margin-top:16px;"></div>
-  </main>
+  const key = hero.dataset.coverKey || "home";
 
-  <script src="/js/config.js"></script>
+  try {
+const res = await fetch("/api/page/covers", { cache: "no-store" });
+const json = await res.json().catch(() => ({}));
+const url = json[key];
+    if(url && String(url).trim()){
+hero.style.backgroundImage =
+  `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url("${url}")`;
+      hero.style.backgroundSize = "cover";
+      hero.style.backgroundPosition = "center";
+      hero.style.backgroundRepeat = "no-repeat";
+    }
+  } catch(e){
+    console.warn("Cover non caricata:", e);
+  }
+})();
+</script>
 
-  <script>
-  (async function(){
-    const hero = document.getElementById("pageHero");
-    if (!hero) return;
-
-    const key = hero.dataset.coverKey || "gallery";
-
-    try {
-      const res = await fetch("/api/page/covers", { cache: "no-store" });
-      const json = await res.json().catch(() => ({}));
-      const url = json[key];
-
-      if (url && String(url).trim()) {
-        hero.style.backgroundImage =
-          `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url("${url}")`;
-        hero.style.backgroundSize = "cover";
-        hero.style.backgroundPosition = "center";
-        hero.style.backgroundRepeat = "no-repeat";
-      }
-    } catch (e) {}
-  })();
-  </script>
-
-  <script>
+<script>
   (function(){
-    const burger = document.getElementById("jsHamburger");
-    const mobileMenu = document.getElementById("jsMobileMenu");
-    const backdrop = document.getElementById("jsMenuBackdrop");
-    if(!burger || !mobileMenu || !backdrop) return;
+    // ====== CONFIG ======
+    const API = (window.API_BASE || "").trim();  // arriva da /js/config.js se lo hai
+    const WHATSAPP_NUMBER = "+393921541210";      // <-- METTI QUI IL NUMERO DEL RISTORANTE (solo cifre, es: 39...)
+    // ====================
 
-    function openMenu(){
-      mobileMenu.classList.add("is-open");
-      backdrop.hidden = false;
-      document.body.style.overflow = "hidden";
-      burger.setAttribute("aria-expanded","true");
+    // MENU MOBILE (uguale a prima)
+    const btn = document.getElementById("jsHamburger");
+    const menu = document.getElementById("jsMobileMenu");
+    const back = document.getElementById("jsMenuBackdrop");
+
+function closeMenu(){
+  menu.classList.remove("is-open");
+  back.hidden = true;
+  back.style.display = "none";          // ✅ forza via overlay
+  btn.setAttribute("aria-expanded","false");
+  document.body.style.overflow = "";    // ✅ riattiva scroll
+}
+
+function openMenu(){
+  menu.classList.add("is-open");
+  back.hidden = false;
+  back.style.display = "block";         // ✅ mostra overlay
+  btn.setAttribute("aria-expanded","true");
+  document.body.style.overflow = "hidden"; // ✅ blocca scroll (opzionale)
+}
+
+    if(btn && menu && back){
+      btn.addEventListener("click", () => {
+        const isOpen = btn.getAttribute("aria-expanded") === "true";
+        isOpen ? closeMenu() : openMenu();
+      });
+      back.addEventListener("click", closeMenu);
+      menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
     }
-    function closeMenu(){
-      mobileMenu.classList.remove("is-open");
-      setTimeout(() => {
-        if(!mobileMenu.classList.contains("is-open")) backdrop.hidden = true;
-      }, 300);
-      document.body.style.overflow = "";
-      burger.setAttribute("aria-expanded","false");
+
+    // ====== PRENOTA LOGIC ======
+    const form = document.getElementById("prenotaForm");
+    if(!form) return;
+
+    // Crea (una volta) una sezione "success" sotto al form
+    const successBox = document.createElement("div");
+    successBox.style.display = "none";
+    successBox.style.marginTop = "14px";
+    successBox.innerHTML = `
+      <div style="padding:14px;border:1px solid rgba(0,0,0,.12);border-radius:14px;background:#f6f1ea;">
+        <div style="font-weight:700; font-size:16px; margin-bottom:6px;">✅ Richiesta inviata</div>
+        <div style="opacity:.8; font-size:14px; line-height:1.4;">
+          Ora premi il bottone qui sotto per inviare la richiesta anche su WhatsApp al ristorante.
+        </div>
+
+        <a id="waLink"
+           href="#"
+           target="_blank"
+           rel="noopener"
+           style="display:block;text-align:center;margin-top:12px;padding:12px 14px;border-radius:14px;
+                  border:1px solid rgba(0,0,0,.18);background:#151515;color:#fff;text-decoration:none;">
+          Invia su WhatsApp al ristorante
+        </a>
+
+        <div style="margin-top:10px; font-size:13px; opacity:.75;">
+          * La conferma/cancellazione verrà gestita dal ristorante. Se vuoi, puoi lasciare WhatsApp aperto.
+        </div>
+      </div>
+    `;
+    form.appendChild(successBox);
+
+    const waLink = successBox.querySelector("#waLink");
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    function buildWhatsAppText(payload, reservationId){
+      // Messaggio precompilato chiaro e compatto
+      const lines = [
+        "📌 *Richiesta prenotazione +400°*",
+        reservationId ? `ID richiesta: #${reservationId}` : "",
+        `Nome: ${payload.name}`,
+        `Tel: ${payload.phone}`,
+        `Persone: ${payload.people}`,
+        `Quando: ${payload.date} • ${payload.time}`,
+        payload.notes ? `Note: ${payload.notes}` : "Note: —",
+      ].filter(Boolean);
+
+      return lines.join("\n");
     }
 
-    burger.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const isOpen = mobileMenu.classList.contains("is-open");
-      isOpen ? closeMenu() : openMenu();
-    });
+    function openWhatsApp(text){
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+      return url;
+    }
 
-    backdrop.addEventListener("click", closeMenu);
-    mobileMenu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
-    document.addEventListener("keydown", (e) => { if(e.key === "Escape") closeMenu(); });
-  })();
-  </script>
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-  <script>
-  // ✅ Gallery: legge SOLO dal sito Pages Function
-  (async function(){
-    const grid = document.getElementById("galleryGrid");
-    if(!grid) return;
+      // Leggi i campi
+      const fd = new FormData(form);
+      const payload = {
+        date: String(fd.get("date") || "").trim(),
+        time: String(fd.get("time") || "").trim(),
+        people: Number(fd.get("people") || 2),
+        phone: String(fd.get("phone") || "").trim(),
+        name: String(fd.get("name") || "").trim(),
+        notes: String(fd.get("notes") || "").trim()
+      };
 
-    try{
-      const res = await fetch("/api/page/gallery?t=" + Date.now(), { cache: "no-store" });
-      const js = await res.json().catch(() => ({}));
-      console.log("GALLERY JSON:", js);
-
-const urls = Array.isArray(js.data?.urls) ? js.data.urls : [];
-      if(!urls.length){
-        grid.innerHTML = `<div class="empty">Nessuna foto ancora. Vai in Admin → Gallery e aggiungile.</div>`;
+      // Validazioni base
+      if(!payload.date || !payload.time || !payload.phone || !payload.name){
+        alert("Compila data, ora, telefono e nome.");
         return;
       }
+      if(!Number.isFinite(payload.people) || payload.people < 1) payload.people = 1;
 
-      grid.innerHTML = urls.map((url) => {
-        const safe = String(url || "").trim();
-        if(!safe) return "";
-        return `
-          <div class="ph">
-            <img src="${escapeAttr(safe)}" alt="Foto" loading="lazy">
-          </div>
-        `;
-      }).join("");
-    }catch(e){
-      grid.innerHTML = `<div class="empty">Errore nel caricamento gallery.</div>`;
-    }
+      // Disabilita bottone
+      if(submitBtn){
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Invio...";
+      }
 
-    function escapeAttr(s){
-      return String(s).replace(/[&<>"']/g, (c) => ({
-        "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
-      }[c]));
-    }
+      try {
+        // Se API_BASE non c'è, proviamo stesso dominio (ma nel tuo caso c'è)
+        const base = API || "";
+        const res = await fetch(base + "/api/reservations", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json().catch(() => ({}));
+        if(!res.ok) throw new Error(data.error || ("HTTP " + res.status));
+
+        // Mostra box e prepara link WA
+        const reservationId = data?.reservation?.id || null;
+        const text = buildWhatsAppText(payload, reservationId);
+        waLink.href = openWhatsApp(text);
+
+        successBox.style.display = "block";
+
+        // (opzionale) scroll fino al bottone WA
+        successBox.scrollIntoView({ behavior: "smooth", block: "start" });
+
+        // Reset form (così non lo reinvia per sbaglio)
+        form.reset();
+
+      } catch (err) {
+        alert("❌ Errore invio: " + (err.message || err));
+      } finally {
+        if(submitBtn){
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Invia richiesta";
+        }
+      }
+    });
+
   })();
-  </script>
+</script>
 
 </body>
 </html>
