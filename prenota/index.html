@@ -314,7 +314,7 @@ async function applyBookingStatus() {
             if(noteMsg) noteMsg.textContent = "Invio in corso...";
 
             // ✅ FIX: prima era /api/reservations
-            const res = await fetch(API + "/reservations", {
+const res = await fetch((API && API.endsWith("/api")) ? (API + "/reservations") : ((API || "") + "/api/reservations"), {
               method: "POST",
               headers: { "content-type": "application/json" },
               body: JSON.stringify(payload)
