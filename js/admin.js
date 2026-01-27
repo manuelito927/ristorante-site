@@ -552,6 +552,24 @@ try {
   }
 
   if (refreshReservationsBtn) refreshReservationsBtn.onclick = () => loadReservations();
+if (toggleBookingBtn) {
+  toggleBookingBtn.onclick = async () => {
+    try {
+      const s = await api("/api/admin/booking/status");
+      const enabledNow = !!(s.enabled ?? s.data?.enabled);
+
+      await api("/api/admin/booking/status", {
+        method: "PUT",
+        body: JSON.stringify({ enabled: !enabledNow })
+      });
+
+      await loadReservations();
+      alert(!enabledNow ? "✅ Prenotazioni ATTIVATE" : "❌ Prenotazioni DISATTIVATE");
+    } catch (e) {
+      alert("❌ " + e.message);
+    }
+  };
+}
 
   /* =========================================================
       GALLERY - UPLOAD R2 + DB
