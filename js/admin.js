@@ -552,6 +552,10 @@ const enabled = s.enabled !== false;
     }
   }
 
+if (refreshReservationsBtn) {
+  refreshReservationsBtn.onclick = () => loadReservations();
+}
+
   if (toggleBookingBtn) {
   toggleBookingBtn.onclick = async () => {
     try {
