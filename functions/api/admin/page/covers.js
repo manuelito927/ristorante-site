@@ -10,10 +10,10 @@ export async function onRequestOptions() {
 
 function normalizeCoverKey(page) {
   return String(page || "")
-    .trim()
-    .replace(/\s+/g, "_")   // spazi -> underscore
-    .replace(/-/g, "_")     // trattini -> underscore  ✅ come-funziona -> come_funziona
-    .toUpperCase();         // -> COME_FUNZIONA
+    .replace(/([a-z0-9])([A-Z])/g, "$1_$2") // camelCase → snake_case
+    .replace(/\s+/g, "_")
+    .replace(/-/g, "_")
+    .toUpperCase();
 }
 
 export async function onRequestPut({ request, env }) {
