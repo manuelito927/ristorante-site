@@ -21,6 +21,8 @@ const API = "https://still-haze-01c8.filosofiaefficace.workers.dev";
   const reservationsGrid = $("reservationsGrid");
   const refreshReservationsBtn = $("refreshReservations");
   const reservationsMsg = $("reservationsMsg");
+const bookingStatusLabel = $("bookingStatusLabel");
+const toggleBookingBtn = $("toggleBookingBtn");
 
   // COME FUNZIONA FIELDS
   const cf_phone = $("cf_phone");
