@@ -8,8 +8,16 @@ export async function onRequestOptions() {
   return new Response(null, { status: 204, headers: CORS });
 }
 
+function normalizeCoverKey(page) {
+  return String(page || "")
+    .trim()
+    .replace(/\s+/g, "_")   // spazi -> underscore
+    .replace(/-/g, "_")     // trattini -> underscore  ✅ come-funziona -> come_funziona
+    .toUpperCase();         // -> COME_FUNZIONA
+}
+
 export async function onRequestPut({ request, env }) {
-  const body = await request.json();
+  const body = await request.json().catch(() => ({}));
 
   const entries = Object.entries(body || {});
   if (!entries.length) {
@@ -20,7 +28,11 @@ export async function onRequestPut({ request, env }) {
   }
 
   for (const [page, url] of entries) {
-    await env.COVERS.put(page.toUpperCase(), url);
+    const key = normalizeCoverKey(page);
+    const val = String(url || "").trim();
+
+    if (!key) continue;
+    await env.COVERS.put(key, val);
   }
 
   return new Response(JSON.stringify({ ok: true }), {
