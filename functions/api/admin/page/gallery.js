@@ -1,0 +1,36 @@
+// functions/api/admin/page/gallery.js
+
+const CORS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
+export async function onRequestOptions() {
+  return new Response(null, { status: 204, headers: CORS });
+}
+
+export async function onRequestGet({ env }) {
+  const raw = await env.COVERS.get("GALLERY_LIST");
+  const urls = raw ? JSON.parse(raw) : [];
+  return new Response(JSON.stringify({ urls }), {
+    headers: { "content-type": "application/json", ...CORS },
+  });
+}
+
+async function saveGallery(request, env) {
+  const body = await request.json().catch(() => ({}));
+  const urls = Array.isArray(body.urls) ? body.urls : [];
+  await env.COVERS.put("GALLERY_LIST", JSON.stringify(urls));
+  return new Response(JSON.stringify({ ok: true, urls }), {
+    headers: { "content-type": "application/json", ...CORS },
+  });
+}
+
+export async function onRequestPut(ctx) {
+  return saveGallery(ctx.request, ctx.env);
+}
+
+export async function onRequestPost(ctx) {
+  return saveGallery(ctx.request, ctx.env);
+}
