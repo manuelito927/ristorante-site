@@ -1,18 +1,16 @@
+// functions/api/admin/gallery/upload.js
+
 const CORS = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS, GET",
-"Access-Control-Allow-Headers": "Content-Type, Authorization",
+  "Access-Control-Allow-Methods": "POST, PUT, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
-
-export async function onRequestGet() {
-  return new Response("UPLOAD ROUTE OK", { status: 200 });
-}
 
 export async function onRequestOptions() {
   return new Response(null, { status: 204, headers: CORS });
 }
 
-export async function onRequestPost({ request, env }) {
+async function handleUpload(request, env) {
   const formData = await request.formData();
   const file = formData.get("file");
 
@@ -36,10 +34,18 @@ export async function onRequestPost({ request, env }) {
     httpMetadata: { contentType: file.type },
   });
 
-const origin = env.CF_PAGES_URL;
-const url = `${origin}/api/public/image?key=${encodeURIComponent(key)}`;
+  const origin = env.CF_PAGES_URL;
+  const url = `${origin}/api/public/image?key=${encodeURIComponent(key)}`;
 
   return new Response(JSON.stringify({ ok: true, key, url }), {
     headers: { "content-type": "application/json", ...CORS },
   });
+}
+
+export async function onRequestPost(ctx) {
+  return handleUpload(ctx.request, ctx.env);
+}
+
+export async function onRequestPut(ctx) {
+  return handleUpload(ctx.request, ctx.env);
 }
