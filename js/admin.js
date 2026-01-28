@@ -494,7 +494,7 @@ function fmtDate(d) {
     try {
       // ✅ stato prenotazioni ON/OFF
 try {
-  const sRes = await fetch("/api/page/booking-status", { cache: "no-store" });
+const sRes = await fetch(API + "/api/page/booking-status", { cache: "no-store" });
 const s = await sRes.json().catch(() => ({}));
 const enabled = s.enabled !== false;
 
