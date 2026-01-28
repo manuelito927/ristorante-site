@@ -576,7 +576,10 @@ if (refreshReservationsBtn) {
   if (toggleBookingBtn) {
   toggleBookingBtn.onclick = async () => {
     try {
-const sRes = await fetch(API + "/api/page/booking-status", { cache: "no-store" });
+const sRes = await fetch(API + "/api/page/booking-status", {
+  cache: "no-store",
+  headers: { ...authHeaders() }
+});
       const s = await sRes.json().catch(() => ({}));
       const enabledNow = s.enabled !== false;
 
