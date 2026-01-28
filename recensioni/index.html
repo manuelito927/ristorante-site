@@ -74,32 +74,6 @@
 
   <!-- ✅ serve per window.API_BASE -->
   <script src="/js/config.js"></script>
-<script>
-(async function(){
-  try {
-    // prende contenuti salvati in admin (slug: recensioni)
-    const res = await fetch("/api/page/recensioni", { cache: "no-store" });
-    const json = await res.json().catch(() => ({}));
-    const d = json.data || {};
-
-    const txtEl = document.getElementById("reviewsText");
-    const readBtn = document.getElementById("googleReadBtn");
-    const writeLink = document.getElementById("googleWriteLink");
-
-    // lingua semplice: se la pagina è in it, usa text_it
-    const text = (d.text_it || "").trim();
-    if (txtEl && text) txtEl.textContent = text;
-
-    const googleUrl = (d.google_url || "").trim();
-    if (googleUrl) {
-      if (readBtn) readBtn.href = googleUrl;
-      if (writeLink) writeLink.href = googleUrl;
-    }
-  } catch(e) {
-    console.warn("Recensioni: contenuti non caricati", e);
-  }
-})();
-</script>
 
   <!-- cover hero (come le altre pagine) -->
   <script>
