@@ -8,16 +8,18 @@ export async function onRequestOptions() {
   return new Response(null, { status: 204, headers: CORS });
 }
 
-function normalizeCoverKey(page) {
-  return String(page || "")
-    .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
+// normalizza: "come-funziona" → "come_funziona"
+function normalizeKey(key) {
+  return String(key || "")
+    .trim()
+    .toLowerCase()
     .replace(/\s+/g, "_")
-    .replace(/-/g, "_")
-    .toLowerCase();
+    .replace(/-/g, "_");
 }
 
 export async function onRequestPut({ request, env }) {
-  const body = await request.json().catch(() => ({}));
+  const body = await request.json().catch(() => null);
+
   if (!body || typeof body !== "object") {
     return new Response(JSON.stringify({ error: "Payload non valido" }), {
       status: 400,
@@ -25,7 +27,7 @@ export async function onRequestPut({ request, env }) {
     });
   }
 
-  const pages = [
+  const ALLOWED = [
     "home",
     "menu",
     "gallery",
@@ -34,26 +36,28 @@ export async function onRequestPut({ request, env }) {
     "recensioni",
   ];
 
-  // 1️⃣ leggi copertine esistenti
+  // 1️⃣ carica stato attuale
   const current = {};
-  for (const p of pages) {
-    current[p] = (await env.COVERS.get(p)) || "";
+  for (const key of ALLOWED) {
+    current[key] = (await env.COVERS.get(key)) || "";
   }
 
-for (const [page, url] of Object.entries(body)) {
-  const key = normalizeCoverKey(page);
-  const val = typeof url === "string" ? url.trim() : "";
-  if (key in current && val) {
-    current[key] = val; // aggiorna SOLO se c'è un valore vero
-  }
-}
+  // 2️⃣ aggiorna solo le chiavi valide
+  for (const [rawKey, rawUrl] of Object.entries(body)) {
+    const key = normalizeKey(rawKey);
+    const url = typeof rawUrl === "string" ? rawUrl.trim() : "";
 
-  // 3️⃣ risalva tutto
+    if (ALLOWED.includes(key) && url) {
+      current[key] = url;
+    }
+  }
+
+  // 3️⃣ salva tutto
   for (const [k, v] of Object.entries(current)) {
     await env.COVERS.put(k, v);
   }
 
-  return new Response(JSON.stringify({ ok: true }), {
+  return new Response(JSON.stringify({ ok: true, data: current }), {
     headers: { "content-type": "application/json", ...CORS },
   });
 }
