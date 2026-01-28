@@ -25,26 +25,32 @@ export async function onRequestPut({ request, env }) {
     });
   }
 
-  // ✅ lista “ufficiale” delle pagine che gestisci
-  const keys = ["home", "menu", "gallery", "prenota", "come_funziona", "recensioni"];
+  const pages = [
+    "home",
+    "menu",
+    "gallery",
+    "prenota",
+    "come_funziona",
+    "recensioni",
+  ];
 
-  // 1) leggi copertine esistenti
+  // 1️⃣ leggi copertine esistenti
   const current = {};
-  for (const k of keys) {
-    current[k] = (await env.COVERS.get(k)) || "";
+  for (const p of pages) {
+    current[p] = (await env.COVERS.get(p)) || "";
   }
 
-  // 2) aggiorna solo quelle passate
+  // 2️⃣ aggiorna solo quelle passate
   for (const [page, url] of Object.entries(body)) {
     const key = normalizeCoverKey(page);
-    if (!keys.includes(key)) continue; // evita chiavi strane
-    const val = String(url || "").trim();
-    if (val) current[key] = val;       // ✅ non sovrascrive con vuoto
+    if (key in current) {
+      current[key] = String(url || "").trim();
+    }
   }
 
-  // 3) risalva tutto (solo valori validi)
+  // 3️⃣ risalva tutto
   for (const [k, v] of Object.entries(current)) {
-    if (v) await env.COVERS.put(k, v);
+    await env.COVERS.put(k, v);
   }
 
   return new Response(JSON.stringify({ ok: true }), {
