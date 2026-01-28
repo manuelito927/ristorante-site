@@ -662,20 +662,28 @@ async function saveCover() {
   const file = coverFile.files[0];
 
   try {
-    // ✅ riuso la stessa funzione di upload della gallery (già testata)
+    // 1) upload immagine -> ottengo URL
     const imageUrl = await uploadOneFileToR2(file);
 
-const page = coverPage.value.toLowerCase();
+    // 2) prendo tutte le copertine già salvate
+    const oldRes = await api("/api/page/covers");
+    // può essere {home:".."} oppure {slug:"covers", data:{...}}
+    const oldData = oldRes?.data || oldRes || {};
 
+    // 3) merge: aggiungo/aggiorno SOLO la pagina scelta
+    const pageKey = String(coverPage.value || "").trim().toLowerCase(); 
+    const merged = { ...oldData, [pageKey]: imageUrl };
+
+    // 4) risalvo tutto (così non sparisce niente)
     await api("/api/admin/page/covers", {
       method: "PUT",
-      body: JSON.stringify({ [page]: imageUrl })
+      body: JSON.stringify(merged)
     });
 
     coverFile.value = "";
-    alert("✅ Copertina salvata per: " + page.toUpperCase());
+    alert("✅ Copertina salvata per: " + pageKey.toUpperCase());
   } catch (e) {
-    alert("❌ Upload copertina fallito: " + (e.message || e));
+    alert("❌ Copertina fallita: " + (e.message || e));
   }
 }
 
