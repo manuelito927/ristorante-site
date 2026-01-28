@@ -4,35 +4,29 @@ const CORS = {
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
-export async function onRequestOptions() {
-  return new Response(null, { status: 204, headers: CORS });
-}
-
-function normalizeCoverKey(page) {
-  return String(page || "")
-    .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
-    .replace(/\s+/g, "_")
-    .replace(/-/g, "_")
-    .toLowerCase(); // ✅
-}
-
 export async function onRequestPut({ request, env }) {
   const body = await request.json().catch(() => ({}));
-
-  const entries = Object.entries(body || {});
-  if (!entries.length) {
-    return new Response(JSON.stringify({ error: "Nessuna copertina fornita" }), {
-      status: 400,
-      headers: { "content-type": "application/json", ...CORS },
-    });
+  if (!body || typeof body !== "object") {
+    return new Response(JSON.stringify({ error: "Payload non valido" }), { status: 400 });
   }
 
-  for (const [page, url] of entries) {
-    const key = normalizeCoverKey(page);
-    const val = String(url || "").trim();
+  const keys = ["home", "menu", "gallery", "prenota", "come_funziona", "recensioni"];
+  const current = {};
 
-    if (!key) continue;
-    await env.COVERS.put(key, val);
+  // 1️⃣ leggi copertine esistenti
+  for (const k of keys) {
+    current[k] = (await env.COVERS.get(k)) || "";
+  }
+
+  // 2️⃣ aggiorna solo quelle passate
+  for (const [page, url] of Object.entries(body)) {
+    const key = normalizeCoverKey(page);
+    current[key] = String(url || "").trim();
+  }
+
+  // 3️⃣ risalva tutto
+  for (const [k, v] of Object.entries(current)) {
+    await env.COVERS.put(k, v);
   }
 
   return new Response(JSON.stringify({ ok: true }), {
