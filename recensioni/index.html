@@ -87,7 +87,7 @@
 const base = window.API_BASE || "https://still-haze-01c8.filosofiaefficace.workers.dev";
 const res = await fetch(base + "/api/page/covers", { cache: "no-store" });
       const json = await res.json().catch(() => ({}));
-      const url = json[key];
+const url = json?.data?.[key];
       if (url && String(url).trim()) {
         hero.style.backgroundImage =
           `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url("${url}")`;
