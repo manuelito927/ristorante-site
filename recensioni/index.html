@@ -139,7 +139,7 @@
     const textEn = (d.text_en || "").trim();
 
     const googleLink = (d.google_link || "").trim();
-    const writeLink = (d.write_link || "").trim();
+const writeLink = (d.write_link || d.google_link || "").trim();
 
     // lingua semplice: se browser inizia con "en" usa EN altrimenti IT
     const lang = (navigator.language || "it").toLowerCase().startsWith("en") ? "en" : "it";
