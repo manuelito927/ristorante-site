@@ -306,6 +306,37 @@
       </div>
     </section>
 
+<!-- TAB RECENSIONI -->
+<section id="tab-reviews" class="tab-content hidden">
+  <div class="card">
+    <h2>Sezione Recensioni</h2>
+    <note>Qui scrivi un testo che apparirà nella pagina “Recensioni” e il link a Google.</note>
+
+    <div class="form-group" style="margin-top:20px;">
+      <label>Link Google Recensioni</label>
+      <input id="rev_google_url" placeholder="Incolla qui il link delle recensioni Google">
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-top:20px;">
+      <div class="form-group">
+        <label>Testo (IT)</label>
+        <textarea id="rev_text_it" placeholder="Scrivi qualcosa tipo: 'Ci fa piacere se ci lasci una recensione...'"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Text (EN)</label>
+        <textarea id="rev_text_en" placeholder="Write something like: 'We’d love your feedback on Google...'"></textarea>
+      </div>
+    </div>
+
+    <button class="btn success" id="saveReviews" style="width:auto; padding:15px 40px; margin-top:18px;">
+      Salva Recensioni
+    </button>
+
+    <div id="reviewsMsg" style="margin-top:12px; font-size:13px; opacity:.75;"></div>
+  </div>
+</section>
+
   </div><!-- /appCard -->
 </div><!-- /wrap -->
 
