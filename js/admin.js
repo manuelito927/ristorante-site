@@ -664,6 +664,8 @@ async function saveCover() {
   try {
     // 1) upload immagine -> ottengo URL
     const imageUrl = await uploadOneFileToR2(file);
+const bust = "v=" + Date.now();
+const imageUrlNoCache = imageUrl + (imageUrl.includes("?") ? "&" : "?") + bust;
 
     // 2) prendo tutte le copertine già salvate
     const oldRes = await api("/api/page/covers");
