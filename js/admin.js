@@ -21,8 +21,6 @@ const API = "https://still-haze-01c8.filosofiaefficace.workers.dev";
   const reservationsGrid = $("reservationsGrid");
   const refreshReservationsBtn = $("refreshReservations");
   const reservationsMsg = $("reservationsMsg");
-const bookingStatusLabel = $("bookingStatusLabel");
-const toggleBookingBtn = $("toggleBookingBtn");
 
   // COME FUNZIONA FIELDS
   const cf_phone = $("cf_phone");
@@ -44,14 +42,6 @@ const toggleBookingBtn = $("toggleBookingBtn");
 const coverPage = $("cover_page");
 const coverFile = $("cover_file");
 const saveCoverBtn = $("saveCover");
-
-// ⭐ RECENSIONI
-const rev_google_url = $("rev_google_url");
-const rev_text_it = $("rev_text_it");
-const rev_text_en = $("rev_text_en");
-const saveReviewsBtn = $("saveReviews");
-const reviewsMsg = $("reviewsMsg");
-
 
   let token = localStorage.getItem("admin_token") || "";
 
@@ -467,24 +457,18 @@ const items = res.items || res.data?.items || [];
       PRENOTAZIONI - CARICA + MOSTRA
      ========================================================= */
 
-function fmtDate(d) {
-  if (!d) return "";
-
-  // Se arriva tipo "2026-01-27T11:30:00.000Z" o con timezone,
-  // io mi prendo SOLO "2026-01-27 11:30" e lo stampo uguale.
-  const s = String(d);
-
-  // prende YYYY-MM-DD e HH:MM
-  const m = s.match(/(\d{4}-\d{2}-\d{2}).*?(\d{2}:\d{2})/);
-  if (m) {
-    const [_, date, time] = m;
-    const [yyyy, mm, dd] = date.split("-");
-    return `${dd}/${mm}/${yyyy} ${time}`;
+  function fmtDate(d) {
+    if (!d) return "";
+    try {
+      const x = new Date(d);
+      return x.toLocaleString("it-IT", {
+        year: "numeric", month: "2-digit", day: "2-digit",
+        hour: "2-digit", minute: "2-digit"
+      });
+    } catch {
+      return String(d);
+    }
   }
-
-  // fallback
-  return s;
-}
 
   async function loadReservations() {
     if (!reservationsGrid) return;
@@ -492,23 +476,6 @@ function fmtDate(d) {
     reservationsGrid.innerHTML = "Caricamento...";
 
     try {
-      // ✅ stato prenotazioni ON/OFF
-try {
-const sRes = await fetch(API + "/api/page/booking-status", {
-  cache: "no-store",
-  headers: { ...authHeaders() }
-});
-const s = await sRes.json().catch(() => ({}));
-const enabled = s.enabled !== false;
-
-  if (bookingStatusLabel) {
-    bookingStatusLabel.textContent = enabled ? "Prenotazioni: ATTIVE ✅" : "Prenotazioni: DISATTIVATE ❌";
-    bookingStatusLabel.style.background = enabled ? "#e6f4ea" : "#fce8e6";
-    bookingStatusLabel.style.color = enabled ? "#1e7e34" : "#b42318";
-  }
-} catch (e) {
-  if (bookingStatusLabel) bookingStatusLabel.textContent = "Prenotazioni: errore";
-}
       const { reservations } = await api("/api/admin/reservations?limit=50");
       reservationsGrid.innerHTML = "";
       
@@ -569,38 +536,7 @@ const enabled = s.enabled !== false;
     }
   }
 
-if (refreshReservationsBtn) {
-  refreshReservationsBtn.onclick = () => loadReservations();
-}
-
-  if (toggleBookingBtn) {
-  toggleBookingBtn.onclick = async () => {
-    try {
-const sRes = await fetch(API + "/api/page/booking-status", {
-  cache: "no-store",
-  headers: { ...authHeaders() }
-});
-      const s = await sRes.json().catch(() => ({}));
-      const enabledNow = s.enabled !== false;
-
-      const putRes = await fetch(API + "/api/page/booking-status", {
-  method: "PUT",
-  headers: {
-    "content-type": "application/json",
-    ...authHeaders()
-  },
-  body: JSON.stringify({ enabled: !enabledNow })
-});
-      const putData = await putRes.json().catch(() => ({}));
-      if (!putRes.ok) throw new Error(putData.error || ("HTTP " + putRes.status));
-
-      await loadReservations();
-      alert(!enabledNow ? "✅ Prenotazioni ATTIVATE" : "❌ Prenotazioni DISATTIVATE");
-    } catch (e) {
-      alert("❌ " + (e.message || e));
-    }
-  };
-}
+  if (refreshReservationsBtn) refreshReservationsBtn.onclick = () => loadReservations();
 
   /* =========================================================
       GALLERY - UPLOAD R2 + DB
@@ -671,90 +607,26 @@ async function saveCover() {
   const file = coverFile.files[0];
 
   try {
-    // 1) upload immagine -> ottengo URL
+    // ✅ riuso la stessa funzione di upload della gallery (già testata)
     const imageUrl = await uploadOneFileToR2(file);
-const bust = "v=" + Date.now();
-const imageUrlNoCache = imageUrl + (imageUrl.includes("?") ? "&" : "?") + bust;
 
-    // 2) prendo tutte le copertine già salvate
-    const oldRes = await api("/api/page/covers");
-    // può essere {home:".."} oppure {slug:"covers", data:{...}}
-    const oldData = oldRes?.data || oldRes || {};
+const page = coverPage.value.toLowerCase();
 
-    // 3) merge: aggiungo/aggiorno SOLO la pagina scelta
-const pageKey = String(coverPage.value || "")
-  .trim()
-  .toLowerCase()
-  .replace(/-/g, "_")
-  .replace(/\s+/g, "_");
-const merged = { ...oldData, [pageKey]: imageUrlNoCache };
-
-    // 4) risalvo tutto (così non sparisce niente)
     await api("/api/admin/page/covers", {
       method: "PUT",
-      body: JSON.stringify(merged)
+      body: JSON.stringify({ [page]: imageUrl })
     });
 
     coverFile.value = "";
-    alert("✅ Copertina salvata per: " + pageKey.toUpperCase());
+    alert("✅ Copertina salvata per: " + page.toUpperCase());
   } catch (e) {
-    alert("❌ Copertina fallita: " + (e.message || e));
+    alert("❌ Upload copertina fallito: " + (e.message || e));
   }
 }
 
 if (saveCoverBtn) {
   saveCoverBtn.onclick = () => saveCover();
 }
-
-/* =========================================================
-   RECENSIONI - CARICA + SALVA
-   salva su slug: "recensioni"
-   ========================================================= */
-
-async function loadReviews() {
-  try {
-    const res = await api("/api/page/recensioni");
-    const d = (res && res.data) ? res.data : {};
-
-    if (rev_google_url) rev_google_url.value = d.google_url || "";
-    if (rev_text_it) rev_text_it.value = d.text_it || "";
-    if (rev_text_en) rev_text_en.value = d.text_en || "";
-
-    if (reviewsMsg) reviewsMsg.textContent = "OK";
-  } catch (e) {
-    if (reviewsMsg) reviewsMsg.textContent = "Errore caricamento";
-    console.error("Errore loadReviews:", e);
-  }
-}
-
-async function saveReviews() {
-  const payload = {
-    google_url: rev_google_url ? rev_google_url.value.trim() : "",
-    text_it: rev_text_it ? rev_text_it.value.trim() : "",
-    text_en: rev_text_en ? rev_text_en.value.trim() : ""
-  };
-
-  await api("/api/admin/page/recensioni", {
-    method: "PUT",
-    body: JSON.stringify(payload)
-  });
-
-  if (reviewsMsg) reviewsMsg.textContent = "✅ Salvato!";
-  alert("✅ Recensioni salvate!");
-}
-
-if (saveReviewsBtn) {
-  saveReviewsBtn.onclick = async () => {
-    try {
-      if (reviewsMsg) reviewsMsg.textContent = "Salvataggio...";
-      await saveReviews();
-    } catch (e) {
-      if (reviewsMsg) reviewsMsg.textContent = "❌ Errore salvataggio";
-      alert("❌ " + e.message);
-    }
-  };
-}
-
   /* =========================================================
       LOGIN / LOGOUT / INIT
      ========================================================= */
@@ -765,7 +637,7 @@ if (saveReviewsBtn) {
       localStorage.setItem("admin_token", token);
       try {
         showApp(true);
-await Promise.all([loadItems(), loadComeFunziona(), loadReservations(), loadReviews()]);
+        await Promise.all([loadItems(), loadComeFunziona(), loadReservations()]);
       } catch (e) {
         showApp(false);
         alert("Errore Accesso: " + e.message);
@@ -785,7 +657,7 @@ await Promise.all([loadItems(), loadComeFunziona(), loadReservations(), loadRevi
   if (token) {
     if (tokenInput) tokenInput.value = token;
     showApp(true);
-loadItems().then(loadComeFunziona).then(loadReservations).then(loadReviews).catch(() => showApp(false));
+    loadItems().then(loadComeFunziona).then(loadReservations).catch(() => showApp(false));
   } else {
     showApp(false);
   }
