@@ -103,7 +103,8 @@
     const key = hero.dataset.coverKey || "gallery";
 
     try {
-      const res = await fetch("/api/page/covers", { cache: "no-store" });
+const API = (window.API_BASE && String(window.API_BASE).replace(/\/$/, "")) || "";
+const res = await fetch(API + "/api/page/covers", { cache: "no-store" });
       const json = await res.json().catch(() => ({}));
 const data = json.data || json;
 const url = data[key];
