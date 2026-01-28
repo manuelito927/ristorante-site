@@ -40,13 +40,13 @@ export async function onRequestPut({ request, env }) {
     current[p] = (await env.COVERS.get(p)) || "";
   }
 
-  // 2️⃣ aggiorna solo quelle passate
-  for (const [page, url] of Object.entries(body)) {
-    const key = normalizeCoverKey(page);
-    if (key in current) {
-      current[key] = String(url || "").trim();
-    }
+for (const [page, url] of Object.entries(body)) {
+  const key = normalizeCoverKey(page);
+  const val = typeof url === "string" ? url.trim() : "";
+  if (key in current && val) {
+    current[key] = val; // aggiorna SOLO se c'è un valore vero
   }
+}
 
   // 3️⃣ risalva tutto
   for (const [k, v] of Object.entries(current)) {
