@@ -45,6 +45,14 @@ const coverPage = $("cover_page");
 const coverFile = $("cover_file");
 const saveCoverBtn = $("saveCover");
 
+// ⭐ RECENSIONI
+const rev_google_url = $("rev_google_url");
+const rev_text_it = $("rev_text_it");
+const rev_text_en = $("rev_text_en");
+const saveReviewsBtn = $("saveReviews");
+const reviewsMsg = $("reviewsMsg");
+
+
   let token = localStorage.getItem("admin_token") || "";
 
   /* =========================================================
