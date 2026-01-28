@@ -49,7 +49,7 @@ const API = ""; // NON usare API_BASE per le cover
   const hero = document.getElementById("pageHero");
   if(!hero) return;
 
-  const key = hero.dataset.coverKey || "home";
+const key = (hero.dataset.coverKey || "home").replace(/-/g, "_");
 
   try {
 const base = window.API_BASE || "https://still-haze-01c8.filosofiaefficace.workers.dev";
