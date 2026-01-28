@@ -31,13 +31,14 @@ const API =
     return String(it[itField] || "");
   }
 
-langBtns.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    LANG = btn.dataset.lang || "it";
-    localStorage.setItem("lang", LANG);
-    location.reload();
+  langBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      LANG = btn.dataset.lang || "it";
+      localStorage.setItem("lang", LANG);
+      paintLang();
+      renderMenu();
+    });
   });
-});
 
   paintLang();
 
