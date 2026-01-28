@@ -141,14 +141,12 @@ const res = await fetch(base + "/api/page/recensioni", { cache: "no-store" });
     const textEn = (d.text_en || "").trim();
 
 const googleLink = (d.google_url || "").trim();
-const writeLink = (d.write_link || d.google_url || "").trim();
 
     // lingua semplice: se browser inizia con "en" usa EN altrimenti IT
     const lang = (navigator.language || "it").toLowerCase().startsWith("en") ? "en" : "it";
 
     const revText = document.getElementById("revText");
     const readBtn = document.getElementById("revReadBtn");
-    const writeBtn = document.getElementById("revWriteBtn");
 
     if (revText) {
       revText.textContent = (lang === "en" && textEn) ? textEn : (textIt || "Leggi tutte le recensioni reali su Google oppure lasciaci la tua.");
@@ -158,9 +156,6 @@ const writeLink = (d.write_link || d.google_url || "").trim();
       readBtn.href = googleLink || "https://www.google.com/search?q=greenwood+matino+recensioni";
     }
 
-    if (writeBtn) {
-      writeBtn.href = writeLink || "https://maps.app.goo.gl/CTUsD7FwFHq6K897A?g_st=ic";
-    }
   } catch (e) {
     console.warn("Errore caricamento recensioni:", e);
   }
