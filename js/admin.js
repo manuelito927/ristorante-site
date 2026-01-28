@@ -577,11 +577,14 @@ const sRes = await fetch(API + "/api/page/booking-status", { cache: "no-store" }
       const s = await sRes.json().catch(() => ({}));
       const enabledNow = s.enabled !== false;
 
-      const putRes = await fetch("/api/page/booking-status", {
-        method: "PUT",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ enabled: !enabledNow })
-      });
+      const putRes = await fetch(API + "/api/page/booking-status", {
+  method: "PUT",
+  headers: {
+    "content-type": "application/json",
+    ...authHeaders()
+  },
+  body: JSON.stringify({ enabled: !enabledNow })
+});
       const putData = await putRes.json().catch(() => ({}));
       if (!putRes.ok) throw new Error(putData.error || ("HTTP " + putRes.status));
 
