@@ -134,36 +134,57 @@ const res = await fetch(base + "/api/page/covers", { cache: "no-store" });
 <script>
 (async function(){
   try {
-const base = window.API_BASE || "https://still-haze-01c8.filosofiaefficace.workers.dev";
-const res = await fetch(base + "/api/page/recensioni", { cache: "no-store" });
+    const base = window.API_BASE || "https://still-haze-01c8.filosofiaefficace.workers.dev";
+    const res = await fetch(base + "/api/page/recensioni", { cache: "no-store" });
     const j = await res.json().catch(() => ({}));
     const d = j.data || {};
 
     const textIt = (d.text_it || "").trim();
     const textEn = (d.text_en || "").trim();
-
-const googleLink = (d.google_url || "").trim();
-
-    // lingua semplice: se browser inizia con "en" usa EN altrimenti IT
-    const lang = (navigator.language || "it").toLowerCase().startsWith("en") ? "en" : "it";
+    const googleLink = (d.google_url || "").trim();
 
     const revText = document.getElementById("revText");
     const readBtn = document.getElementById("revReadBtn");
 
-    if (revText) {
-      revText.textContent = (lang === "en" && textEn) ? textEn : (textIt || "Leggi tutte le recensioni reali su Google oppure lasciaci la tua.");
+    const btnIT = document.getElementById("langIT");
+    const btnEN = document.getElementById("langEN");
+
+    function render(lang){
+      if (revText) {
+        if (lang === "en" && textEn) revText.textContent = textEn;
+        else revText.textContent = textIt || textEn || "";
+      }
+
+      if (readBtn) {
+        readBtn.href = googleLink || "https://www.google.com/search?q=greenwood+matino+recensioni";
+      }
+
+      if (btnIT) btnIT.style.opacity = lang === "it" ? "1" : "0.5";
+      if (btnEN) btnEN.style.opacity = lang === "en" ? "1" : "0.5";
     }
 
-    if (readBtn) {
-      readBtn.href = googleLink || "https://www.google.com/search?q=greenwood+matino+recensioni";
-    }
+    // lingua salvata oppure lingua telefono
+    const saved = localStorage.getItem("gw_lang");
+    const autoLang = (navigator.language || "it").toLowerCase().startsWith("en") ? "en" : "it";
+    const current = saved || autoLang;
+
+    render(current);
+
+    if (btnIT) btnIT.onclick = () => {
+      localStorage.setItem("gw_lang","it");
+      render("it");
+    };
+
+    if (btnEN) btnEN.onclick = () => {
+      localStorage.setItem("gw_lang","en");
+      render("en");
+    };
 
   } catch (e) {
     console.warn("Errore caricamento recensioni:", e);
   }
 })();
 </script>
-
 </main>
 </body>
 </html>
