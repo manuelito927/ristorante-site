@@ -52,7 +52,8 @@ const API = ""; // NON usare API_BASE per le cover
   const key = hero.dataset.coverKey || "home";
 
   try {
-const res = await fetch("/api/page/covers", { cache: "no-store" });
+const base = window.API_BASE || "https://still-haze-01c8.filosofiaefficace.workers.dev";
+const res = await fetch(base + "/api/page/covers", { cache: "no-store" });
 const json = await res.json().catch(() => ({}));
 const url = (json && json.data && json.data[key]) || json[key];
     if(url && String(url).trim()){
