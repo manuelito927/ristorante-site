@@ -152,8 +152,7 @@
   try {
     const res = await fetch("/api/page/covers", { cache: "no-store" });
     const json = await res.json().catch(() => ({}));
-const data = json.data || json;
-const url = data[key] || data[key.replace(/-/g,"_")];
+    const url = json[key];
 
     if (url && String(url).trim()) {
       hero.style.backgroundImage =
@@ -201,9 +200,8 @@ const url = data[key] || data[key.replace(/-/g,"_")];
     /* Caricamento Dati dal Worker */
     (async function(){
       try {
-const API = (window.API_BASE || "").replace(/\/$/, "");
-const res = await fetch(API + "/api/page/come-funziona?t=" + Date.now(), { cache: "no-store" });
-
+        const API = "https://still-haze-01c8.filosofiaefficace.workers.dev";
+        const res = await fetch(API + "/api/page/come-funziona?t=" + Date.now(), { cache: "no-store" });
         const json = await res.json();
         const d = json.data || {};
 
