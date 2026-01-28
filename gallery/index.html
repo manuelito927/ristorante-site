@@ -103,11 +103,9 @@
     const key = hero.dataset.coverKey || "gallery";
 
     try {
-const API = (window.API_BASE && String(window.API_BASE).replace(/\/$/, "")) || "";
-const res = await fetch(API + "/api/page/covers", { cache: "no-store" });
+      const res = await fetch("/api/page/covers", { cache: "no-store" });
       const json = await res.json().catch(() => ({}));
-const data = json.data || json;
-const url = data[key];
+      const url = json[key];
 
       if (url && String(url).trim()) {
         hero.style.backgroundImage =
@@ -161,8 +159,7 @@ const url = data[key];
     if(!grid) return;
 
     try{
-const API = (window.API_BASE && String(window.API_BASE).replace(/\/$/, "")) || "";
-const res = await fetch(API + "/api/page/gallery?t=" + Date.now(), { cache: "no-store" });
+      const res = await fetch("/api/page/gallery?t=" + Date.now(), { cache: "no-store" });
       const js = await res.json().catch(() => ({}));
       console.log("GALLERY JSON:", js);
 
