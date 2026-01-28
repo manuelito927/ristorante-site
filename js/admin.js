@@ -674,7 +674,7 @@ const imageUrlNoCache = imageUrl + (imageUrl.includes("?") ? "&" : "?") + bust;
 
     // 3) merge: aggiungo/aggiorno SOLO la pagina scelta
     const pageKey = String(coverPage.value || "").trim().toLowerCase(); 
-    const merged = { ...oldData, [pageKey]: imageUrl };
+const merged = { ...oldData, [pageKey]: imageUrlNoCache };
 
     // 4) risalvo tutto (così non sparisce niente)
     await api("/api/admin/page/covers", {
