@@ -682,6 +682,56 @@ const page = coverPage.value.toLowerCase();
 if (saveCoverBtn) {
   saveCoverBtn.onclick = () => saveCover();
 }
+
+/* =========================================================
+   RECENSIONI - CARICA + SALVA
+   salva su slug: "recensioni"
+   ========================================================= */
+
+async function loadReviews() {
+  try {
+    const res = await api("/api/page/recensioni");
+    const d = (res && res.data) ? res.data : {};
+
+    if (rev_google_url) rev_google_url.value = d.google_url || "";
+    if (rev_text_it) rev_text_it.value = d.text_it || "";
+    if (rev_text_en) rev_text_en.value = d.text_en || "";
+
+    if (reviewsMsg) reviewsMsg.textContent = "OK";
+  } catch (e) {
+    if (reviewsMsg) reviewsMsg.textContent = "Errore caricamento";
+    console.error("Errore loadReviews:", e);
+  }
+}
+
+async function saveReviews() {
+  const payload = {
+    google_url: rev_google_url ? rev_google_url.value.trim() : "",
+    text_it: rev_text_it ? rev_text_it.value.trim() : "",
+    text_en: rev_text_en ? rev_text_en.value.trim() : ""
+  };
+
+  await api("/api/admin/page/recensioni", {
+    method: "PUT",
+    body: JSON.stringify(payload)
+  });
+
+  if (reviewsMsg) reviewsMsg.textContent = "✅ Salvato!";
+  alert("✅ Recensioni salvate!");
+}
+
+if (saveReviewsBtn) {
+  saveReviewsBtn.onclick = async () => {
+    try {
+      if (reviewsMsg) reviewsMsg.textContent = "Salvataggio...";
+      await saveReviews();
+    } catch (e) {
+      if (reviewsMsg) reviewsMsg.textContent = "❌ Errore salvataggio";
+      alert("❌ " + e.message);
+    }
+  };
+}
+
   /* =========================================================
       LOGIN / LOGOUT / INIT
      ========================================================= */
