@@ -11,7 +11,7 @@ export async function onRequestGet({ request, env }) {
   return new Response(obj.body, {
     headers: {
       "Content-Type": obj.httpMetadata?.contentType || "image/jpeg",
-      "Cache-Control": "public, max-age=31536000"
+"Cache-Control": "no-store"
     }
   });
 }
