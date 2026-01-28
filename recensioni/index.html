@@ -154,5 +154,42 @@
     })();
   </script>
 
+<script>
+(async function(){
+  try {
+    const res = await fetch("/api/page/recensioni", { cache: "no-store" });
+    const j = await res.json().catch(() => ({}));
+    const d = j.data || {};
+
+    const textIt = (d.text_it || "").trim();
+    const textEn = (d.text_en || "").trim();
+
+    const googleLink = (d.google_link || "").trim();
+    const writeLink = (d.write_link || "").trim();
+
+    // lingua semplice: se browser inizia con "en" usa EN altrimenti IT
+    const lang = (navigator.language || "it").toLowerCase().startsWith("en") ? "en" : "it";
+
+    const revText = document.getElementById("revText");
+    const readBtn = document.getElementById("revReadBtn");
+    const writeBtn = document.getElementById("revWriteBtn");
+
+    if (revText) {
+      revText.textContent = (lang === "en" && textEn) ? textEn : (textIt || "Leggi tutte le recensioni reali su Google oppure lasciaci la tua.");
+    }
+
+    if (readBtn) {
+      readBtn.href = googleLink || "https://www.google.com/search?q=greenwood+matino+recensioni";
+    }
+
+    if (writeBtn) {
+      writeBtn.href = writeLink || "https://maps.app.goo.gl/CTUsD7FwFHq6K897A?g_st=ic";
+    }
+  } catch (e) {
+    console.warn("Errore caricamento recensioni:", e);
+  }
+})();
+</script>
+
 </body>
 </html>
