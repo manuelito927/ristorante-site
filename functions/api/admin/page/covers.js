@@ -8,86 +8,34 @@ export async function onRequestOptions() {
   return new Response(null, { status: 204, headers: CORS });
 }
 
-function normalizeKey(k) {
-  return String(k || "")
-    .trim()
-    .toLowerCase()
+function normalizeCoverKey(page) {
+  return String(page || "")
+    .replace(/([a-z0-9])([A-Z])/g, "$1_$2") // camelCase → snake_case
     .replace(/\s+/g, "_")
-    .replace(/-/g, "_");
+    .replace(/-/g, "_")
+    .toUpperCase();
 }
 
-const ALLOWED = new Set([
-  "home",
-  "menu",
-  "gallery",
-  "prenota",
-  "come_funziona",
-  "recensioni",
-]);
-
 export async function onRequestPut({ request, env }) {
-  const body = await request.json().catch(() => null);
+  const body = await request.json().catch(() => ({}));
 
-  if (!body || typeof body !== "object") {
-    return new Response(JSON.stringify({ error: "Payload non valido" }), {
+  const entries = Object.entries(body || {});
+  if (!entries.length) {
+    return new Response(JSON.stringify({ error: "Nessuna copertina fornita" }), {
       status: 400,
       headers: { "content-type": "application/json", ...CORS },
     });
   }
 
-  // ✅ Caso A (vecchio): { page, url }
-  if ("page" in body || "url" in body) {
-    const page = normalizeKey(body.page);
-    const url = typeof body.url === "string" ? body.url.trim() : "";
+  for (const [page, url] of entries) {
+    const key = normalizeCoverKey(page);
+    const val = String(url || "").trim();
 
-    if (!page || !url) {
-      return new Response(JSON.stringify({ error: "page o url mancanti" }), {
-        status: 400,
-        headers: { "content-type": "application/json", ...CORS },
-      });
-    }
-    if (!ALLOWED.has(page)) {
-      return new Response(JSON.stringify({ error: "pagina non valida" }), {
-        status: 400,
-        headers: { "content-type": "application/json", ...CORS },
-      });
-    }
-
-    await env.COVERS.put(page, url);
-    return new Response(JSON.stringify({ ok: true, updated: [page] }), {
-      headers: { "content-type": "application/json", ...CORS },
-    });
+    if (!key) continue;
+    await env.COVERS.put(key, val);
   }
 
-  // ✅ Caso B (nuovo): { home:"...", menu:"...", ... }
-  const updated = [];
-  const ignored = [];
-
-  for (const [k, v] of Object.entries(body)) {
-    const key = normalizeKey(k);
-    const url = typeof v === "string" ? v.trim() : "";
-
-    // ignora chiavi non permesse
-    if (!ALLOWED.has(key)) {
-      ignored.push(k);
-      continue;
-    }
-
-    // ignora valori vuoti (NON sovrascrive)
-    if (!url) continue;
-
-    await env.COVERS.put(key, url);
-    updated.push(key);
-  }
-
-  if (updated.length === 0) {
-    return new Response(JSON.stringify({ ok: false, error: "Nessun campo valido da salvare", ignored }), {
-      status: 400,
-      headers: { "content-type": "application/json", ...CORS },
-    });
-  }
-
-  return new Response(JSON.stringify({ ok: true, updated, ignored }), {
+  return new Response(JSON.stringify({ ok: true }), {
     headers: { "content-type": "application/json", ...CORS },
   });
 }
