@@ -10,10 +10,10 @@ export async function onRequestOptions() {
 
 function normalizeCoverKey(page) {
   return String(page || "")
-    .replace(/([a-z0-9])([A-Z])/g, "$1_$2") // camelCase → snake_case
+    .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
     .replace(/\s+/g, "_")
     .replace(/-/g, "_")
-    .toUpperCase();
+    .toLowerCase(); // ✅ minuscolo
 }
 
 export async function onRequestPut({ request, env }) {
@@ -30,7 +30,6 @@ export async function onRequestPut({ request, env }) {
   for (const [page, url] of entries) {
     const key = normalizeCoverKey(page);
     const val = String(url || "").trim();
-
     if (!key) continue;
     await env.COVERS.put(key, val);
   }
