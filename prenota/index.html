@@ -190,10 +190,8 @@
     try {
       // ✅ FIX: prima era /api/page/covers
 const res = await fetch("/api/page/covers", { cache: "no-store" });
-
-const json = await res.json().catch(() => ({}));
-const data = json.data || json;
-const url = data[key];
+      const json = await res.json().catch(() => ({}));
+      const url = json[key];
 
       if (url && String(url).trim()) {
         hero.style.backgroundImage =
@@ -239,48 +237,6 @@ const url = data[key];
       // ===== INVIO REALE =====
       const form = document.getElementById("prenotaForm");
       const noteMsg = document.getElementById("noteMsg");
-      // ===== VISIBILITÀ FORM (ON/OFF da Admin) =====
-      const API = window.API_BASE || "";
-      const card = document.querySelector(".prenota-card");
-
-async function applyBookingStatus() {
-  try {
-    const res = await fetch("/api/page/booking-status", { cache: "no-store" });
-    const data = await res.json().catch(() => ({}));
-    const enabled = data.enabled !== false;
-
-    if (!enabled) {
-      if (form) form.style.display = "none";
-
-      if (noteMsg) {
-        noteMsg.textContent =
-          "❌ Prenotazioni momentaneamente disattivate. Contattaci su WhatsApp o telefono.";
-      }
-
-      if (card && !document.getElementById("waBtn")) {
-        const a = document.createElement("a");
-        a.id = "waBtn";
-        a.href = "https://wa.me/393331234567?text=Ciao%20vorrei%20prenotare%20un%20tavolo";
-        a.target = "_blank";
-        a.className = "btn-primary";
-        a.style.display = "block";
-        a.style.textAlign = "center";
-        a.style.textDecoration = "none";
-        a.style.marginTop = "14px";
-        a.textContent = "Prenota su WhatsApp";
-        card.appendChild(a);
-      }
-    } else {
-      if (form) form.style.display = "";
-      const wa = document.getElementById("waBtn");
-      if (wa) wa.remove();
-    }
-  } catch (e) {
-    console.warn("Booking status non letto:", e);
-  }
-}
-
-      applyBookingStatus();
 
       if(form){
         form.addEventListener("submit", async (e) => {
@@ -316,7 +272,7 @@ async function applyBookingStatus() {
             if(noteMsg) noteMsg.textContent = "Invio in corso...";
 
             // ✅ FIX: prima era /api/reservations
-const res = await fetch((API && API.endsWith("/api")) ? (API + "/reservations") : ((API || "") + "/api/reservations"), {
+            const res = await fetch(API + "/reservations", {
               method: "POST",
               headers: { "content-type": "application/json" },
               body: JSON.stringify(payload)
