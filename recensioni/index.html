@@ -82,7 +82,8 @@
     if (!hero) return;
     const key = hero.dataset.coverKey || "recensioni";
     try {
-      const res = await fetch("/api/page/covers", { cache: "no-store" });
+const base = window.API_BASE || "https://still-haze-01c8.filosofiaefficace.workers.dev";
+const res = await fetch(base + "/api/page/covers", { cache: "no-store" });
       const json = await res.json().catch(() => ({}));
       const url = json[key];
       if (url && String(url).trim()) {
