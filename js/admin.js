@@ -673,7 +673,7 @@ const imageUrlNoCache = imageUrl + (imageUrl.includes("?") ? "&" : "?") + bust;
     const oldData = oldRes?.data || oldRes || {};
 
     // 3) merge: aggiungo/aggiorno SOLO la pagina scelta
-    const pageKey = String(coverPage.value || "").trim().toLowerCase(); 
+const pageKey = String(coverPage.value || "").trim().toLowerCase().replace(/-/g, "_").replace(/\s+/g, "_");
 const merged = { ...oldData, [pageKey]: imageUrlNoCache };
 
     // 4) risalvo tutto (così non sparisce niente)
