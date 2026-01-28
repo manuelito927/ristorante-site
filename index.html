@@ -54,7 +54,7 @@ const API = ""; // NON usare API_BASE per le cover
   try {
 const res = await fetch("/api/page/covers", { cache: "no-store" });
 const json = await res.json().catch(() => ({}));
-const url = json[key];
+const url = (json && json.data && json.data[key]) || json[key];
     if(url && String(url).trim()){
 hero.style.backgroundImage =
   `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url("${url}")`;
