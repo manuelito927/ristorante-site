@@ -43,6 +43,11 @@ const coverPage = $("cover_page");
 const coverFile = $("cover_file");
 const saveCoverBtn = $("saveCover");
 
+// 🏠 HOME
+const homeTitle = $("homeTitle");
+const homeBody = $("homeBody");
+const saveHomeBtn = $("saveHome");
+
   let token = localStorage.getItem("admin_token") || "";
 
   /* =========================================================
