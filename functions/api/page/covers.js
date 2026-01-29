@@ -21,6 +21,7 @@ export async function onRequestGet({ env }) {
 
   return new Response(JSON.stringify({
     home: home || "",
+    homeContent: homeContent ? JSON.parse(homeContent) : { title: "", body: "", images: [] }
     menu: menu || "",
     gallery: gallery || "",
     prenota: prenota || "",
