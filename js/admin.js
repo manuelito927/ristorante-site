@@ -703,10 +703,6 @@ if (saveCoverBtn) {
   saveCoverBtn.onclick = () => saveCover();
 }
 
-if (stripKey) stripKey.onchange = () => loadStripAdmin();
-if (saveStripTitleBtn) saveStripTitleBtn.onclick = () => saveStripTitle();
-if (addStripItemBtn) addStripItemBtn.onclick = () => addStripItem();
-
 async function loadStripAdmin(){
   return; // disattivata temporaneamente
 }
