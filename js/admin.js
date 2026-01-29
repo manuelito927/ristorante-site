@@ -806,8 +806,8 @@ await Promise.all([
   loadItems(),
   loadComeFunziona(),
   loadReservations(),
-  loadHome()
-  // loadStripAdmin()
+  loadHome(),
+  loadStripKeysIntoSelect()
 ]);
       } catch (e) {
         showApp(false);
