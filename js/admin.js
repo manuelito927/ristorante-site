@@ -48,6 +48,9 @@ const homeTitle = $("homeTitle");
 const homeBody = $("homeBody");
 const saveHomeBtn = $("saveHome");
 
+const homeCardsEditor = $("homeCardsEditor");
+const homeMsg = $("homeMsg");
+
   let token = localStorage.getItem("admin_token") || "";
 
   /* =========================================================
