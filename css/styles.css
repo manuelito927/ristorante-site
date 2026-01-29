@@ -555,42 +555,41 @@ body{
   font-size: 12px;
 }
 
-/* === FORZA STILE GLASS SU HOME (override totale) === */
-#homeCards .home-hero-card{
-  background: rgba(255,255,255,.55) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
+/* === STILE GLASS "ERRICO PORZIO" SOLO PER LE CARD === */
+#homeCards .home-hero-card {
+  /* 1. Trasparenza e Colore */
+  background: rgba(255, 255, 255, 0.65) !important;
+  
+  /* 2. Effetto Vetro (Blur + Saturazione) */
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
 
-  border: 1px solid rgba(255,255,255,.35) !important;
-  border-radius: 22px !important;
-  box-shadow: 0 12px 35px rgba(0,0,0,.10) !important;
-
+  /* 3. Bordo sottile "luccicante" */
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  
+  /* 4. Ombra morbida e profonda */
+  box-shadow: 0 15px 35px rgba(0,0,0,0.12) !important;
+  
+  border-radius: 28px !important; /* Angoli più tondi come Porzio */
+  padding: 30px 25px !important;
   max-width: 520px !important;
-  margin: 0 auto 14px auto !important;
-  padding: 22px 20px !important;
+  margin: 0 auto 20px auto !important;
 }
 
-#homeCards .home-hero-card h1{
-  color:#6b3a32 !important;
-  font-size: 34px !important;
-  line-height: 1.05 !important;
-  margin: 0 0 10px 0 !important;
-}
-
-#homeCards .home-hero-card p{
-  color:#111 !important;
-  opacity:.85 !important;
-  font-size: 15px !important;
-  line-height: 1.5 !important;
-  margin: 0 0 16px 0 !important;
-}
-
-#homeCards .home-hero-card .heroBtn{
-  background:#6b3a32 !important;
-  color:#fff !important;
-  border-radius: 999px !important;
-  padding: 12px 18px !important;
+/* Titolo della card più elegante */
+#homeCards .home-hero-card h1 {
+  color: #6b3a32 !important;
+  font-size: 32px !important;
   font-weight: 800 !important;
-  letter-spacing: .12em !important;
-  font-size: 12px !important;
+  letter-spacing: -1px !important;
+  line-height: 1.1 !important;
+  margin-bottom: 15px !important;
+}
+
+/* Testo della card più leggibile */
+#homeCards .home-hero-card p {
+  color: #1a1a1a !important;
+  font-size: 16px !important;
+  line-height: 1.6 !important;
+  opacity: 1 !important;
 }
