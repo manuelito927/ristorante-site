@@ -72,23 +72,7 @@
 
 </section>
 
-<section class="home-content">
-  <h1 id="homeTitle"></h1>
-  <p id="homeBody"></p>
 
-  <div class="home-actions">
-    <a href="/menu/" class="btn primary">Vedi Menu</a>
-    <a href="/prenota/" class="btn secondary">Prenota</a>
-  </div>
-</section>
-
-<section class="home-grid">
-  <a class="home-card" href="/menu/"><span>🍴</span>Menu Digitale</a>
-  <a class="home-card" href="/come-funziona/"><span>📖</span>Come funziona</a>
-  <a class="home-card" href="/prenota/"><span>📅</span>Prenota</a>
-  <a class="home-card" href="/gallery/"><span>📸</span>Gallery</a>
-  <a class="home-card" href="/recensioni/"><span>⭐</span>Recensioni</a>
-</section>
 
 <script src="/js/config.js"></script>
 <script>
@@ -114,24 +98,7 @@ hero.style.backgroundImage =
   }
 })();
 </script>
-<script>
-(async function(){
-  try {
-    const res = await fetch("/api/page/covers", { cache: "no-store" });
-    const data = await res.json();
 
-    const hc = data.homeContent || {};
-
-    const t = document.getElementById("homeTitle");
-    const b = document.getElementById("homeBody");
-
-    if (t) t.textContent = hc.title || "";
-    if (b) b.textContent = hc.body || "";
-  } catch(e){
-    console.warn("Home content non caricato", e);
-  }
-})();
-</script>
 <script>
   (function(){
     // ====== CONFIG ======
