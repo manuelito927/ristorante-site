@@ -243,3 +243,52 @@ body{
   background: #fafafa;
   color: #000;
 }
+
+/* =========================
+   HOME CONTENT + BOTTONI
+   ========================= */
+.home-content{
+  padding: 22px var(--pad);
+  background: #fcfaf7;
+}
+
+.home-content h1{
+  margin: 0 0 10px 0;
+  font-size: 26px;
+  letter-spacing: .5px;
+}
+
+.home-content p{
+  margin: 0 0 16px 0;
+  opacity: .8;
+  line-height: 1.45;
+}
+
+.home-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap: wrap;
+}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding: 12px 16px;
+  border-radius: 14px;
+  text-decoration:none;
+  font-weight:700;
+  border:1px solid rgba(0,0,0,.12);
+}
+
+.btn.primary{
+  background:#151515;
+  color:#fff;
+  border-color:#151515;
+}
+
+.btn.secondary{
+  background:#fff;
+  color:#151515;
+}
+
