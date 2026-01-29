@@ -883,18 +883,24 @@ payload.allergens = Array.from(
   }
   function escapeAttr(s) { return escapeHtml(s).replace(/"/g, "&quot;"); }
 
-if (addStripItemBtn) {
-  addStripItemBtn.onclick = async () => {
-    const key = stripKey.value;
-    const title = stripTitle.value.trim();
+// =======================
+// SALVA TITOLO STRIP
+// =======================
+if (saveStripTitleBtn) {
+  saveStripTitleBtn.onclick = async () => {
+    const key = String(stripKey?.value || "").trim();
+    const title = String(stripTitle?.value || "").trim();
 
     if (!key) return alert("Seleziona una sezione");
     if (!title) return alert("Inserisci un titolo");
 
     try {
-      await api("/api/admin/strip/" + key, {
+      const current = await api("/api/strip/" + encodeURIComponent(key)).catch(() => ({ data: {} }));
+      const items = Array.isArray(current?.data?.items) ? current.data.items : [];
+
+      await api("/api/admin/strip/" + encodeURIComponent(key), {
         method: "PUT",
-        body: JSON.stringify({ title })
+        body: JSON.stringify({ title, items })
       });
 
       alert("✅ Titolo salvato");
@@ -903,33 +909,33 @@ if (addStripItemBtn) {
     }
   };
 }
-    if (!stripKey) return alert("Manca strip_key");
-    if (!stripItemName) return alert("Manca strip_item_name");
-    if (!stripItemFile) return alert("Manca strip_item_file");
 
-    const key = String(stripKey.value || "").trim();
-    const name = String(stripItemName.value || "").trim();
-    const file = stripItemFile.files && stripItemFile.files[0];
+// =======================
+// AGGIUNGI PIATTO STRIP
+// =======================
+if (addStripItemBtn) {
+  addStripItemBtn.onclick = async () => {
+    const key = String(stripKey?.value || "").trim();
+    const name = String(stripItemName?.value || "").trim();
+    const file = stripItemFile?.files?.[0];
 
     if (!key) return alert("Seleziona la sezione");
     if (!name) return alert("Scrivi il nome piatto");
-    if (!file) return alert("Seleziona un file immagine");
+    if (!file) return alert("Seleziona un'immagine");
 
     try {
-      // 1) upload su R2 (usa la funzione che hai già)
       const imageUrl = await uploadOneFileToR2(file);
 
-      // 2) salva nel DB tramite API (endpoint da creare/aggiustare se non esiste)
-      await api("/api/admin/strip/" + encodeURIComponent(key), {
-  method: "PUT",
-  body: JSON.stringify({ title: title || key, items: [] })
-});
+      await api("/api/admin/strip/items", {
+        method: "POST",
+        body: JSON.stringify({ key, name, image_url: imageUrl })
+      });
 
       stripItemName.value = "";
       stripItemFile.value = "";
-      alert("✅ Piatto aggiunto allo strip!");
+      alert("✅ Piatto aggiunto!");
     } catch (e) {
-      alert("❌ " + (e.message || e));
+      alert("❌ " + e.message);
     }
   };
 }
