@@ -68,6 +68,31 @@ hero.style.backgroundImage =
 </script>
 
 <script>
+(async function(){
+  try {
+    const res = await fetch("/api/page/home", { cache: "no-store" });
+    const j = await res.json();
+    const data = j.data || {};
+    const cards = Array.isArray(data.cards) ? data.cards : [];
+
+    const wrap = document.getElementById("homeCards");
+    if(!wrap) return;
+
+    wrap.innerHTML = cards.map(c => `
+      <div class="hero-card home-card">
+        <h1>${c.title || ""}</h1>
+        <p>${c.text || ""}</p>
+        <a class="heroBtn" href="${c.href || "#"}">${c.buttonText || "SCOPRI"}</a>
+      </div>
+    `).join("");
+
+  } catch(e){
+    console.warn("Home cards non caricate", e);
+  }
+})();
+</script>
+
+<script>
   (function(){
     // ====== CONFIG ======
     const API = (window.API_BASE || "").trim();  // arriva da /js/config.js se lo hai
