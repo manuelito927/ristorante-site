@@ -319,3 +319,16 @@ body{
 .home-card span{
   font-size:18px;
 }
+
+/* HERO solo copertina (non deve contenere le cards) */
+#pageHero{
+  min-height: 70vh;
+  padding: 0;                 /* così è solo immagine */
+  display: block;             /* toglie il flex che ti spinge tutto */
+}
+
+/* contenitore cards sotto la copertina */
+#homeCards{
+  padding: 18px var(--pad);
+}
+
