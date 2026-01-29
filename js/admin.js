@@ -677,7 +677,12 @@ if (saveCoverBtn) {
       localStorage.setItem("admin_token", token);
       try {
         showApp(true);
-        await Promise.all([loadItems(), loadComeFunziona(), loadReservations()]);
+await Promise.all([
+  loadItems(),
+  loadComeFunziona(),
+  loadReservations(),
+  loadHome()
+]);
       } catch (e) {
         showApp(false);
         alert("Errore Accesso: " + e.message);
