@@ -792,8 +792,5 @@ payload.allergens = Array.from(
   }
   function escapeAttr(s) { return escapeHtml(s).replace(/"/g, "&quot;"); }
 
-if (stripKey) stripKey.onchange = () => loadStripAdmin();
-if (saveStripTitleBtn) saveStripTitleBtn.onclick = () => saveStripTitle();
-if (addStripItemBtn) addStripItemBtn.onclick = () => addStripItem();
 
 })();
