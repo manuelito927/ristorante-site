@@ -54,7 +54,8 @@
     const base = (window.API_BASE || "https://still-haze-01c8.filosofiaefficace.workers.dev").trim();
     const res = await fetch(base + "/api/page/covers", { cache: "no-store" });
     const json = await res.json().catch(() => ({}));
-const url = (json.data || {})[key];
+
+    const url = (json.data || {})[key];  // ✅ QUESTA È LA FIX
 
     if (url && String(url).trim()) {
       hero.style.backgroundImage =
