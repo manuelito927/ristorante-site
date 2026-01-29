@@ -452,3 +452,7 @@ body{
   gap: 14px;
 }
 .home-card{ max-width: 520px; }
+
+.home-hero-card{
+  margin-bottom: 14px;
+}
