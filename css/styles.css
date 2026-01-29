@@ -445,4 +445,10 @@ body{
   font-size:18px;
 }
 
-
+#homeCards{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.home-card{ max-width: 520px; }
