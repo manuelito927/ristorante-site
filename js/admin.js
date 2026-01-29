@@ -61,6 +61,12 @@ const addStripItemBtn = $("addStripItem");
 const stripItemsGrid = $("stripItemsGrid");
 const stripMsg = $("stripMsg");
 
+// ➕ CREA CATEGORIA STRIP
+const newStripKey = $("new_strip_key");
+const newStripTitle = $("new_strip_title");
+const createStripCategoryBtn = $("createStripCategory");
+const createStripMsg = $("createStripMsg");
+
   let token = localStorage.getItem("admin_token") || "";
 
   /* =========================================================
