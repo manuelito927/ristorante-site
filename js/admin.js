@@ -50,16 +50,6 @@ const saveHomeBtn = $("saveHome");
 
 const homeCardsEditor = $("homeCardsEditor");
 const homeMsg = $("homeMsg");
-// 🍕 STRIP PIATTI (titolo + immagini)
-const stripKey = $("strip_key");
-const stripTitle = $("strip_title");
-const saveStripTitleBtn = $("saveStripTitle");
-const stripItemName = $("strip_item_name");
-const stripItemFile = $("strip_item_file");
-const addStripItemBtn = $("addStripItem");
-const stripItemsGrid = $("stripItemsGrid");
-const stripMsg = $("stripMsg");
-
 
   let token = localStorage.getItem("admin_token") || "";
 
