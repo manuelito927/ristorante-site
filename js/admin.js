@@ -703,9 +703,6 @@ if (saveCoverBtn) {
   saveCoverBtn.onclick = () => saveCover();
 }
 
-async function loadStripAdmin(){
-  return; // disattivata temporaneamente
-}
 
   /* =========================================================
       LOGIN / LOGOUT / INIT
