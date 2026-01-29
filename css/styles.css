@@ -459,81 +459,57 @@ body{
 
 
 /* =========================
-   HOME CARDS (nuova sezione sotto la cover)
+   HOME CARDS – GLASS (tipo Errico Porzio)
    ========================= */
-.home-cards{
+
+#homeCards{
+  width: 100%;
   padding: 18px var(--pad) 30px;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 14px;
-  background: #f6f1ea;
 }
 
-/* Card stile “bello” come prima */
-.home-hero-card{
-  background: rgba(255,255,255,.78);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(0,0,0,.10);
-  border-radius: 22px;
-  padding: 22px 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.06);
-
-  max-width: 620px;
-  margin: 0 auto; /* centra */
-}
-
-.home-hero-card h1{
-  margin: 0 0 10px 0;
-  font-size: 34px;
-  line-height: 1;
-}
-
-.home-hero-card p{
-  margin: 0 0 16px 0;
-  opacity: .8;
-  line-height: 1.45;
-}
-
-/* bottone dentro card */
-.home-hero-card .heroBtn{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 18px;
-  border-radius: 999px;
-  text-decoration: none;
-  font-weight: 700;
-  background: #7b3f36; /* puoi cambiare */
-  color: #fff;
-}
-
-/* =========================
-   HOME CARD – STILE GLASS (ERRICO PORZIO)
-   ========================= */
-
-.home-hero-card{
+#homeCards .home-hero-card{
+  position: relative;
   max-width: 520px;
   margin: 0 auto;
   padding: 22px 20px;
-
   border-radius: 22px;
+  overflow: hidden;
 
-  /* GLASS EFFECT */
-  background: rgba(255,255,255,0.65);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  /* GLASS */
+  background: rgba(255,255,255,.45);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
 
-  border: 1px solid rgba(255,255,255,0.35);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  border: 1px solid rgba(255,255,255,.55);
+  box-shadow: 0 12px 35px rgba(0,0,0,.10);
 }
 
-.home-hero-card h1{
+/* “riflesso” interno che fa sembrare davvero vetro anche su sfondo piatto */
+#homeCards .home-hero-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(135deg,
+      rgba(255,255,255,.55) 0%,
+      rgba(255,255,255,.18) 35%,
+      rgba(255,255,255,.06) 100%);
+  pointer-events:none;
+}
+
+#homeCards .home-hero-card h1{
+  position: relative;
   margin: 0 0 10px 0;
   font-size: 34px;
   line-height: 1.05;
   color: #6b3a32;
 }
 
-.home-hero-card p{
+#homeCards .home-hero-card p{
+  position: relative;
   margin: 0 0 16px 0;
   font-size: 15px;
   line-height: 1.5;
@@ -541,7 +517,8 @@ body{
   opacity: .85;
 }
 
-.home-hero-card .heroBtn{
+#homeCards .home-hero-card .heroBtn{
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -553,44 +530,4 @@ body{
   font-weight: 800;
   letter-spacing: .12em;
   font-size: 12px;
-}
-
-/* === FORZA STILE GLASS SU HOME (override totale) === */
-#homeCards .home-hero-card{
-  background: rgba(255,255,255,.55) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-
-  border: 1px solid rgba(255,255,255,.35) !important;
-  border-radius: 22px !important;
-  box-shadow: 0 12px 35px rgba(0,0,0,.10) !important;
-
-  max-width: 520px !important;
-  margin: 0 auto 14px auto !important;
-  padding: 22px 20px !important;
-}
-
-#homeCards .home-hero-card h1{
-  color:#6b3a32 !important;
-  font-size: 34px !important;
-  line-height: 1.05 !important;
-  margin: 0 0 10px 0 !important;
-}
-
-#homeCards .home-hero-card p{
-  color:#111 !important;
-  opacity:.85 !important;
-  font-size: 15px !important;
-  line-height: 1.5 !important;
-  margin: 0 0 16px 0 !important;
-}
-
-#homeCards .home-hero-card .heroBtn{
-  background:#6b3a32 !important;
-  color:#fff !important;
-  border-radius: 999px !important;
-  padding: 12px 18px !important;
-  font-weight: 800 !important;
-  letter-spacing: .12em !important;
-  font-size: 12px !important;
 }
