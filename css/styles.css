@@ -506,6 +506,53 @@ body{
   color: #fff;
 }
 
+/* =========================
+   HOME CARD – STILE GLASS (ERRICO PORZIO)
+   ========================= */
 
+.home-hero-card{
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 22px 20px;
+
+  border-radius: 22px;
+
+  /* GLASS EFFECT */
+  background: rgba(255,255,255,0.65);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(255,255,255,0.35);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.home-hero-card h1{
+  margin: 0 0 10px 0;
+  font-size: 34px;
+  line-height: 1.05;
+  color: #6b3a32;
+}
+
+.home-hero-card p{
+  margin: 0 0 16px 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #111;
+  opacity: .85;
+}
+
+.home-hero-card .heroBtn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: #6b3a32;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 800;
+  letter-spacing: .12em;
+  font-size: 12px;
+}
 
 
