@@ -58,15 +58,27 @@ body{
 .hero{
   min-height: 70vh;
   padding: 24px var(--pad);
-  display:flex;
-  align-items:center;
-  justify-content:flex-start;
   position: relative;
 
+  /* cover */
   background-color:#111;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+
+  /* ✅ slider verticale “1 card alla volta” */
+  display:flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.hero-card{
+  scroll-snap-align: center;
+  width: min(520px, 100%);
+  margin: auto;            /* centra orizzontale */
 }
 
 /* card trasparente sopra immagine */
