@@ -808,5 +808,16 @@ payload.allergens = Array.from(
   }
   function escapeAttr(s) { return escapeHtml(s).replace(/"/g, "&quot;"); }
 
+if (addStripItemBtn) {
+  addStripItemBtn.onclick = async () => {
+    alert("CLICK STRIP OK");
+  };
+}
+
+if (saveStripTitleBtn) {
+  saveStripTitleBtn.onclick = async () => {
+    alert("CLICK TITOLO OK");
+  };
+}
 
 })();
