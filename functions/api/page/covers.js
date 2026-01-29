@@ -29,3 +29,25 @@ export async function onRequestGet({ env }) {
     headers: { "content-type": "application/json", "cache-control": "no-store", ...CORS }
   });
 }
+
+export async function onRequestPut({ request, env }) {
+  const auth = request.headers.get("authorization") || "";
+  if (auth !== `Bearer ${env.ADMIN_TOKEN}`) {
+    return new Response("Unauthorized", { status: 401, headers: CORS });
+  }
+
+  const data = await request.json().catch(() => ({}));
+
+  const homeData = {
+    title: data.title || "",
+    body: data.body || "",
+    images: Array.isArray(data.images) ? data.images : []
+  };
+
+  await env.COVERS.put("HOME_CONTENT", JSON.stringify(homeData));
+
+  return new Response(JSON.stringify({ ok: true }), {
+    headers: { "content-type": "application/json", ...CORS }
+  });
+}
+
