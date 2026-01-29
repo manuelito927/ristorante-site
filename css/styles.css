@@ -652,3 +652,25 @@ body{
   color: #151515;
 }
 
+.strip-categories{
+  display:flex;
+  gap:12px;
+  overflow:auto;
+  padding: 0 var(--pad);
+  margin: 18px 0 10px 0;
+}
+.cat-btn{
+  border:1px solid rgba(0,0,0,.15);
+  background:#fff;
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.cat-btn.is-active{
+  background: var(--greenwood);
+  color:#fff;
+  border-color: transparent;
+}
