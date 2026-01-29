@@ -593,3 +593,62 @@ body{
   line-height: 1.6 !important;
   opacity: 1 !important;
 }
+
+/* =========================
+   STRIP PIATTI – SCROLL ORIZZONTALE
+   ========================= */
+
+.piatti-strip{
+  padding: 26px var(--pad) 10px;
+  background: #f6f1ea;
+}
+
+.piatti-title{
+  margin: 0 0 14px 4px;
+  font-size: 26px;
+  font-weight: 700;
+  color: #151515;
+}
+
+/* contenitore scroll */
+.piatti-scroll{
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  padding-bottom: 14px;
+
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* nasconde scrollbar (iOS style) */
+.piatti-scroll::-webkit-scrollbar{
+  display: none;
+}
+
+/* singolo piatto */
+.piatto-card{
+  flex: 0 0 auto;
+  width: 140px;
+  text-align: center;
+  scroll-snap-align: start;
+}
+
+/* immagine piatto */
+.piatto-card img{
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: transparent;
+}
+
+/* nome piatto */
+.piatto-card span{
+  display: block;
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #151515;
+}
+
