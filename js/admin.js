@@ -885,8 +885,6 @@ payload.allergens = Array.from(
 
 if (addStripItemBtn) {
   addStripItemBtn.onclick = async () => {
-    if (saveStripTitleBtn) {
-  saveStripTitleBtn.onclick = async () => {
     const key = stripKey.value;
     const title = stripTitle.value.trim();
 
