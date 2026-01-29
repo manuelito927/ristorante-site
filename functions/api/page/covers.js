@@ -1,6 +1,6 @@
 const CORS = {
   "Access-Control-Allow-Origin": "*",
-"Access-Control-Allow-Methods": "GET, PUT, OPTIONS",
+  "Access-Control-Allow-Methods": "GET, PUT, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
@@ -9,7 +9,15 @@ export async function onRequestOptions() {
 }
 
 export async function onRequestGet({ env }) {
-  const [home, menu, gallery, prenota, comeFunziona, recensioni] = await Promise.all([
+  const [
+    home,
+    homeContent,
+    menu,
+    gallery,
+    prenota,
+    comeFunziona,
+    recensioni
+  ] = await Promise.all([
     env.COVERS.get("HOME"),
     env.COVERS.get("HOME_CONTENT"),
     env.COVERS.get("MENU"),
@@ -21,14 +29,20 @@ export async function onRequestGet({ env }) {
 
   return new Response(JSON.stringify({
     home: home || "",
-    homeContent: homeContent ? JSON.parse(homeContent) : { title: "", body: "", images: [] }
+    homeContent: homeContent
+      ? JSON.parse(homeContent)
+      : { title: "", body: "", images: [] },
     menu: menu || "",
     gallery: gallery || "",
     prenota: prenota || "",
     "come-funziona": comeFunziona || "",
     recensioni: recensioni || ""
   }), {
-    headers: { "content-type": "application/json", "cache-control": "no-store", ...CORS }
+    headers: {
+      "content-type": "application/json",
+      "cache-control": "no-store",
+      ...CORS
+    }
   });
 }
 
@@ -52,4 +66,3 @@ export async function onRequestPut({ request, env }) {
     headers: { "content-type": "application/json", ...CORS }
   });
 }
-
