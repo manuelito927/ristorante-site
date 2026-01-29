@@ -675,6 +675,24 @@ if (saveHomeBtn) {
    COPERTINE PAGINE
    ========================================================= */
 
+async function uploadOneFileToR2(file) {
+  const fd = new FormData();
+  fd.append("file", file);
+
+  const res = await fetch(API + "/api/admin/gallery/upload", {
+    method: "POST",
+    headers: { ...authHeaders() },
+    body: fd
+  });
+
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || ("HTTP " + res.status));
+  if (!data.url) throw new Error("Manca URL nella risposta");
+
+  return data.url;
+}
+
+
 async function saveCover() {
   if (!coverPage || !coverFile) return alert("Campi copertina non trovati");
   if (!coverFile.files || !coverFile.files[0]) return alert("Seleziona un'immagine");
