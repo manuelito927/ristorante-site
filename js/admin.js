@@ -841,6 +841,10 @@ const page = coverPage.value.toLowerCase();
 if (saveCoverBtn) {
   saveCoverBtn.onclick = () => saveCover();
 }
+
+if (stripKey) stripKey.onchange = () => loadStripAdmin();
+if (saveStripTitleBtn) saveStripTitleBtn.onclick = () => saveStripTitle();
+if (addStripItemBtn) addStripItemBtn.onclick = () => addStripItem();
   /* =========================================================
       LOGIN / LOGOUT / INIT
      ========================================================= */
