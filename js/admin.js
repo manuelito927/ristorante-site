@@ -859,7 +859,8 @@ await Promise.all([
   loadItems(),
   loadComeFunziona(),
   loadReservations(),
-  loadHome()
+  loadHome(),
+  loadStripAdmin()
 ]);
       } catch (e) {
         showApp(false);
