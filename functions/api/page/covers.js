@@ -11,6 +11,7 @@ export async function onRequestOptions() {
 export async function onRequestGet({ env }) {
   const [home, menu, gallery, prenota, comeFunziona, recensioni] = await Promise.all([
     env.COVERS.get("HOME"),
+    env.COVERS.get("HOME_CONTENT"),
     env.COVERS.get("MENU"),
     env.COVERS.get("GALLERY"),
     env.COVERS.get("PRENOTA"),
