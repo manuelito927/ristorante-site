@@ -332,3 +332,51 @@ body{
   padding: 18px var(--pad);
 }
 
+/* =========================
+   HOME CARDS (nuova sezione sotto la cover)
+   ========================= */
+.home-cards{
+  padding: 18px var(--pad) 30px;
+  display: grid;
+  gap: 14px;
+  background: #f6f1ea;
+}
+
+/* Card stile “bello” come prima */
+.home-hero-card{
+  background: rgba(255,255,255,.78);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(0,0,0,.10);
+  border-radius: 22px;
+  padding: 22px 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.06);
+
+  max-width: 620px;
+  margin: 0 auto; /* centra */
+}
+
+.home-hero-card h1{
+  margin: 0 0 10px 0;
+  font-size: 34px;
+  line-height: 1;
+}
+
+.home-hero-card p{
+  margin: 0 0 16px 0;
+  opacity: .8;
+  line-height: 1.45;
+}
+
+/* bottone dentro card */
+.home-hero-card .heroBtn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 18px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 700;
+  background: #7b3f36; /* puoi cambiare */
+  color: #fff;
+}
+
