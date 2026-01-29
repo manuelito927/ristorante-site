@@ -810,13 +810,34 @@ payload.allergens = Array.from(
 
 if (addStripItemBtn) {
   addStripItemBtn.onclick = async () => {
-    alert("CLICK STRIP OK");
-  };
-}
+    if (!stripKey) return alert("Manca strip_key");
+    if (!stripItemName) return alert("Manca strip_item_name");
+    if (!stripItemFile) return alert("Manca strip_item_file");
 
-if (saveStripTitleBtn) {
-  saveStripTitleBtn.onclick = async () => {
-    alert("CLICK TITOLO OK");
+    const key = String(stripKey.value || "").trim();
+    const name = String(stripItemName.value || "").trim();
+    const file = stripItemFile.files && stripItemFile.files[0];
+
+    if (!key) return alert("Seleziona la sezione");
+    if (!name) return alert("Scrivi il nome piatto");
+    if (!file) return alert("Seleziona un file immagine");
+
+    try {
+      // 1) upload su R2 (usa la funzione che hai già)
+      const imageUrl = await uploadOneFileToR2(file);
+
+      // 2) salva nel DB tramite API (endpoint da creare/aggiustare se non esiste)
+      await api("/api/admin/strip/items", {
+        method: "POST",
+        body: JSON.stringify({ key, name, image_url: imageUrl })
+      });
+
+      stripItemName.value = "";
+      stripItemFile.value = "";
+      alert("✅ Piatto aggiunto allo strip!");
+    } catch (e) {
+      alert("❌ " + (e.message || e));
+    }
   };
 }
 
