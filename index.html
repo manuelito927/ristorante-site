@@ -77,7 +77,24 @@ hero.style.backgroundImage =
   }
 })();
 </script>
+<script>
+(async function(){
+  try {
+    const res = await fetch("/api/page/covers", { cache: "no-store" });
+    const data = await res.json();
 
+    const hc = data.homeContent || {};
+
+    const t = document.getElementById("homeTitle");
+    const b = document.getElementById("homeBody");
+
+    if (t) t.textContent = hc.title || "";
+    if (b) b.textContent = hc.body || "";
+  } catch(e){
+    console.warn("Home content non caricato", e);
+  }
+})();
+</script>
 <script>
   (function(){
     // ====== CONFIG ======
