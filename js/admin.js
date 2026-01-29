@@ -885,6 +885,7 @@ loadItems()
   .then(loadComeFunziona)
   .then(loadReservations)
   .then(loadHome)
+  .then(loadStripAdmin)
   .catch(() => showApp(false));
   } else {
     showApp(false);
