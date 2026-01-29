@@ -902,10 +902,10 @@ if (addStripItemBtn) {
       const imageUrl = await uploadOneFileToR2(file);
 
       // 2) salva nel DB tramite API (endpoint da creare/aggiustare se non esiste)
-      await api("/api/admin/strip/items", {
-        method: "POST",
-        body: JSON.stringify({ key, name, image_url: imageUrl })
-      });
+      await api("/api/admin/strip/" + encodeURIComponent(key), {
+  method: "PUT",
+  body: JSON.stringify({ title: title || key, items: [] })
+});
 
       stripItemName.value = "";
       stripItemFile.value = "";
