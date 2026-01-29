@@ -53,120 +53,31 @@ body{
 }
 
 /* ============================================================
-   HERO (CARD COME LA FOTO)
+   HERO (Migliorata per effetto Porzio)
    ============================================================ */
-.hero{
-  min-height: 70vh;
-  padding: 24px var(--pad);
+.hero {
+  min-height: 80vh; /* Aumentata per mostrare meglio lo sfondo */
+  padding: 40px var(--pad);
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  /* cover */
-  background-color:#111;
+  /* Fondamentale: deve esserci un'immagine nitida sotto */
+  background-color: #222; 
+  background-image: url('LA_TUA_FOTO_LOCALE.jpg'); 
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
-
-  /* ✅ slider verticale “1 card alla volta” */
-  display:flex;
-  flex-direction: column;
-  gap: 14px;
-  overflow-y: auto;
-  scroll-snap-type: y mandatory;
-  -webkit-overflow-scrolling: touch;
+  background-attachment: fixed;
 }
 
-.hero-card{
-  scroll-snap-align: center;
-  width: min(520px, 100%);
-  margin: auto;            /* centra orizzontale */
-}
-
-/* card trasparente sopra immagine */
-.hero-card{
-  max-width: 520px;
-  padding: 18px;
-  border-radius: 18px;
-  background: rgba(255,255,255,.55);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(255,255,255,.25);
-}
-
-.hero-card h1{
-  margin:0 0 8px 0;
-  font-size: 34px;
-  line-height: 1.05;
-  letter-spacing: -0.5px;
-  font-weight: 700;
-  color:#6b3a32;
-}
-
-.hero-card p{
-  margin:0 0 10px 0;
-  color:#111;
-  opacity:.9;
-  line-height: 1.45;
-  font-size: 14px;
-}
-
-.heroText{ opacity:.75; }
-
-.heroBtn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  margin-top: 10px;
-  padding: 12px 18px;
-  border-radius: 999px;
-  background:#6b3a32;
-  color:#fff;
-  text-decoration:none;
-  font-weight: 800;
-  letter-spacing: .12em;
-  font-size: 12px;
-}
-/* ============================================================
-   MENU ACCORDEON (GREENWOOD CHIARO)
-   ============================================================ */
-.menu{
-  padding: 10px var(--pad);
-}
-
-.menu-section{
-  margin-bottom: 8px;
-}
-
-.menu-title{
-  width:100%;
-  display:flex;
-  justify-content: space-between;
-  align-items:center;
-  padding: 18px 20px;
-  background: var(--greenwood-light);
-  border: 0;
-  cursor: pointer;
-  color: #ffffff;
-  text-align: left;
-  -webkit-appearance: none;
-  appearance: none;
-  border-radius: 0;
-}
-
-.menu-title h2{
-  margin:0;
-  font-size: 20px;
-  font-weight: 700;
-  color:#ffffff;
-  text-transform: none;
-}
-
-.plus{
-  font-size: 24px;
-  font-weight: 300;
-  color:#ffffff;
-}
-
-.menu-content{
-  padding-bottom: 14px;
+/* Overlay per migliorare la leggibilità */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.2); 
+  z-index: 1;
 }
 
 /* ============================================================
