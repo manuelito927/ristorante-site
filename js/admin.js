@@ -729,6 +729,36 @@ if (saveCoverBtn) {
 }
 
 
+/* =========================================================
+   STRIP - CARICA CATEGORIE (da /api/strip)
+   ========================================================= */
+async function loadStripKeysIntoSelect() {
+  if (!stripKey) return;
+
+  try {
+    const res = await api("/api/strip"); // ritorna { keys: [...] }
+    const keys = Array.isArray(res.keys) ? res.keys : [];
+
+    // svuota e ricrea opzioni
+    stripKey.innerHTML = "";
+
+    if (!keys.length) {
+      stripKey.innerHTML = `<option value="pizze">pizze</option>`;
+      return;
+    }
+
+    keys.forEach((k) => {
+      const opt = document.createElement("option");
+      opt.value = k;
+      opt.textContent = k;
+      stripKey.appendChild(opt);
+    });
+
+  } catch (e) {
+    console.warn("Errore load strip keys:", e);
+  }
+}
+
   /* =========================================================
       LOGIN / LOGOUT / INIT
      ========================================================= */
