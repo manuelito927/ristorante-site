@@ -51,7 +51,32 @@
   const key = hero.dataset.coverKey || "home";
 
   try {
-const res = await fetch("/api/page/covers", { cache: "no-store" });
+<script>
+(async function(){
+  const hero = document.getElementById("pageHero");
+  if(!hero) return;
+
+  const key = hero.dataset.coverKey || "home";
+
+  try {
+    const base = (window.API_BASE || "https://still-haze-01c8.filosofiaefficace.workers.dev").trim();
+    const res = await fetch(base + "/api/page/covers", { cache: "no-store" });
+    const json = await res.json().catch(() => ({}));
+    const url = json[key];
+
+    if(url && String(url).trim()){
+      hero.style.backgroundImage =
+        `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url("${url}")`;
+      hero.style.backgroundSize = "cover";
+      hero.style.backgroundPosition = "center";
+      hero.style.backgroundRepeat = "no-repeat";
+    }
+  } catch(e){
+    console.warn("Cover non caricata:", e);
+  }
+})();
+</script>
+
 const json = await res.json().catch(() => ({}));
 const url = json[key];
     if(url && String(url).trim()){
