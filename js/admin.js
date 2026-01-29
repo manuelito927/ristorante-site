@@ -671,32 +671,23 @@ if (saveHomeBtn) {
     });
   }
 
-  async function uploadOneFileToR2(file) {
+async function uploadOneFileToR2(file) {
+  const fd = new FormData();
+  fd.append("file", file);
 
-  const key = (stripKey && stripKey.value) ? stripKey.value : "pizze";
-  const name = stripItemName ? stripItemName.value.trim() : "";
-  const file = (stripItemFile && stripItemFile.files && stripItemFile.files[0]) ? stripItemFile.files[0] : null;
-
-  if(!name) return alert("Inserisci nome piatto");
-  if(!file) return alert("Seleziona un'immagine");
-
-  setStripMsg("Upload immagine...");
-
-  const image_url = await uploadOneFileToR2(file);
-
-  setStripMsg("Salvataggio su DB...");
-
-  await api("/api/admin/strip/item", {
+  const res = await fetch(API + "/api/admin/gallery/upload", {
     method: "POST",
-    body: JSON.stringify({ strip_key: key, name, image_url })
+    headers: { ...authHeaders() },
+    body: fd
   });
 
-  if(stripItemName) stripItemName.value = "";
-  if(stripItemFile) stripItemFile.value = "";
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || ("HTTP " + res.status));
+  if (!data.url) throw new Error("Manca URL nella risposta");
 
-  setStripMsg("✅ Aggiunto!");
-  loadStripAdmin();
+  return data.url;
 }
+
     const fd = new FormData();
     fd.append("file", file);
     const res = await fetch(API + "/api/admin/gallery/upload", {
