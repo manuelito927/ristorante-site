@@ -759,6 +759,39 @@ async function loadStripKeysIntoSelect() {
   }
 }
 
+if (createStripCategoryBtn) {
+  createStripCategoryBtn.onclick = async () => {
+    const key = String(newStripKey?.value || "").trim().toLowerCase();
+    const title = String(newStripTitle?.value || "").trim();
+
+    if (!key) return alert("Scrivi la key (es. piatti_gourmet)");
+    if (!/^[a-z0-9_-]{2,30}$/.test(key)) {
+      return alert("Key non valida. Usa solo a-z 0-9 _ - (2-30 caratteri)");
+    }
+
+    try {
+      if (createStripMsg) createStripMsg.textContent = "Creazione...";
+
+      await api("/api/admin/strip/create", {
+        method: "POST",
+        body: JSON.stringify({ key, title })
+      });
+
+      if (createStripMsg) createStripMsg.textContent = "✅ Categoria creata!";
+      if (newStripKey) newStripKey.value = "";
+      if (newStripTitle) newStripTitle.value = "";
+
+      // ricarica dropdown
+      await loadStripKeysIntoSelect();
+
+      alert("✅ Categoria creata: " + key);
+    } catch (e) {
+      if (createStripMsg) createStripMsg.textContent = "❌ " + e.message;
+      alert("❌ " + e.message);
+    }
+  };
+}
+
   /* =========================================================
       LOGIN / LOGOUT / INIT
      ========================================================= */
