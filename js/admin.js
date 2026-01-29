@@ -885,6 +885,26 @@ payload.allergens = Array.from(
 
 if (addStripItemBtn) {
   addStripItemBtn.onclick = async () => {
+    if (saveStripTitleBtn) {
+  saveStripTitleBtn.onclick = async () => {
+    const key = stripKey.value;
+    const title = stripTitle.value.trim();
+
+    if (!key) return alert("Seleziona una sezione");
+    if (!title) return alert("Inserisci un titolo");
+
+    try {
+      await api("/api/admin/strip/" + key, {
+        method: "PUT",
+        body: JSON.stringify({ title })
+      });
+
+      alert("✅ Titolo salvato");
+    } catch (e) {
+      alert("❌ " + e.message);
+    }
+  };
+}
     if (!stripKey) return alert("Manca strip_key");
     if (!stripItemName) return alert("Manca strip_item_name");
     if (!stripItemFile) return alert("Manca strip_item_file");
