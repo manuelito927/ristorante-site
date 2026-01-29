@@ -772,9 +772,11 @@ if (createStripCategoryBtn) {
     try {
       if (createStripMsg) createStripMsg.textContent = "Creazione...";
 
-      await api("/api/admin/strip/create", {
-        method: "POST",
-        body: JSON.stringify({ key, title })
+      // ✅ QUI la vera API che esiste già nel worker:
+      // PUT /api/admin/strip/<key>  body: { title:"...", items:[] }
+      await api("/api/admin/strip/" + encodeURIComponent(key), {
+        method: "PUT",
+        body: JSON.stringify({ title: title || key, items: [] })
       });
 
       if (createStripMsg) createStripMsg.textContent = "✅ Categoria creata!";
@@ -783,6 +785,9 @@ if (createStripCategoryBtn) {
 
       // ricarica dropdown
       await loadStripKeysIntoSelect();
+
+      // seleziona la categoria appena creata
+      if (stripKey) stripKey.value = key;
 
       alert("✅ Categoria creata: " + key);
     } catch (e) {
