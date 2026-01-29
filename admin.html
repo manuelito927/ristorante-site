@@ -133,6 +133,51 @@
               <input id="name" placeholder="es. Margherita">
             </div>
 
+<div class="card">
+  <h2>Sezione Menu: Titolo + Immagini</h2>
+  <note>Cambia il titolo e carica le immagini per lo scroll “Le nostre pizze”.</note>
+
+  <div class="form-group">
+    <label>Chiave sezione</label>
+    <select id="strip_key">
+      <option value="pizze">Pizze</option>
+      <option value="antipasti">Antipasti</option>
+      <option value="dolci">Dolci</option>
+    </select>
+    <note>Puoi iniziare con “pizze”.</note>
+  </div>
+
+  <div class="form-group">
+    <label>Titolo sezione (es. Le nostre pizze)</label>
+    <input id="strip_title" placeholder="Le nostre pizze">
+  </div>
+
+  <button class="btn success" id="saveStripTitle" style="margin-bottom:12px;">
+    Salva Titolo Sezione
+  </button>
+
+  <hr>
+
+  <div class="form-group">
+    <label>Nome piatto</label>
+    <input id="strip_item_name" placeholder="Margherita">
+  </div>
+
+  <div class="form-group">
+    <label>Immagine piatto (file)</label>
+    <input id="strip_item_file" type="file" accept="image/*">
+    <note>Carica come gallery: verrà salvata su R2.</note>
+  </div>
+
+  <button class="btn primary" id="addStripItem">
+    Aggiungi Piatto
+  </button>
+
+  <div id="stripMsg" style="margin-top:10px; font-size:13px; opacity:.75;"></div>
+
+  <div id="stripItemsGrid" style="display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-top:14px;"></div>
+</div>
+
             <div class="form-group">
               <span class="lang-tag">INGLESE</span>
               <label>English Name</label>
