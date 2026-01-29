@@ -403,34 +403,92 @@ const items = res.items || res.data?.items || [];
 }
 
 /* =========================================================
-   HOME - CARICA + SALVA
+   HOME - CARICA + SALVA (5 CARD)
+   usa: GET  /api/page/home
+        PUT  /api/admin/page/home
    ========================================================= */
+
+const DEFAULT_HOME_CARDS = [
+  { title:"Menu Digitale", text:"Scopri tutti i piatti, ingredienti e prezzi in un attimo.", href:"/menu/", buttonText:"VAI AL MENU" },
+  { title:"Come funziona", text:"Orari, indirizzo, info utili e tutto quello che devi sapere.", href:"/come-funziona/", buttonText:"SCOPRI" },
+  { title:"Prenota", text:"Prenota il tuo tavolo in pochi secondi.", href:"/prenota/", buttonText:"PRENOTA" },
+  { title:"Gallery", text:"Guarda foto, atmosfera e piatti.", href:"/gallery/", buttonText:"VEDI FOTO" },
+  { title:"Recensioni", text:"Leggi cosa dicono di noi.", href:"/recensioni/", buttonText:"LEGGI" },
+];
+
+function renderHomeCardsEditor(cards){
+  if(!homeCardsEditor) return;
+  homeCardsEditor.innerHTML = (cards || []).map((c, i) => `
+    <div class="card" style="padding:14px; border-radius:14px; border:1px solid rgba(0,0,0,.06);">
+      <div style="font-weight:800; margin-bottom:10px;">Card ${i+1}</div>
+
+      <div class="form-group">
+        <label>Titolo</label>
+        <input data-hk="title" data-i="${i}" value="${escapeAttr(c.title || "")}">
+      </div>
+
+      <div class="form-group">
+        <label>Testo</label>
+        <textarea data-hk="text" data-i="${i}">${escapeHtml(c.text || "")}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Link (href)</label>
+        <input data-hk="href" data-i="${i}" value="${escapeAttr(c.href || "")}" placeholder="/menu/">
+      </div>
+
+      <div class="form-group">
+        <label>Testo bottone</label>
+        <input data-hk="buttonText" data-i="${i}" value="${escapeAttr(c.buttonText || "")}">
+      </div>
+    </div>
+  `).join("");
+}
+
+function readHomeCardsFromEditor(){
+  if(!homeCardsEditor) return [];
+  const cards = [];
+  for(let i=0;i<5;i++){
+    const get = (k) => {
+      const el = homeCardsEditor.querySelector(`[data-hk="${k}"][data-i="${i}"]`);
+      return el ? String(el.value || "").trim() : "";
+    };
+    cards.push({
+      title: get("title"),
+      text: get("text"),
+      href: get("href") || "#",
+      buttonText: get("buttonText") || "SCOPRI"
+    });
+  }
+  return cards;
+}
 
 async function loadHome() {
   try {
-    const res = await api("/api/page/covers");
-    const hc = res.homeContent || {};
+    const res = await api("/api/page/home");
+    const d = res && res.data ? res.data : {};
 
-    if (homeTitle) homeTitle.value = hc.title || "";
-    if (homeBody) homeBody.value = hc.body || "";
+    const cards = Array.isArray(d.cards) ? d.cards : DEFAULT_HOME_CARDS;
+
+    renderHomeCardsEditor(cards);
+    if(homeMsg) homeMsg.textContent = "Caricato ✅";
   } catch (e) {
     console.error("Errore caricamento HOME", e);
+    renderHomeCardsEditor(DEFAULT_HOME_CARDS);
+    if(homeMsg) homeMsg.textContent = "Errore: caricati valori di default";
   }
 }
 
 async function saveHome() {
-  const payload = {
-    title: homeTitle ? homeTitle.value.trim() : "",
-    body: homeBody ? homeBody.value.trim() : "",
-    images: []
-  };
+  const cards = readHomeCardsFromEditor();
 
-  await api("/api/page/covers", {
+  await api("/api/admin/page/home", {
     method: "PUT",
-    body: JSON.stringify(payload)
+    body: JSON.stringify({ cards })
   });
 
-  alert("✅ Home salvata");
+  if(homeMsg) homeMsg.textContent = "Salvato ✅";
+  alert("✅ Home (card) salvata!");
 }
 
 if (saveHomeBtn) {
