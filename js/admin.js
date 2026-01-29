@@ -702,7 +702,11 @@ await Promise.all([
   if (token) {
     if (tokenInput) tokenInput.value = token;
     showApp(true);
-    loadItems().then(loadComeFunziona).then(loadReservations).catch(() => showApp(false));
+loadItems()
+  .then(loadComeFunziona)
+  .then(loadReservations)
+  .then(loadHome)
+  .catch(() => showApp(false));
   } else {
     showApp(false);
   }
