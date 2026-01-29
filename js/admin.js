@@ -399,6 +399,41 @@ const items = res.items || res.data?.items || [];
   }
 }
 
+/* =========================================================
+   HOME - CARICA + SALVA
+   ========================================================= */
+
+async function loadHome() {
+  try {
+    const res = await api("/api/page/covers");
+    const hc = res.homeContent || {};
+
+    if (homeTitle) homeTitle.value = hc.title || "";
+    if (homeBody) homeBody.value = hc.body || "";
+  } catch (e) {
+    console.error("Errore caricamento HOME", e);
+  }
+}
+
+async function saveHome() {
+  const payload = {
+    title: homeTitle ? homeTitle.value.trim() : "",
+    body: homeBody ? homeBody.value.trim() : "",
+    images: []
+  };
+
+  await api("/api/page/covers", {
+    method: "PUT",
+    body: JSON.stringify(payload)
+  });
+
+  alert("✅ Home salvata");
+}
+
+if (saveHomeBtn) {
+  saveHomeBtn.onclick = () => saveHome();
+}
+
   /* =========================================================
       COME FUNZIONA - CARICA + SALVA
      ========================================================= */
