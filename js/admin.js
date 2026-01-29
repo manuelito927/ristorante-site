@@ -832,6 +832,7 @@ loadItems()
   .then(loadComeFunziona)
   .then(loadReservations)
   .then(loadHome)
+  .then(loadStripKeysIntoSelect)
   .catch(() => showApp(false));
   } else {
     showApp(false);
