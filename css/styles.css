@@ -53,23 +53,64 @@ body{
 }
 
 /* ============================================================
-   HERO (SCRITTA DELICATA E MINIMAL)
+   HERO (CARD COME LA FOTO)
    ============================================================ */
 .hero{
   min-height: 70vh;
-  padding: var(--pad) var(--pad) 60px var(--pad);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  text-align: center;
+  padding: 24px var(--pad);
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  position: relative;
 
-  /* DEFAULT: nessuna immagine */
-  background-color: #111;
-
-  /* IMPORTANTISSIMO: permettiamo al JS di mettere l'immagine */
+  background-color:#111;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+/* card trasparente sopra immagine */
+.hero-card{
+  max-width: 520px;
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.55);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,.25);
+}
+
+.hero-card h1{
+  margin:0 0 8px 0;
+  font-size: 34px;
+  line-height: 1.05;
+  letter-spacing: -0.5px;
+  font-weight: 700;
+  color:#6b3a32;
+}
+
+.hero-card p{
+  margin:0 0 10px 0;
+  color:#111;
+  opacity:.9;
+  line-height: 1.45;
+  font-size: 14px;
+}
+
+.heroText{ opacity:.75; }
+
+.heroBtn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  margin-top: 10px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background:#6b3a32;
+  color:#fff;
+  text-decoration:none;
+  font-weight: 800;
+  letter-spacing: .12em;
+  font-size: 12px;
 }
 /* ============================================================
    MENU ACCORDEON (GREENWOOD CHIARO)
