@@ -672,6 +672,109 @@ if (saveHomeBtn) {
   }
 
   async function uploadOneFileToR2(file) {
+    function setStripMsg(t){ if(stripMsg) stripMsg.textContent = t || ""; }
+
+async function loadStripAdmin(){
+  if(!stripKey) return;
+
+  const key = stripKey.value || "pizze";
+  setStripMsg("Caricamento sezione...");
+
+  try{
+    const res = await api("/api/admin/strip?key=" + encodeURIComponent(key));
+    const d = res.data || {};
+
+    if(stripTitle) stripTitle.value = d.title || "";
+
+    renderStripItems(d.items || []);
+    setStripMsg("OK ✅");
+  }catch(e){
+    setStripMsg("❌ " + e.message);
+  }
+}
+
+function renderStripItems(items){
+  if(!stripItemsGrid) return;
+  stripItemsGrid.innerHTML = "";
+
+  (items || []).forEach((it) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.style.padding = "12px";
+    card.style.borderRadius = "14px";
+
+    card.innerHTML = `
+      <div style="display:flex; gap:10px; align-items:center;">
+        <img src="${escapeAttr(it.image_url || "")}" 
+             style="width:58px;height:58px;object-fit:contain;border-radius:50%;background:#fff;border:1px solid rgba(0,0,0,.08);"/>
+        <div style="min-width:0; flex:1;">
+          <div style="font-weight:800; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+            ${escapeHtml(it.name || "")}
+          </div>
+          <div style="opacity:.6; font-size:11px;">#${it.id}</div>
+        </div>
+        <button class="btn danger" data-del="${it.id}" style="width:auto; padding:8px 10px;">X</button>
+      </div>
+    `;
+
+    card.querySelector("[data-del]").onclick = async () => {
+      if(!confirm("Eliminare " + (it.name || "item") + "?")) return;
+      try{
+        await api("/api/admin/strip/item/" + it.id, { method:"DELETE" });
+        loadStripAdmin();
+      }catch(e){
+        alert("❌ " + e.message);
+      }
+    };
+
+    stripItemsGrid.appendChild(card);
+  });
+
+  if(!items || items.length === 0){
+    stripItemsGrid.innerHTML = `<div class="card" style="padding:12px;border-radius:14px;">Nessun piatto in questa sezione.</div>`;
+  }
+}
+
+async function saveStripTitle(){
+  const key = (stripKey && stripKey.value) ? stripKey.value : "pizze";
+  const title = stripTitle ? stripTitle.value.trim() : "";
+
+  if(!title) return alert("Inserisci un titolo");
+
+  await api("/api/admin/strip", {
+    method: "PUT",
+    body: JSON.stringify({ key, title })
+  });
+
+  alert("✅ Titolo salvato!");
+  loadStripAdmin();
+}
+
+async function addStripItem(){
+  const key = (stripKey && stripKey.value) ? stripKey.value : "pizze";
+  const name = stripItemName ? stripItemName.value.trim() : "";
+  const file = (stripItemFile && stripItemFile.files && stripItemFile.files[0]) ? stripItemFile.files[0] : null;
+
+  if(!name) return alert("Inserisci nome piatto");
+  if(!file) return alert("Seleziona un'immagine");
+
+  setStripMsg("Upload immagine...");
+
+  const image_url = await uploadOneFileToR2(file);
+
+  setStripMsg("Salvataggio su DB...");
+
+  await api("/api/admin/strip/item", {
+    method: "POST",
+    body: JSON.stringify({ strip_key: key, name, image_url })
+  });
+
+  if(stripItemName) stripItemName.value = "";
+  if(stripItemFile) stripItemFile.value = "";
+
+  setStripMsg("✅ Aggiunto!");
+  loadStripAdmin();
+}
     const fd = new FormData();
     fd.append("file", file);
     const res = await fetch(API + "/api/admin/gallery/upload", {
