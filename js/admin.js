@@ -831,6 +831,11 @@ if (saveCoverBtn) {
 if (stripKey) stripKey.onchange = () => loadStripAdmin();
 if (saveStripTitleBtn) saveStripTitleBtn.onclick = () => saveStripTitle();
 if (addStripItemBtn) addStripItemBtn.onclick = () => addStripItem();
+
+async function loadStripAdmin(){
+  return; // disattivata temporaneamente
+}
+
   /* =========================================================
       LOGIN / LOGOUT / INIT
      ========================================================= */
