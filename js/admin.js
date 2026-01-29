@@ -671,6 +671,12 @@ if (saveHomeBtn) {
     });
   }
 
+// ================= STRIP ADMIN =================
+async function loadStripAdmin() { ... }
+function renderStripItems(...) { ... }
+async function saveStripTitle() { ... }
+async function addStripItem() { ... }
+
 async function uploadOneFileToR2(file) {
 // ================= STRIP ADMIN =================
 
