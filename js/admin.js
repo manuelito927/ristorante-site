@@ -672,6 +672,88 @@ if (saveHomeBtn) {
   }
 
 async function uploadOneFileToR2(file) {
+// ================= STRIP ADMIN =================
+
+async function loadStripAdmin(){
+  if(!stripKey) return;
+
+  const key = stripKey.value || "pizze";
+  if(stripMsg) stripMsg.textContent = "Caricamento...";
+
+  try{
+    const res = await api("/api/admin/strip?key=" + encodeURIComponent(key));
+    const d = res.data || {};
+
+    if(stripTitle) stripTitle.value = d.title || "";
+    renderStripItems(d.items || []);
+
+    if(stripMsg) stripMsg.textContent = "OK ✅";
+  }catch(e){
+    if(stripMsg) stripMsg.textContent = "❌ " + e.message;
+  }
+}
+
+function renderStripItems(items){
+  if(!stripItemsGrid) return;
+  stripItemsGrid.innerHTML = "";
+
+  (items || []).forEach(it => {
+    const div = document.createElement("div");
+    div.className = "card";
+    div.style.padding = "10px";
+
+    div.innerHTML = `
+      <div style="display:flex;gap:10px;align-items:center">
+        <img src="${it.image_url}" style="width:50px;height:50px;object-fit:cover;border-radius:8px">
+        <strong style="flex:1">${it.name}</strong>
+        <button class="btn danger">X</button>
+      </div>
+    `;
+
+    div.querySelector("button").onclick = async () => {
+      if(!confirm("Eliminare?")) return;
+      await api("/api/admin/strip/item/" + it.id, { method:"DELETE" });
+      loadStripAdmin();
+    };
+
+    stripItemsGrid.appendChild(div);
+  });
+}
+
+async function saveStripTitle(){
+  const key = stripKey.value || "pizze";
+  const title = stripTitle.value.trim();
+  if(!title) return alert("Inserisci titolo");
+
+  await api("/api/admin/strip", {
+    method:"PUT",
+    body: JSON.stringify({ key, title })
+  });
+
+  alert("Titolo salvato ✅");
+  loadStripAdmin();
+}
+
+async function addStripItem(){
+  const key = stripKey.value || "pizze";
+  const name = stripItemName.value.trim();
+  const file = stripItemFile.files[0];
+
+  if(!name) return alert("Nome mancante");
+  if(!file) return alert("Immagine mancante");
+
+  const image_url = await uploadOneFileToR2(file);
+
+  await api("/api/admin/strip/item", {
+    method:"POST",
+    body: JSON.stringify({ strip_key:key, name, image_url })
+  });
+
+  stripItemName.value = "";
+  stripItemFile.value = "";
+
+  loadStripAdmin();
+}
 
     const fd = new FormData();
     fd.append("file", file);
