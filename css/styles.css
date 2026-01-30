@@ -638,9 +638,10 @@ body{
 .piatto-card img{
   width: 140px;
   height: 140px;
-  object-fit: contain;
+  object-fit: cover;      /* ✅ riempie bene il cerchio */
   border-radius: 50%;
-  background: transparent;
+  display: block;         /* ✅ evita comportamenti strani inline */
+  background: #f2f2f2;    /* ✅ se manca immagine, sfondo pulito */
 }
 
 /* nome piatto */
