@@ -66,6 +66,7 @@ const newStripKey = $("new_strip_key");
 const newStripTitle = $("new_strip_title");
 const createStripCategoryBtn = $("createStripCategory");
 const createStripMsg = $("createStripMsg");
+const deleteStripCategoryBtn = $("deleteStripCategory");
 
   let token = localStorage.getItem("admin_token") || "";
 let stripOpenIndex = null; // tiene aperto solo 1 piatto nello strip
