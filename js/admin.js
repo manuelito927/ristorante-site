@@ -880,6 +880,7 @@ loadItems()
   .then(loadReservations)
   .then(loadHome)
   .then(loadStripKeysIntoSelect)
+  .then(() => refreshStripEditor())
   .catch(() => showApp(false));
   } else {
     showApp(false);
