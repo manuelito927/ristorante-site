@@ -682,3 +682,8 @@ body{
   gap: 14px;
 }
 
+.piatti-title {
+  font-weight: 300;
+  letter-spacing: 0.6px;
+}
+
