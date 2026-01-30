@@ -1000,6 +1000,13 @@ row.innerHTML = `
 </div>
 `;
 
+const toggleBtn = row.querySelector('[data-s="toggle"]');
+const editor = row.querySelector('[data-s="editor"]');
+
+toggleBtn.onclick = () => {
+  editor.hidden = !editor.hidden;
+};
+
     // handlers
     const fileInput = row.querySelector('[data-s="file"]');
     const msgEl = row.querySelector('[data-s="msg"]');
