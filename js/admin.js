@@ -799,6 +799,10 @@ async function loadStripKeysIntoSelect() {
   }
 }
 
+if (stripKey) {
+  stripKey.onchange = () => refreshStripEditor();
+}
+
 if (createStripCategoryBtn) {
   createStripCategoryBtn.onclick = async () => {
     const key = String(newStripKey?.value || "").trim().toLowerCase();
