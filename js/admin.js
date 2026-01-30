@@ -972,37 +972,33 @@ function renderStripItemsEditor(items) {
     row.style.borderRadius = "14px";
     row.style.border = "1px solid rgba(0,0,0,.06)";
 
-    row.innerHTML = `
-      <div style="display:flex; gap:12px; align-items:center;">
-        <img src="${escapeAttr(it.image_url || "")}"
-             style="width:84px; height:64px; object-fit:cover; border-radius:12px; border:1px solid rgba(0,0,0,.1); background:#f2f2f2;"
-             onerror="this.style.display='none'">
+row.innerHTML = `
+<button data-s="toggle"
+  style="all:unset; width:100%; cursor:pointer;">
+  <div style="display:flex; gap:12px; align-items:center;">
+    <img src="${escapeAttr(it.image_url || "")}"
+      style="width:84px; height:64px; object-fit:cover; border-radius:12px; background:#eee;">
+    <strong>${escapeHtml(it.name || "Senza nome")}</strong>
+  </div>
+</button>
 
-        <div style="flex:1; min-width:0;">
-          <div style="font-size:12px; opacity:.7; margin-bottom:6px;">Piatto #${idx + 1}</div>
-          <input data-s="name" value="${escapeAttr(it.name || "")}"
-                 style="width:100%; padding:10px; border-radius:10px; border:1px solid #e0e0e0; background:#fafafa;">
+<div data-s="editor" hidden style="margin-top:12px;">
+  <input data-s="name" value="${escapeAttr(it.name || "")}"
+    style="width:100%; margin-bottom:8px;">
 
-        </div>
-      </div>
+  <label class="btn secondary" style="width:100%;">
+    Cambia foto
+    <input data-s="file" type="file" hidden>
+  </label>
 
-      <div style="display:flex; gap:10px; margin-top:12px;">
-        <label class="btn secondary" style="flex:1; width:auto; padding:10px; text-align:center; cursor:pointer;">
-          Cambia foto
-          <input data-s="file" type="file" accept="image/*" style="display:none;">
-        </label>
+  <div style="display:flex; gap:8px; margin-top:8px;">
+    <button data-s="save" class="btn success" style="flex:1;">Salva</button>
+    <button data-s="del" class="btn danger" style="flex:1;">Elimina</button>
+  </div>
 
-        <button class="btn success" data-s="save" style="flex:1; width:auto; padding:10px;">
-          Salva
-        </button>
-
-        <button class="btn danger" data-s="del" style="flex:1; width:auto; padding:10px;">
-          Elimina
-        </button>
-      </div>
-
-      <div data-s="msg" style="margin-top:8px; font-size:12px; text-align:center; opacity:.75;"></div>
-    `;
+  <div data-s="msg" style="margin-top:6px; font-size:12px;"></div>
+</div>
+`;
 
     // handlers
     const fileInput = row.querySelector('[data-s="file"]');
