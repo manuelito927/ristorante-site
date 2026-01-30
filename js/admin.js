@@ -848,6 +848,8 @@ if (createStripCategoryBtn) {
       try {
         showApp(true);
 await Promise.all([
+  // dopo aver caricato le keys, carica editor strip della sezione selezionata
+setTimeout(() => refreshStripEditor(), 0);
   loadItems(),
   loadComeFunziona(),
   loadReservations(),
