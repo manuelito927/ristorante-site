@@ -842,6 +842,40 @@ if (createStripCategoryBtn) {
   };
 }
 
+if (deleteStripCategoryBtn) {
+  deleteStripCategoryBtn.onclick = async () => {
+    const key = String(stripKey?.value || "").trim();
+    if (!key) return alert("Seleziona una categoria");
+
+    const ok = confirm("Vuoi eliminare la categoria '" + key + "'? Verranno rimossi titolo e piatti dello scroll.");
+    if (!ok) return;
+
+    try {
+      if (createStripMsg) createStripMsg.textContent = "Eliminazione...";
+
+      await api("/api/admin/strip/" + encodeURIComponent(key), {
+        method: "DELETE"
+      });
+
+      if (createStripMsg) createStripMsg.textContent = "✅ Categoria eliminata!";
+
+      // ricarica dropdown
+      await loadStripKeysIntoSelect();
+
+      // seleziona la prima rimasta e ricarica editor
+      if (stripKey && stripKey.options.length) {
+        stripKey.value = stripKey.options[0].value;
+        await refreshStripEditor();
+      }
+
+      alert("✅ Categoria eliminata: " + key);
+    } catch (e) {
+      if (createStripMsg) createStripMsg.textContent = "❌ " + e.message;
+      alert("❌ " + e.message);
+    }
+  };
+}
+
   /* =========================================================
       LOGIN / LOGOUT / INIT
      ========================================================= */
