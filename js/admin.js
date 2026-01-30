@@ -923,6 +923,180 @@ payload.allergens = Array.from(
   }
   function escapeAttr(s) { return escapeHtml(s).replace(/"/g, "&quot;"); }
 
+
+/* =========================================================
+   STRIP - CARICA + MOSTRA + MODIFICA ITEMS (EDIT/DELETE)
+   usa:
+     GET  /api/strip/:key
+     PUT  /api/admin/strip/:key   body: { title, items }
+   ========================================================= */
+
+async function loadStripData(key) {
+  if (!key) return { title: "", items: [] };
+  const res = await api("/api/strip/" + encodeURIComponent(key)).catch(() => ({ data: {} }));
+  const d = res && res.data && typeof res.data === "object" ? res.data : {};
+  return {
+    title: String(d.title || ""),
+    items: Array.isArray(d.items) ? d.items : []
+  };
+}
+
+async function saveStripData(key, title, items) {
+  await api("/api/admin/strip/" + encodeURIComponent(key), {
+    method: "PUT",
+    body: JSON.stringify({ title: title || "", items: Array.isArray(items) ? items : [] })
+  });
+}
+
+function renderStripItemsEditor(items) {
+  if (!stripItemsGrid) return;
+  stripItemsGrid.innerHTML = "";
+
+  if (!items || !items.length) {
+    stripItemsGrid.innerHTML = `<div style="opacity:.7; font-size:13px;">Nessun piatto presente in questa sezione.</div>`;
+    return;
+  }
+
+  items.forEach((it, idx) => {
+    const row = document.createElement("div");
+    row.className = "card";
+    row.style.padding = "12px";
+    row.style.borderRadius = "14px";
+    row.style.border = "1px solid rgba(0,0,0,.06)";
+
+    row.innerHTML = `
+      <div style="display:flex; gap:12px; align-items:center;">
+        <img src="${escapeAttr(it.image_url || "")}"
+             style="width:84px; height:64px; object-fit:cover; border-radius:12px; border:1px solid rgba(0,0,0,.1); background:#f2f2f2;"
+             onerror="this.style.display='none'">
+
+        <div style="flex:1; min-width:0;">
+          <div style="font-size:12px; opacity:.7; margin-bottom:6px;">Piatto #${idx + 1}</div>
+          <input data-s="name" value="${escapeAttr(it.name || "")}"
+                 style="width:100%; padding:10px; border-radius:10px; border:1px solid #e0e0e0; background:#fafafa;">
+          <div style="font-size:11px; opacity:.65; margin-top:6px; word-break:break-all;">
+            ${escapeHtml(it.image_url || "")}
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; margin-top:12px;">
+        <label class="btn secondary" style="flex:1; width:auto; padding:10px; text-align:center; cursor:pointer;">
+          Cambia foto
+          <input data-s="file" type="file" accept="image/*" style="display:none;">
+        </label>
+
+        <button class="btn success" data-s="save" style="flex:1; width:auto; padding:10px;">
+          Salva
+        </button>
+
+        <button class="btn danger" data-s="del" style="flex:1; width:auto; padding:10px;">
+          Elimina
+        </button>
+      </div>
+
+      <div data-s="msg" style="margin-top:8px; font-size:12px; text-align:center; opacity:.75;"></div>
+    `;
+
+    // handlers
+    const fileInput = row.querySelector('[data-s="file"]');
+    const msgEl = row.querySelector('[data-s="msg"]');
+    const nameInput = row.querySelector('[data-s="name"]');
+
+    // CAMBIA FOTO (upload immediato e aggiorna url in memoria)
+    fileInput.onchange = async () => {
+      const file = fileInput.files && fileInput.files[0];
+      if (!file) return;
+      msgEl.textContent = "Upload foto...";
+      try {
+        const url = await uploadOneFileToR2(file);
+        it.image_url = url; // aggiorna oggetto
+        // aggiorna preview
+        const img = row.querySelector("img");
+        if (img) {
+          img.style.display = "";
+          img.src = url;
+        }
+        msgEl.textContent = "✅ Foto aggiornata (ora premi Salva)";
+      } catch (e) {
+        msgEl.textContent = "❌ " + e.message;
+      }
+    };
+
+    // SALVA singolo item: salva TUTTA la lista
+    row.querySelector('[data-s="save"]').onclick = async () => {
+      const key = String(stripKey?.value || "").trim();
+      if (!key) return alert("Seleziona la sezione");
+
+      const title = String(stripTitle?.value || "").trim();
+      it.name = String(nameInput.value || "").trim();
+
+      if (!it.name) return alert("Nome piatto obbligatorio");
+
+      msgEl.textContent = "Salvataggio...";
+      try {
+        const { items: currentItems } = await loadStripData(key);
+        // ricostruisco lista mantenendo ordine, sostituisco l'elemento per id o per index
+        const next = currentItems.map((x, i) => {
+          const same =
+            (it.id != null && x.id === it.id) ||
+            (it.id == null && i === idx);
+          return same ? { ...x, name: it.name, image_url: it.image_url } : x;
+        });
+
+        await saveStripData(key, title, next);
+        msgEl.textContent = "✅ Salvato";
+        await refreshStripEditor(); // ricarica da DB e ridisegna
+      } catch (e) {
+        msgEl.textContent = "❌ " + e.message;
+      }
+    };
+
+    // ELIMINA item: salva TUTTA la lista senza quell'item
+    row.querySelector('[data-s="del"]').onclick = async () => {
+      const ok = confirm("Eliminare questo piatto dallo scroll?");
+      if (!ok) return;
+
+      const key = String(stripKey?.value || "").trim();
+      if (!key) return alert("Seleziona la sezione");
+      const title = String(stripTitle?.value || "").trim();
+
+      msgEl.textContent = "Eliminazione...";
+      try {
+        const { items: currentItems } = await loadStripData(key);
+        const next = currentItems.filter((x, i) => {
+          const same =
+            (it.id != null && x.id === it.id) ||
+            (it.id == null && i === idx);
+          return !same;
+        });
+
+        await saveStripData(key, title, next);
+        msgEl.textContent = "✅ Eliminato";
+        await refreshStripEditor();
+      } catch (e) {
+        msgEl.textContent = "❌ " + e.message;
+      }
+    };
+
+    stripItemsGrid.appendChild(row);
+  });
+}
+
+// ricarica titolo + lista in editor
+async function refreshStripEditor() {
+  const key = String(stripKey?.value || "").trim();
+  if (!key) return;
+
+  if (stripMsg) stripMsg.textContent = "Caricamento sezione...";
+  const d = await loadStripData(key);
+
+  if (stripTitle) stripTitle.value = d.title || "";
+  renderStripItemsEditor(d.items);
+
+  if (stripMsg) stripMsg.textContent = "OK";
+}
+
 // =======================
 // SALVA TITOLO STRIP
 // =======================
