@@ -685,20 +685,24 @@ if (galSaveBtn) {
     }
 
     try {
+      const urls = [];
+
+      // 1️⃣ upload di TUTTE le immagini su R2
       for (const file of gal_files.files) {
         const imageUrl = await uploadOneFileToR2(file);
-
-        // 🔴 QUESTA È LA PARTE CHE MANCAVA
-        await api("/api/admin/gallery", {
-          method: "POST",
-          body: JSON.stringify({ image_url: imageUrl })
-        });
+        urls.push(imageUrl);
       }
+
+      // 2️⃣ UNA SOLA chiamata → sostituisce tutta la gallery
+      await api("/api/admin/gallery", {
+        method: "POST",
+        body: JSON.stringify({ images: urls })
+      });
 
       gal_files.value = "";
       if (galPreview) galPreview.innerHTML = "";
 
-      alert("✅ Foto caricate in gallery!");
+      alert("✅ Gallery aggiornata!");
     } catch (e) {
       alert("❌ " + e.message);
     }
