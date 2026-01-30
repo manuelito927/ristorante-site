@@ -177,7 +177,7 @@ function openMenu(){
         return;
       }
 
-      if (titleEl && data.title) titleEl.textContent = data.title;
+if (titleEl) titleEl.textContent = "Le nostre proposte";
 
       if (wrap) {
         wrap.innerHTML = (data.items || []).map(it => `
