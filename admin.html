@@ -313,6 +313,33 @@
   <div class="form-group">
     <label>Chiave sezione</label>
     <select id="strip_key">
+      <hr>
+
+<h2 style="margin-top:0;">Gestione categorie</h2>
+<note>Crea una nuova sezione (categoria) o elimina quella selezionata.</note>
+
+<div class="form-group" style="margin-top:14px;">
+  <label>Nuova key categoria (es. piatti_gourmet)</label>
+  <input id="new_strip_key" placeholder="piatti_gourmet">
+  <note>Solo a-z 0-9 _ - (2-30 caratteri)</note>
+</div>
+
+<div class="form-group">
+  <label>Titolo categoria (es. Gourmet)</label>
+  <input id="new_strip_title" placeholder="Gourmet">
+</div>
+
+<div style="display:flex; gap:10px; flex-wrap:wrap;">
+  <button class="btn success" id="createStripCategory" style="width:auto; padding:14px 22px;">
+    Crea categoria
+  </button>
+
+  <button class="btn danger" id="deleteStripCategory" style="width:auto; padding:14px 22px;">
+    Elimina categoria selezionata
+  </button>
+</div>
+
+<div id="createStripMsg" style="margin-top:10px; font-size:13px; opacity:.75;"></div>
       <option value="pizze">Pizze</option>
       <option value="antipasti">Antipasti</option>
       <option value="dolci">Dolci</option>
