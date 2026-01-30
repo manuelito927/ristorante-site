@@ -680,13 +680,19 @@ if (saveHomeBtn) {
 
 if (galSaveBtn) {
   galSaveBtn.onclick = async () => {
-    if (!gal_files || !gal_files.files || !gal_files.files.length) {
+    if (!gal_files?.files?.length) {
       return alert("Seleziona almeno una foto");
     }
 
     try {
       for (const file of gal_files.files) {
-        await uploadOneFileToR2(file);
+        const imageUrl = await uploadOneFileToR2(file);
+
+        // 🔴 QUESTA È LA PARTE CHE MANCAVA
+        await api("/api/admin/gallery", {
+          method: "POST",
+          body: JSON.stringify({ image_url: imageUrl })
+        });
       }
 
       gal_files.value = "";
@@ -694,7 +700,7 @@ if (galSaveBtn) {
 
       alert("✅ Foto caricate in gallery!");
     } catch (e) {
-      alert("❌ Upload gallery fallito: " + e.message);
+      alert("❌ " + e.message);
     }
   };
 }
