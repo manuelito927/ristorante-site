@@ -201,7 +201,7 @@
     /* Caricamento Dati dal Worker */
     (async function(){
       try {
-        const API = "https://still-haze-01c8.filosofiaefficace.workers.dev";
+const API = (window.API_BASE || "https://still-haze-01c8.filosofiaefficace.workers.dev").trim();
         const res = await fetch(API + "/api/page/come-funziona?t=" + Date.now(), { cache: "no-store" });
         const json = await res.json();
         const d = json.data || {};
