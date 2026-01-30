@@ -159,11 +159,11 @@
     if(!grid) return;
 
     try{
-      const res = await fetch("/api/page/gallery?t=" + Date.now(), { cache: "no-store" });
-      const js = await res.json().catch(() => ({}));
-      console.log("GALLERY JSON:", js);
 
+const res = await fetch("/api/gallery?t=" + Date.now(), { cache: "no-store" });
+const js = await res.json().catch(() => ({}));
 const urls = Array.isArray(js.images) ? js.images : [];
+
       if(!urls.length){
         grid.innerHTML = `<div class="empty">Nessuna foto ancora. Vai in Admin → Gallery e aggiungile.</div>`;
         return;
