@@ -982,9 +982,7 @@ function renderStripItemsEditor(items) {
           <div style="font-size:12px; opacity:.7; margin-bottom:6px;">Piatto #${idx + 1}</div>
           <input data-s="name" value="${escapeAttr(it.name || "")}"
                  style="width:100%; padding:10px; border-radius:10px; border:1px solid #e0e0e0; background:#fafafa;">
-          <div style="font-size:11px; opacity:.65; margin-top:6px; word-break:break-all;">
-            ${escapeHtml(it.image_url || "")}
-          </div>
+
         </div>
       </div>
 
