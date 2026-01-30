@@ -1004,7 +1004,7 @@ const toggleBtn = row.querySelector('[data-s="toggle"]');
 const editor = row.querySelector('[data-s="editor"]');
 
 toggleBtn.onclick = () => {
-  const isOpen = openIndex === idx;
+  const isOpen = stripOpenIndex === idx;
 
   // chiude tutti
   stripItemsGrid
@@ -1012,16 +1012,14 @@ toggleBtn.onclick = () => {
     .forEach(e => e.hidden = true);
 
   if (isOpen) {
-    openIndex = null;
+    stripOpenIndex = null;
   } else {
     editor.hidden = false;
-    openIndex = idx;
+    stripOpenIndex = idx;
 
-    // porta l’item in vista (mobile friendly)
     row.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 };
-
     // handlers
     const fileInput = row.querySelector('[data-s="file"]');
     const msgEl = row.querySelector('[data-s="msg"]');
