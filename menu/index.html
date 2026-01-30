@@ -53,30 +53,30 @@
 
   <!-- ✅ COVER -->
   <script>
-  (async function(){
-    const hero = document.getElementById("pageHero");
-    if (!hero) return;
+(async function(){
+  const hero = document.getElementById("pageHero");
+  if (!hero) return;
 
-    const key = hero.dataset.coverKey || "menu";
+  const key = hero.dataset.coverKey || "menu";
 
-    try {
-      const res = await fetch("/api/page/covers", { cache: "no-store" });
-      const json = await res.json().catch(() => ({}));
-const url = (json.data || {})[key];
+  try {
+    const base = (window.API_BASE || "https://still-haze-01c8.filosofiaefficace.workers.dev").trim();
+    const res = await fetch(base + "/api/page/covers", { cache: "no-store" });
+    const json = await res.json().catch(() => ({}));
+    const url = (json.data || {})[key];
 
-      if (url && String(url).trim()) {
-        hero.style.backgroundImage =
-          `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url("${url}")`;
-        hero.style.backgroundSize = "cover";
-        hero.style.backgroundPosition = "center";
-        hero.style.backgroundRepeat = "no-repeat";
-      }
-    } catch(e){
-      console.warn("Cover non caricata:", e);
+    if (url && String(url).trim()) {
+      hero.style.backgroundImage =
+        `linear-gradient(rgba(0,0,0,.3), rgba(0,0,0,.3)), url("${url}")`;
+      hero.style.backgroundSize = "cover";
+      hero.style.backgroundPosition = "center";
+      hero.style.backgroundRepeat = "no-repeat";
     }
-  })();
-  </script>
-
+  } catch(e){
+    console.warn("Cover non caricata:", e);
+  }
+})();
+</script>
   <!-- ✅ MENU DIGITALE -->
   <script src="/js/menu.js?v=4"></script>
 
