@@ -203,22 +203,34 @@ function openMenu(){
 
   // fallback se lista vuota
   if (!keys.length) keys = ["pizze"];
+// 2) render tabs (usa TITLE invece della key)
+if (cats) {
+  cats.innerHTML = "";
 
-  // 2) render tabs
-  if (cats) {
-    cats.innerHTML = "";
-    keys.forEach((k, i) => cats.appendChild(mkBtn(k, k, i === 0)));
-
-    cats.addEventListener("click", (e) => {
-      const btn = e.target.closest(".cat-btn");
-      if (!btn) return;
-
-      cats.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("is-active"));
-      btn.classList.add("is-active");
-
-      loadStrip(btn.dataset.key);
-    });
+  const labels = {};
+  for (const k of keys) {
+    try {
+      const r = await fetch(base + "/api/strip/" + encodeURIComponent(k), { cache: "no-store" });
+      const jj = await r.json();
+      const d = jj && jj.data ? jj.data : null;
+      labels[k] = (d && d.title && String(d.title).trim()) ? String(d.title).trim() : k;
+    } catch {
+      labels[k] = k;
+    }
   }
+
+  keys.forEach((k, i) => cats.appendChild(mkBtn(k, labels[k], i === 0)));
+
+  cats.addEventListener("click", (e) => {
+    const btn = e.target.closest(".cat-btn");
+    if (!btn) return;
+
+    cats.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("is-active"));
+    btn.classList.add("is-active");
+
+    loadStrip(btn.dataset.key);
+  });
+}
 
   // default: prima categoria
   loadStrip(keys[0]);
