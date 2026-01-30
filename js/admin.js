@@ -959,7 +959,7 @@ async function saveStripData(key, title, items) {
 function renderStripItemsEditor(items) {
   if (!stripItemsGrid) return;
   stripItemsGrid.innerHTML = "";
-
+let openIndex = null;
   if (!items || !items.length) {
     stripItemsGrid.innerHTML = `<div style="opacity:.7; font-size:13px;">Nessun piatto presente in questa sezione.</div>`;
     return;
