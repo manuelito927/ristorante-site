@@ -160,7 +160,10 @@
 
     try{
 
-const res = await fetch("/api/gallery?t=" + Date.now(), { cache: "no-store" });
+const res = await fetch(
+  "https://still-haze-01c8.filosofiaefficace.workers.dev/api/gallery?t=" + Date.now(),
+  { cache: "no-store" }
+);
 const js = await res.json().catch(() => ({}));
 const urls = Array.isArray(js.images) ? js.images : [];
 
