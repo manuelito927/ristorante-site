@@ -852,14 +852,15 @@ if (createStripCategoryBtn) {
       try {
         showApp(true);
 await Promise.all([
-  // dopo aver caricato le keys, carica editor strip della sezione selezionata
-setTimeout(() => refreshStripEditor(), 0);
   loadItems(),
   loadComeFunziona(),
   loadReservations(),
   loadHome(),
   loadStripKeysIntoSelect()
 ]);
+
+// dopo che le keys sono caricate, ricarico l'editor della sezione selezionata
+await refreshStripEditor();
       } catch (e) {
         showApp(false);
         alert("Errore Accesso: " + e.message);
