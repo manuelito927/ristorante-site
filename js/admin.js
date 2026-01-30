@@ -678,6 +678,27 @@ if (saveHomeBtn) {
     });
   }
 
+if (galSaveBtn) {
+  galSaveBtn.onclick = async () => {
+    if (!gal_files || !gal_files.files || !gal_files.files.length) {
+      return alert("Seleziona almeno una foto");
+    }
+
+    try {
+      for (const file of gal_files.files) {
+        await uploadOneFileToR2(file);
+      }
+
+      gal_files.value = "";
+      if (galPreview) galPreview.innerHTML = "";
+
+      alert("✅ Foto caricate in gallery!");
+    } catch (e) {
+      alert("❌ Upload gallery fallito: " + e.message);
+    }
+  };
+}
+
 /* =========================================================
    COPERTINE PAGINE
    ========================================================= */
