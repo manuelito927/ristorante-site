@@ -1004,7 +1004,22 @@ const toggleBtn = row.querySelector('[data-s="toggle"]');
 const editor = row.querySelector('[data-s="editor"]');
 
 toggleBtn.onclick = () => {
-  editor.hidden = !editor.hidden;
+  const isOpen = openIndex === idx;
+
+  // chiude tutti
+  stripItemsGrid
+    .querySelectorAll('[data-s="editor"]')
+    .forEach(e => e.hidden = true);
+
+  if (isOpen) {
+    openIndex = null;
+  } else {
+    editor.hidden = false;
+    openIndex = idx;
+
+    // porta l’item in vista (mobile friendly)
+    row.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 };
 
     // handlers
