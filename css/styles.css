@@ -687,3 +687,14 @@ body{
   letter-spacing: 0.6px;
 }
 
+/* =========================
+   FIX: TOGLIE SCRITTA NERA SOPRA LE COPERTINE (pagine interne)
+   Non tocca le card HOME
+   ========================= */
+
+.hero > h1,
+.hero > h2,
+.hero > p,
+.hero .heroText {
+  display: none !important;
+}
