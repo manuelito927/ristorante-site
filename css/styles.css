@@ -698,3 +698,8 @@ body{
 .hero .heroText {
   display: none !important;
 }
+
+/* se nelle pagine interne c'è una card dentro la hero, la nascondo */
+.hero .hero-card:not(.home-hero-card){
+  display: none !important;
+}
