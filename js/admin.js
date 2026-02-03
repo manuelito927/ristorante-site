@@ -326,12 +326,6 @@ const items = res.items || res.data?.items || [];
     </select>
   </div>
 </div>
-
-          <div class="form-group" style="margin-bottom:15px;">
-            <label style="display:block; font-size:12px; font-weight:bold;">Immagine URL</label>
-            <input data-k="image_url" value="${escapeAttr(it.image_url || "")}" style="width:100%;"/>
-          </div>
-
           ${allergensHtml}
 
           <div class="row" style="display:flex; gap:10px;">
