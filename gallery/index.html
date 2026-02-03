@@ -192,6 +192,47 @@ applyLangToStaticTexts(); // <-- aggiungi questa riga
     }
   })();
   </script>
+<script>
+  function getLang(){
+    const q = new URLSearchParams(location.search).get("lang");
+    const saved = localStorage.getItem("lang");
+    return (q || saved || "it").toLowerCase().startsWith("en") ? "en" : "it";
+  }
 
+  function setText(id, value){
+    const el = document.getElementById(id);
+    if(el) el.textContent = value || "";
+  }
+
+  function applyLangToStaticTexts(){
+    const lang = getLang();
+    localStorage.setItem("lang", lang);
+    document.documentElement.lang = lang;
+
+    const t = {
+      it: {
+        h1: "Gallery",
+        title: "Le nostre foto",
+        sub: "Foto gestite dall’Admin (aggiungi / togli quando vuoi).",
+        empty: "Nessuna foto ancora. Vai in Admin → Gallery e aggiungile."
+      },
+      en: {
+        h1: "Gallery",
+        title: "Our photos",
+        sub: "Photos managed from Admin (add / remove anytime).",
+        empty: "No photos yet. Go to Admin → Gallery and add them."
+      }
+    }[lang];
+
+    setText("t_gallery_h1", t.h1);
+    setText("t_gallery_title", t.title);
+    setText("t_gallery_sub", t.sub);
+
+    const emptyEl = document.getElementById("t_gallery_empty");
+    if(emptyEl) emptyEl.textContent = t.empty;
+  }
+
+  applyLangToStaticTexts();
+</script>
 </body>
 </html>
