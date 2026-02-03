@@ -546,8 +546,6 @@ if (saveHomeBtn) {
             pets_title: "Amici a 4 zampe //",
       pets_text: cf_pets ? cf_pets.value.trim() : "",
 
-      story_it: story_it ? story_it.value.trim() : "",
-      story_en: story_en ? story_en.value.trim() : ""
     };
 
     await api("/api/admin/page/come-funziona", {
