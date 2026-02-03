@@ -149,30 +149,6 @@ menu.querySelectorAll("a").forEach(a => {
 
     if (!href || href === "#") return;
 
-    // ✅ CASO ANCORA (/#recensioni o #recensioni)
-    if (href.includes("#")) {
-      e.preventDefault();
-
-      const hash = href.split("#")[1] || "";
-      const targetId = decodeURIComponent(hash);
-
-      // se NON sei in home → vai a /#recensioni (normale)
-      if (location.pathname !== "/") {
-        setTimeout(() => { window.location.href = "/#" + targetId; }, 80);
-        return;
-      }
-
-      // ✅ sei già in home → forza scroll vero (Safari-friendly)
-      setTimeout(() => {
-        const el = document.getElementById(targetId);
-        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-        // aggiorna anche la URL con l’hash
-        history.replaceState(null, "", "#"+targetId);
-      }, 120);
-
-      return;
-    }
-
     // ✅ tutte le altre pagine (menu/gallery/prenota ecc.)
     e.preventDefault();
     setTimeout(() => { window.location.href = href; }, 80);
