@@ -167,7 +167,8 @@ const js = await res.json().catch(() => ({}));
 const urls = Array.isArray(js.images) ? js.images : [];
 
       if(!urls.length){
-        grid.innerHTML = `<div class="empty">Nessuna foto ancora. Vai in Admin → Gallery e aggiungile.</div>`;
+grid.innerHTML = `<div class="empty" id="t_gallery_empty"></div>`;
+applyLangToStaticTexts(); // <-- aggiungi questa riga
         return;
       }
 
