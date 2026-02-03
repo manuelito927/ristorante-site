@@ -161,10 +161,8 @@ const url = (json.data || {})[key];
 
     try{
 
-const res = await fetch(
-  "https://still-haze-01c8.filosofiaefficace.workers.dev/api/gallery?t=" + Date.now(),
-  { cache: "no-store" }
-);
+const base = (window.API_BASE || "https://still-haze-01c8.filosofiaefficace.workers.dev").trim();
+const res = await fetch(base + "/api/gallery?t=" + Date.now(), { cache: "no-store" });
 const js = await res.json().catch(() => ({}));
 const urls = Array.isArray(js.images) ? js.images : [];
 
