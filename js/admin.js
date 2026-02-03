@@ -1198,6 +1198,7 @@ async function refreshStripEditor() {
   const d = await loadStripData(key);
 
   if (stripTitle) stripTitle.value = d.title || "";
+  if (stripOrder) stripOrder.value = String(d.order ?? 0);
   renderStripItemsEditor(d.items);
 
   if (stripMsg) stripMsg.textContent = "OK";
