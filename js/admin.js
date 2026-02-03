@@ -1222,7 +1222,7 @@ const order = Number(stripOrder?.value || 0);
 
       await api("/api/admin/strip/" + encodeURIComponent(key), {
         method: "PUT",
-        body: JSON.stringify({ title, items })
+body: JSON.stringify({ title, order, items })
       });
 
       alert("✅ Titolo salvato");
