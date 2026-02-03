@@ -68,6 +68,62 @@
 
 <script src="/js/config.js"></script>
 <script>
+(function(){
+  // lingua globale (default IT)
+  const lang = (localStorage.getItem("lang") || "it").toLowerCase();
+  const btn = document.getElementById("langBtn");
+  if (btn) btn.textContent = lang.toUpperCase();
+
+  // toggle lingua
+  if (btn) {
+    btn.addEventListener("click", () => {
+      const next = (localStorage.getItem("lang") || "it") === "it" ? "en" : "it";
+      localStorage.setItem("lang", next);
+      location.reload();
+    });
+  }
+
+  // traduzioni fisse (quelle scritte in HTML)
+  const T = {
+    it: {
+      menu: "MENU DIGITALE",
+      how: "COME FUNZIONA",
+      book: "PRENOTA",
+      gallery: "GALLERY",
+      reviews: "RECENSIONI",
+      home: "HOME",
+      offers: "Le nostre proposte"
+    },
+    en: {
+      menu: "DIGITAL MENU",
+      how: "HOW IT WORKS",
+      book: "BOOK A TABLE",
+      gallery: "GALLERY",
+      reviews: "REVIEWS",
+      home: "HOME",
+      offers: "Our suggestions"
+    }
+  };
+
+  const tr = T[lang] || T.it;
+
+  // cambia titolo sezione strip
+  const titleEl = document.querySelector(".piatti-title");
+  if (titleEl) titleEl.textContent = tr.offers;
+
+  // cambia voci menu mobile (ordine come nel tuo html)
+  const links = document.querySelectorAll(".mobile-menu__list .mobile-menu__link");
+  if (links && links.length >= 6) {
+    links[0].textContent = tr.menu;
+    links[1].textContent = tr.how;
+    links[2].textContent = tr.book;
+    links[3].textContent = tr.gallery;
+    links[4].textContent = tr.reviews;
+    links[5].textContent = tr.home;
+  }
+})();
+</script>
+<script>
 (async function(){
   const hero = document.getElementById("pageHero");
   if(!hero) return;
