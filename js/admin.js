@@ -56,6 +56,7 @@ const homeMsg = $("homeMsg");
 // 🍕 STRIP PIATTI (titolo + immagini)
 const stripKey = $("strip_key");
 const stripTitle = $("strip_title");
+const stripOrder = $("strip_order"); // ✅ ordine categoria
 const saveStripTitleBtn = $("saveStripTitle");
 const stripItemName = $("strip_item_name");
 const stripItemFile = $("strip_item_file");
