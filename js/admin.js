@@ -667,6 +667,53 @@ function fmtDate(d) {
   if (refreshReservationsBtn) refreshReservationsBtn.onclick = () => loadReservations();
 
   /* =========================================================
+      PRENOTAZIONI - SETTINGS (ON/OFF + WHATSAPP)
+      usa:
+        GET  /api/settings/booking
+        PUT  /api/admin/settings/booking
+     ========================================================= */
+
+  async function loadBookingSettings(){
+    try {
+      const res = await api("/api/settings/booking"); // { enabled, whatsapp }
+      const d = res && res.data ? res.data : res;
+
+      if (bookingEnabled) bookingEnabled.checked = !!d.enabled;
+      if (bookingWhatsapp) bookingWhatsapp.value = String(d.whatsapp || "").trim();
+
+      if (bookingSettingsMsg) bookingSettingsMsg.textContent = "Impostazioni caricate ✅";
+    } catch (e) {
+      // se endpoint non esiste ancora, non bloccare la dashboard
+      if (bookingSettingsMsg) bookingSettingsMsg.textContent = "Impostazioni non disponibili (endpoint non ancora creato)";
+      console.warn("loadBookingSettings:", e.message);
+    }
+  }
+
+  async function saveBookingSettings(){
+    const enabled = bookingEnabled ? !!bookingEnabled.checked : false;
+    const whatsapp = bookingWhatsapp ? String(bookingWhatsapp.value || "").trim() : "";
+
+    try {
+      if (bookingSettingsMsg) bookingSettingsMsg.textContent = "Salvataggio...";
+      await api("/api/admin/settings/booking", {
+        method: "PUT",
+        body: JSON.stringify({ enabled, whatsapp })
+      });
+      if (bookingSettingsMsg) bookingSettingsMsg.textContent = "Salvato ✅";
+      alert("✅ Impostazioni prenotazioni salvate!");
+    } catch (e) {
+      if (bookingSettingsMsg) bookingSettingsMsg.textContent = "❌ " + e.message;
+      alert("❌ " + e.message);
+    }
+  }
+
+  if (saveBookingSettingsBtn) {
+    saveBookingSettingsBtn.onclick = () => saveBookingSettings();
+  }
+
+
+
+  /* =========================================================
       GALLERY - UPLOAD R2 + DB
      ========================================================= */
 
