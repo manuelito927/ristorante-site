@@ -858,7 +858,11 @@ if (createStripCategoryBtn) {
       // PUT /api/admin/strip/<key>  body: { title:"...", items:[] }
       await api("/api/admin/strip/" + encodeURIComponent(key), {
         method: "PUT",
-        body: JSON.stringify({ title: title || key, items: [] })
+body: JSON.stringify({
+  title: title || key,
+  order: 99,
+  items: []
+})
       });
 
       if (createStripMsg) createStripMsg.textContent = "✅ Categoria creata!";
