@@ -162,7 +162,6 @@ const uniqueAllergens = [...new Set(allergens)];
         $("category").value = "";
         if ($("category_en")) $("category_en").value = "";
         $("position").value = "0";
-        $("image_url").value = "";
         $("is_available").value = "true";
 
         // reset checkbox allergeni
