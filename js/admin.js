@@ -1033,10 +1033,14 @@ async function loadStripData(key) {
   };
 }
 
-async function saveStripData(key, title, items) {
+async function saveStripData(key, title, order, items) {
   await api("/api/admin/strip/" + encodeURIComponent(key), {
     method: "PUT",
-    body: JSON.stringify({ title: title || "", items: Array.isArray(items) ? items : [] })
+    body: JSON.stringify({
+      title: title || "",
+      order: Number(order || 0),
+      items: Array.isArray(items) ? items : []
+    })
   });
 }
 
