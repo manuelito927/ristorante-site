@@ -1211,6 +1211,7 @@ if (saveStripTitleBtn) {
   saveStripTitleBtn.onclick = async () => {
     const key = String(stripKey?.value || "").trim();
     const title = String(stripTitle?.value || "").trim();
+const order = Number(stripOrder?.value || 0);
 
     if (!key) return alert("Seleziona una sezione");
     if (!title) return alert("Inserisci un titolo");
