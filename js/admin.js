@@ -861,7 +861,7 @@ if (createStripCategoryBtn) {
         method: "PUT",
 body: JSON.stringify({
   title: title || key,
-  order: 99,
+order: Number(newStripOrder?.value || 0),
   items: []
 })
       });
