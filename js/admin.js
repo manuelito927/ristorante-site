@@ -869,6 +869,8 @@ order: Number(newStripOrder?.value || 0),
       if (createStripMsg) createStripMsg.textContent = "✅ Categoria creata!";
       if (newStripKey) newStripKey.value = "";
       if (newStripTitle) newStripTitle.value = "";
+if (newStripOrder) newStripOrder.value = "";
+
 
       // ricarica dropdown
       await loadStripKeysIntoSelect();
