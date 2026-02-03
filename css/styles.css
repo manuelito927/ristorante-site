@@ -703,3 +703,17 @@ body{
 .hero .hero-card:not(.home-hero-card){
   display: none !important;
 }
+
+.lang-btn{
+  margin-left: auto;
+  margin-right: 12px;
+  border: 1px solid rgba(255,255,255,.5);
+  background: rgba(0,0,0,.25);
+  color: #fff;
+  padding: 8px 10px;
+  border-radius: 12px;
+  font: inherit;
+  cursor: pointer;
+  letter-spacing: .06em;
+}
+
