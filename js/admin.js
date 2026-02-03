@@ -967,6 +967,7 @@ loadItems()
   .then(loadReservations)
   .then(loadHome)
   .then(loadStripKeysIntoSelect)
+  .then(loadBookingSettings)
   .then(() => refreshStripEditor())
   .catch(() => showApp(false));
   } else {
