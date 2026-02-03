@@ -66,6 +66,7 @@ const stripMsg = $("stripMsg");
 // ➕ CREA CATEGORIA STRIP
 const newStripKey = $("new_strip_key");
 const newStripTitle = $("new_strip_title");
+const newStripOrder = $("new_strip_order");
 const createStripCategoryBtn = $("createStripCategory");
 const createStripMsg = $("createStripMsg");
 const deleteStripCategoryBtn = $("deleteStripCategory");
