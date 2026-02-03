@@ -211,9 +211,21 @@ const API = (window.API_BASE || "https://still-haze-01c8.filosofiaefficace.worke
           if(el) el.textContent = val || "";
         };
 
-        set("hours_it_title", d.hours_it_title);
-        set("hours_it_text", d.hours_it_text);
-        set("hours_en_text", d.hours_en_text);
+        const lang = localStorage.getItem("lang") || "it";
+
+set(
+  "hours_it_title",
+  lang === "en" ? d.hours_en_title || d.hours_it_title : d.hours_it_title
+);
+
+set(
+  "hours_it_text",
+  lang === "en" ? d.hours_en_text || d.hours_it_text : d.hours_it_text
+);
+
+// il paragrafo inglese sotto NON serve più
+const enBlock = document.getElementById("hours_en_text");
+if (enBlock) enBlock.style.display = "none";
         set("phone", d.phone);
         set("address", d.address);
         set("takeaway_title", d.takeaway_title);
