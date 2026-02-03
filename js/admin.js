@@ -938,9 +938,9 @@ await Promise.all([
   loadComeFunziona(),
   loadReservations(),
   loadHome(),
-  loadStripKeysIntoSelect()
+  loadStripKeysIntoSelect(),
+  loadBookingSettings()
 ]);
-
 // dopo che le keys sono caricate, ricarico l'editor della sezione selezionata
 await refreshStripEditor();
       } catch (e) {
