@@ -44,8 +44,6 @@ const coverFile = $("cover_file");
 const saveCoverBtn = $("saveCover");
 
 // 🏠 HOME
-const homeTitle = $("homeTitle");
-const homeBody = $("homeBody");
 const saveHomeBtn = $("saveHome");
 
 const homeCardsEditor = $("homeCardsEditor");
