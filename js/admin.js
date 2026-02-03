@@ -30,8 +30,6 @@ const API = "https://still-haze-01c8.filosofiaefficace.workers.dev";
   const cf_takeaway = $("cf_takeaway");
   const cf_gluten = $("cf_gluten");
   const cf_lactose = $("cf_lactose");
-    const story_it = $("story_it");
-  const story_en = $("story_en");
   const cf_pets = $("cf_pets");
 
   // ✅ GALLERY (UPLOAD FILE)
