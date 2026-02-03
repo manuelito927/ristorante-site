@@ -1021,11 +1021,14 @@ payload.allergens = Array.from(
    ========================================================= */
 
 async function loadStripData(key) {
-  if (!key) return { title: "", items: [] };
+  if (!key) return { title: "", order: 0, items: [] };
+
   const res = await api("/api/strip/" + encodeURIComponent(key)).catch(() => ({ data: {} }));
   const d = res && res.data && typeof res.data === "object" ? res.data : {};
+
   return {
     title: String(d.title || ""),
+    order: Number.isFinite(Number(d.order)) ? Number(d.order) : 0,
     items: Array.isArray(d.items) ? d.items : []
   };
 }
