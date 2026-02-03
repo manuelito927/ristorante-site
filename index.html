@@ -139,7 +139,23 @@ function openMenu(){
         isOpen ? closeMenu() : openMenu();
       });
       back.addEventListener("click", closeMenu);
-      menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
+menu.querySelectorAll("a").forEach(a => {
+  a.addEventListener("click", (e) => {
+    const href = a.getAttribute("href") || "";
+    if (!href || href === "#") {
+      closeMenu();
+      return;
+    }
+
+    e.preventDefault();   // ✅ blocca il click “normale”
+    closeMenu();          // ✅ chiude il menu
+
+    // ✅ dopo un attimo, naviga (Safari non lo annulla)
+    setTimeout(() => {
+      window.location.href = href;
+    }, 80);
+  });
+});
     }
 
 
