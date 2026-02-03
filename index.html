@@ -161,13 +161,21 @@ const res = await fetch((window.API_BASE || "https://still-haze-01c8.filosofiaef
     const wrap = document.getElementById("homeCards");
     if(!wrap) return;
 
-    wrap.innerHTML = cards.map(c => `
-<div class="hero-card home-hero-card">
-        <h1>${c.title || ""}</h1>
-        <p>${c.text || ""}</p>
-        <a class="heroBtn" href="${c.href || "#"}">${c.buttonText || "SCOPRI"}</a>
-      </div>
-    `).join("");
+const lang = (localStorage.getItem("lang") || "it").toLowerCase();
+
+wrap.innerHTML = cards.map(c => {
+  const title = (lang === "en" ? (c.title_en || c.title) : c.title) || "";
+  const text = (lang === "en" ? (c.text_en || c.text) : c.text) || "";
+  const buttonText = (lang === "en" ? (c.buttonText_en || c.buttonText) : c.buttonText) || "SCOPRI";
+
+  return `
+    <div class="hero-card home-hero-card">
+      <h1>${title}</h1>
+      <p>${text}</p>
+      <a class="heroBtn" href="${c.href || "#"}">${buttonText}</a>
+    </div>
+  `;
+}).join("");
 
   } catch(e){
     console.warn("Home cards non caricate", e);
