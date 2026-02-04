@@ -717,3 +717,70 @@ body{
   letter-spacing: .06em;
 }
 
+/* ====== LANGUAGE BUTTON (flags) ====== */
+.lang-btn{
+  margin-left:auto;
+  margin-right: 12px;
+  width: 54px;
+  height: 34px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+
+  border: 1px solid rgba(0,0,0,.12);
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  border-radius: 999px;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* pallini-flag */
+.lang-btn .flag{
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,.12);
+  box-shadow: 0 2px 6px rgba(0,0,0,.10);
+}
+
+/* 🇮🇹 IT flag */
+.lang-btn .flag-it{
+  background:
+    linear-gradient(90deg,
+      #009246 0 33.33%,
+      #ffffff 33.33% 66.66%,
+      #ce2b37 66.66% 100%);
+}
+
+/* 🇬🇧 EN flag (stile semplice, pulito, riconoscibile) */
+.lang-btn .flag-en{
+  background:
+    linear-gradient(#012169, #012169);
+  position: relative;
+}
+.lang-btn .flag-en::before,
+.lang-btn .flag-en::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(90deg, transparent 42%, #fff 42% 58%, transparent 58%),
+    linear-gradient(transparent 42%, #fff 42% 58%, transparent 58%);
+  opacity: .95;
+}
+.lang-btn .flag-en::after{
+  background:
+    linear-gradient(90deg, transparent 46%, #C8102E 46% 54%, transparent 54%),
+    linear-gradient(transparent 46%, #C8102E 46% 54%, transparent 54%);
+}
+
+/* mostra solo la bandiera della lingua ATTIVA */
+.lang-btn.is-it .flag-en{ display:none; }
+.lang-btn.is-en .flag-it{ display:none; }
+
+
