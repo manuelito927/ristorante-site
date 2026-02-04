@@ -503,6 +503,7 @@ function renderHomeCardsEditor(cards){
   const norm = normalizeHomeCards(cards);
 
   homeCardsEditor.innerHTML = norm.map((c, i) => `
+      bindHomeSaveButtons();
     <div class="card" style="padding:14px; border-radius:14px; border:1px solid rgba(0,0,0,.06);">
       <div style="font-weight:800; margin-bottom:10px;">Card ${i+1}</div>
 
