@@ -173,6 +173,7 @@ category_order: Number((categoryOrder ? categoryOrder.value : 0) || 0),
         $("category").value = "";
         if ($("category_en")) $("category_en").value = "";
         $("position").value = "0";
+        if (categoryOrder) categoryOrder.value = "0";
         $("is_available").value = "true";
 
         // reset checkbox allergeni
