@@ -1205,49 +1205,6 @@ function renderStripItemsEditor(items) {
     return;
   }
 
-// 🔍 input ricerca (se non esiste lo crea)
-let searchInput = document.getElementById("searchProducts");
-if (!searchInput) {
-  searchInput = document.createElement("input");
-  searchInput.id = "searchProducts";
-  searchInput.placeholder = "Cerca prodotto...";
-  searchInput.style = "width:100%; padding:12px; margin-bottom:15px; border-radius:10px; border:1px solid #ddd;";
-  grid.parentElement.prepend(searchInput);
-}
-
-function renderItems(list) {
-  grid.innerHTML = "";
-
-  if (!list.length) {
-    grid.innerHTML = "<div class='card'>Nessun prodotto trovato.</div>";
-    return;
-  }
-
-  list.forEach((it) => {
-    const wrap = document.createElement("div");
-    wrap.className = "item-card card";
-    wrap.style.padding = "14px";
-    wrap.innerHTML = `
-      <strong>${escapeHtml(it.name)}</strong><br>
-      <small>${escapeHtml(it.category)}</small><br>
-      <strong>€ ${fromCents(it.price_cents)}</strong>
-    `;
-    grid.appendChild(wrap);
-  });
-}
-
-// prima render
-renderItems(items);
-
-// live search
-searchInput.oninput = () => {
-  const q = searchInput.value.toLowerCase();
-  const filtered = items.filter(it =>
-    it.name.toLowerCase().includes(q) ||
-    it.category.toLowerCase().includes(q)
-  );
-  renderItems(filtered);
-};
 }
 
 // ricarica titolo + lista in editor
