@@ -164,9 +164,9 @@ const res = await fetch((window.API_BASE || "https://still-haze-01c8.filosofiaef
 const lang = (localStorage.getItem("lang") || "it").toLowerCase();
 
 wrap.innerHTML = cards.map(c => {
-  const title = (lang === "en" ? (c.title_en || c.title) : c.title) || "";
-  const text = (lang === "en" ? (c.text_en || c.text) : c.text) || "";
-  const buttonText = (lang === "en" ? (c.buttonText_en || c.buttonText) : c.buttonText) || "SCOPRI";
+const title = (lang === "en" ? (c.title_en || c.title_it) : (c.title_it || c.title_en)) || "";
+const text  = (lang === "en" ? (c.text_en  || c.text_it)  : (c.text_it  || c.text_en))  || "";
+const buttonText = (lang === "en" ? (c.button_en || c.button_it) : (c.button_it || c.button_en)) || "SCOPRI";
 
   return `
     <div class="hero-card home-hero-card">
