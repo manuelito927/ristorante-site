@@ -122,7 +122,7 @@ if (btn) {
 <script>
 (async function(){
   const hero = document.getElementById("pageHero");
-  if(!hero) return;
+  if (!hero) return;
 
   const key = hero.dataset.coverKey || "home";
 
@@ -131,20 +131,35 @@ if (btn) {
     const res = await fetch(base + "/api/page/covers", { cache: "no-store" });
     const json = await res.json().catch(() => ({}));
 
-    const url = (json.data || {})[key];  // ✅ QUESTA È LA FIX
+    let covers = (json.data || {})[key];
 
-    if (url && String(url).trim()) {
+    // 🔹 normalizza: stringa → array
+    if (typeof covers === "string") covers = [covers];
+    if (!Array.isArray(covers) || !covers.length) return;
+
+    let index = 0;
+
+    function show(i){
       hero.style.backgroundImage =
-        `linear-gradient(rgba(0,0,0,.3), rgba(0,0,0,.3)), url("${url}")`;
+        `linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)), url("${covers[i]}")`;
       hero.style.backgroundSize = "cover";
       hero.style.backgroundPosition = "center";
       hero.style.backgroundRepeat = "no-repeat";
     }
+
+    // prima immagine
+    show(index);
+
+    // autoplay
+    setInterval(() => {
+      index = (index + 1) % covers.length;
+      show(index);
+    }, 4500);
+
   } catch(e){
     console.warn("Cover non caricata:", e);
   }
 })();
-
 </script>
 
 <script>
