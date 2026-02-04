@@ -996,6 +996,7 @@ if (deleteStripCategoryBtn) {
       try {
         showApp(true);
 await Promise.all([
+    loadMenuCategoriesOrder(),
   loadItems(),
   loadComeFunziona(),
   loadReservations(),
