@@ -297,96 +297,222 @@ function renderMenuItems(items) {
 
   grid.innerHTML = "";
 
-  // ⬇️ QUI incolli TUTTO il codice che avevi prima
-  // cioè il forEach che costruisce le card
-  // + l'if finale "Nessun prodotto presente"
+  // tiene traccia di quale prodotto è aperto
+  let openId = null;
 
-// tiene traccia di quale prodotto è aperto
-let openId = null;
+  (items || []).forEach((it) => {
+    const wrap = document.createElement("div");
+    wrap.className = "item-card card";
+    wrap.style.padding = "14px";
 
-(items || []).forEach((it) => {
-  const wrap = document.createElement("div");
-  wrap.className = "item-card card";
-  wrap.style.padding = "14px";
+    // ✅ Allergeni: pre-seleziona quelli già salvati in DB
+    const selAll = new Set(Array.isArray(it.allergens) ? it.allergens : []);
 
-  const selAll = new Set(Array.isArray(it.allergens) ? it.allergens : []);
-
-  function alg(value, label) {
-    const checked = selAll.has(value) ? "checked" : "";
-    return `
-      <label style="display:flex; gap:8px; align-items:center; font-size:13px; background:#fafafa; border:1px solid #e0e0e0; padding:8px 10px; border-radius:10px;">
-        <input class="alg" type="checkbox" value="${value}" ${checked}>
-        <span>${label}</span>
-      </label>
-    `;
-  }
-
-  const allergensHtml = `
-    <div class="form-group" style="margin-bottom:12px;">
-      <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:8px;">
-        ALLERGENI
-      </label>
-      <div style="display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:8px;">
-        ${alg("glutine","Glutine")}
-        ${alg("latte","Latte")}
-        ${alg("uova","Uova")}
-        ${alg("pesce","Pesce")}
-        ${alg("arachidi","Arachidi")}
-        ${alg("soia","Soia")}
-        ${alg("frutta_a_guscio","Frutta a guscio")}
-        ${alg("sedano","Sedano")}
-        ${alg("senape","Senape")}
-        ${alg("sesamo","Sesamo")}
-        ${alg("solfiti","Solfiti")}
-        ${alg("lupini","Lupini")}
-        ${alg("molluschi","Molluschi")}
-        ${alg("nichel","Nichel")}
-      </div>
-    </div>
-  `;
-
-  const compactHeader = `
-    <button data-act="toggle" style="width:100%; background:none; border:0; cursor:pointer; text-align:left;">
-      <strong>${escapeHtml(it.name)}</strong>
-      <div style="font-size:12px; opacity:.6;">${escapeHtml(it.category || "")}</div>
-    </button>
-  `;
-
-  const details = `
-    <div data-el="details" hidden style="margin-top:10px;">
-      <input data-k="name" value="${escapeAttr(it.name)}" />
-      <textarea data-k="description">${escapeHtml(it.description || "")}</textarea>
-
-      <input data-k="position" type="number" value="${it.position || 0}" />
-      ${allergensHtml}
-
-      <button data-act="save" class="btn success">Salva</button>
-      <button data-act="del" class="btn danger">Elimina</button>
-      <div data-msg style="font-size:12px; margin-top:6px;"></div>
-    </div>
-  `;
-
-  wrap.innerHTML = compactHeader + details;
-  grid.appendChild(wrap);
-
-  const toggleBtn = wrap.querySelector('[data-act="toggle"]');
-  const detailsEl = wrap.querySelector('[data-el="details"]');
-
-  toggleBtn.onclick = () => {
-    const open = openId !== it.id;
-    document.querySelectorAll('[data-el="details"]').forEach(d => d.hidden = true);
-    if (open) {
-      openId = it.id;
-      detailsEl.hidden = false;
-    } else {
-      openId = null;
+    function alg(value, label) {
+      const checked = selAll.has(value) ? "checked" : "";
+      return `
+        <label style="display:flex; gap:8px; align-items:center; font-size:13px; background:#fafafa; border:1px solid #e0e0e0; padding:8px 10px; border-radius:10px;">
+          <input class="alg" type="checkbox" value="${value}" ${checked}>
+          <span>${label}</span>
+        </label>
+      `;
     }
-  };
-});
 
-if (!items || items.length === 0) {
-  grid.innerHTML = "<div class='card'>Nessun prodotto presente nel menu.</div>";
-}
+    const allergensHtml = `
+      <div class="form-group" style="margin-bottom:12px;">
+        <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:8px;">
+          ALLERGENI (spunta quelli presenti)
+        </label>
+        <div style="display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:8px;">
+          ${alg("glutine","Glutine")}
+          ${alg("crostacei","Crostacei")}
+          ${alg("uova","Uova")}
+          ${alg("pesce","Pesce")}
+          ${alg("arachidi","Arachidi")}
+          ${alg("soia","Soia")}
+          ${alg("latte","Latte")}
+          ${alg("frutta_a_guscio","Frutta a guscio")}
+          ${alg("sedano","Sedano")}
+          ${alg("senape","Senape")}
+          ${alg("sesamo","Sesamo")}
+          ${alg("solfiti","Solfiti")}
+          ${alg("lupini","Lupini")}
+          ${alg("molluschi","Molluschi")}
+          ${alg("nichel","Nichel")}
+        </div>
+      </div>
+    `;
+
+    const compactHeader = `
+      <button type="button" data-act="toggle"
+        style="
+          width:100%;
+          display:flex;
+          align-items:center;
+          justify-content:space-between;
+          gap:12px;
+          background:transparent;
+          border:0;
+          padding:0;
+          cursor:pointer;
+          text-align:left;
+        "
+        aria-expanded="false"
+      >
+        <div style="min-width:0; flex:1;">
+          <div style="display:flex; align-items:center; gap:10px; min-width:0;">
+            <strong style="font-size:15px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+              ${escapeHtml(it.name || "")}
+            </strong>
+            <span style="opacity:.7; font-size:12px; white-space:nowrap;">
+              ${escapeHtml(it.category || "")}
+            </span>
+          </div>
+          <div style="opacity:.6; font-size:12px; margin-top:4px;">
+            ID: ${escapeHtml(String(it.id))}
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px; flex:0 0 auto;">
+          <span class="status-badge status-${it.is_available}"
+            style="padding:4px 8px; border-radius:6px; font-size:10px; font-weight:800; text-transform:uppercase;
+            background:${it.is_available ? '#e6f4ea' : '#ffebee'};
+            color:${it.is_available ? '#1e7e34' : '#c62828'};">
+            ${it.is_available ? 'Disponibile' : 'Esaurito'}
+          </span>
+
+          <strong style="font-size:14px; white-space:nowrap;">€ ${fromCents(it.price_cents)}</strong>
+
+          <span data-el="chev" style="font-size:18px; line-height:1; opacity:.7;">▾</span>
+        </div>
+      </button>
+    `;
+
+    const details = `
+      <div data-el="details" hidden style="margin-top:14px; padding-top:14px; border-top:1px solid rgba(0,0,0,.06);">
+
+        <div class="form-group" style="margin-bottom:10px;">
+          <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px;">NOME PRODOTTO (IT / EN)</label>
+          <input data-k="name" value="${escapeAttr(it.name)}" style="width:100%; margin-bottom:5px;"/>
+          <input data-k="name_en" value="${escapeAttr(it.name_en || "")}" placeholder="English name" style="width:100%;"/>
+        </div>
+
+        <div class="form-group" style="margin-bottom:10px;">
+          <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px;">DESCRIZIONE (IT)</label>
+          <textarea data-k="description" style="width:100%; min-height:50px;">${escapeHtml(it.description || "")}</textarea>
+        </div>
+
+        <div class="form-group" style="margin-bottom:10px;">
+          <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:4px;">DESCRIPTION (EN)</label>
+          <textarea data-k="description_en" style="width:100%; min-height:50px;">${escapeHtml(it.description_en || "")}</textarea>
+        </div>
+
+        <div class="row" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+          <div>
+            <label style="display:block; font-size:12px; font-weight:bold;">Prezzo (€)</label>
+            <input data-k="price" type="number" step="0.01" value="${fromCents(it.price_cents)}" style="width:100%;"/>
+          </div>
+          <div>
+            <label style="display:block; font-size:12px; font-weight:bold;">Posizione</label>
+            <input data-k="position" type="number" step="1" value="${it.position || 0}" style="width:100%;"/>
+          </div>
+        </div>
+
+        <div class="row" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+          <div>
+            <label style="display:block; font-size:12px; font-weight:bold;">Categoria (IT)</label>
+            <input data-k="category" value="${escapeAttr(it.category || "")}" style="width:100%;"/>
+
+            <label style="display:block; font-size:12px; font-weight:bold; margin-top:10px;">Category (EN)</label>
+            <input data-k="category_en" value="${escapeAttr(it.category_en || "")}" style="width:100%;" placeholder="es. Pizzas"/>
+          </div>
+
+          <div>
+            <label style="display:block; font-size:12px; font-weight:bold;">Disponibile</label>
+            <select data-k="is_available" style="width:100%;">
+              <option value="true" ${it.is_available ? "selected" : ""}>Si</option>
+              <option value="false" ${!it.is_available ? "selected" : ""}>No</option>
+            </select>
+          </div>
+        </div>
+
+        ${allergensHtml}
+
+        <div class="row" style="display:flex; gap:10px;">
+          <button class="btn success" data-act="save" style="flex:2;">Salva Modifiche</button>
+          <button class="btn danger" data-act="del" style="flex:1;">Elimina</button>
+        </div>
+
+        <div style="margin-top:10px; opacity:.7; font-size:13px; text-align:center;" data-msg=""></div>
+      </div>
+    `;
+
+    wrap.innerHTML = compactHeader + details;
+    grid.appendChild(wrap);
+
+    const toggleBtn = wrap.querySelector('[data-act="toggle"]');
+    const detailsEl = wrap.querySelector('[data-el="details"]');
+    const chevEl = wrap.querySelector('[data-el="chev"]');
+
+    function setOpen(isOpen) {
+      toggleBtn.setAttribute("aria-expanded", String(isOpen));
+      detailsEl.hidden = !isOpen;
+      if (chevEl) chevEl.textContent = isOpen ? "▴" : "▾";
+    }
+
+    toggleBtn.onclick = () => {
+      const willOpen = openId !== it.id;
+
+      grid.querySelectorAll('[data-el="details"]').forEach(d => (d.hidden = true));
+      grid.querySelectorAll('[data-act="toggle"]').forEach(b => b.setAttribute("aria-expanded", "false"));
+      grid.querySelectorAll('[data-el="chev"]').forEach(c => (c.textContent = "▾"));
+
+      if (willOpen) {
+        openId = it.id;
+        setOpen(true);
+        wrap.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        openId = null;
+        setOpen(false);
+      }
+    };
+
+    wrap.querySelector('[data-act="save"]').onclick = async () => {
+      const msg = wrap.querySelector('[data-msg]');
+      msg.textContent = "Salvataggio...";
+      try {
+        const payload = readPayload(wrap);
+        await api("/api/admin/menu/" + it.id, {
+          method: "PUT",
+          body: JSON.stringify(payload)
+        });
+        msg.innerHTML = "<span style='color:green'>✅ Salvato</span>";
+        setTimeout(() => {
+          msg.textContent = "";
+          openId = it.id;
+          loadItems();
+        }, 800);
+      } catch (e) {
+        msg.textContent = "❌ " + e.message;
+      }
+    };
+
+    wrap.querySelector('[data-act="del"]').onclick = async () => {
+      const ok = confirm("Eliminare '" + (it.name || "") + "'?");
+      if (!ok) return;
+      try {
+        await api("/api/admin/menu/" + it.id, { method: "DELETE" });
+        openId = null;
+        loadItems();
+      } catch (e) {
+        alert("❌ " + e.message);
+      }
+    };
+  });
+
+  if (!items || items.length === 0) {
+    grid.innerHTML = "<div class='card'>Nessun prodotto presente nel menu.</div>";
+  }
 }
 
 /* =========================================================
