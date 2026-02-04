@@ -226,7 +226,6 @@ let stripOpenIndex = null; // tiene aperto solo 1 piatto nello strip
   // CREA nuovo prodotto (POST /api/admin/menu)
   if (createBtn) {
     createBtn.onclick = async () => {
-      alert("CLICK FUNZIONA");
       // prende gli allergeni spuntati nel form "Nuovo Prodotto" (tab-menu)
       const newCard = createBtn.closest(".card"); // card "Nuovo Prodotto"
 const allergens = Array.from(newCard.querySelectorAll(".alg:checked")).map(el => el.value);
