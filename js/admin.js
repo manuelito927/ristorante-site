@@ -34,9 +34,16 @@ const API = "https://still-haze-01c8.filosofiaefficace.workers.dev";
   const cf_hours_it = $("cf_hours_it");
   const cf_hours_en = $("cf_hours_en");
   const cf_takeaway = $("cf_takeaway");
-  const cf_gluten = $("cf_gluten");
-  const cf_lactose = $("cf_lactose");
+  const cf_takeaway_en = $("cf_takeaway_en");
+
   const cf_pets = $("cf_pets");
+  const cf_pets_en = $("cf_pets_en");
+
+  const cf_gluten = $("cf_gluten");
+  const cf_gluten_en = $("cf_gluten_en");
+
+  const cf_lactose = $("cf_lactose");
+  const cf_lactose_en = $("cf_lactose_en");
 
   // ✅ GALLERY (UPLOAD FILE)
   const galSaveBtn = $("saveGallery");
