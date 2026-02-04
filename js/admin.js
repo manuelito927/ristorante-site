@@ -954,26 +954,38 @@ async function uploadOneFileToR2(file) {
 
 
 async function saveCover() {
-  if (!coverPage || !coverFile) return alert("Campi copertina non trovati");
-  if (!coverFile.files || !coverFile.files[0]) return alert("Seleziona un'immagine");
+  if (!coverPage || !coverFiles) {
+    return alert("Campi copertina non trovati");
+  }
 
-  const file = coverFile.files[0];
+  const files = Array.from(coverFiles.files || []);
+  if (!files.length) {
+    return alert("Seleziona almeno un'immagine");
+  }
+
+  if (files.length > 7) {
+    return alert("Puoi caricare massimo 7 immagini");
+  }
 
   try {
-    // ✅ riuso la stessa funzione di upload della gallery (già testata)
-    const imageUrl = await uploadOneFileToR2(file);
+    const urls = [];
 
-const page = coverPage.value.toLowerCase();
+    for (const file of files) {
+      const url = await uploadOneFileToR2(file);
+      urls.push(url);
+    }
+
+    const page = coverPage.value.toLowerCase();
 
     await api("/api/admin/page/covers", {
       method: "PUT",
-      body: JSON.stringify({ [page]: imageUrl })
+      body: JSON.stringify({ [page]: urls }) // ✅ ARRAY
     });
 
-    coverFile.value = "";
-    alert("✅ Copertina salvata per: " + page.toUpperCase());
+    coverFiles.value = "";
+    alert("✅ Copertine salvate per: " + page.toUpperCase());
   } catch (e) {
-    alert("❌ Upload copertina fallito: " + (e.message || e));
+    alert("❌ Upload copertine fallito: " + e.message);
   }
 }
 
