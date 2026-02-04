@@ -692,17 +692,31 @@ if (saveHomeBtn) {
     const payload = {
       phone: cf_phone ? cf_phone.value.trim() : "",
       address: cf_address ? cf_address.value.trim() : "",
+
       hours_it_title: "Orari di apertura",
       hours_it_text: cf_hours_it ? cf_hours_it.value.trim() : "",
+      hours_en_title: "Opening hours",
       hours_en_text: cf_hours_en ? cf_hours_en.value.trim() : "",
+
       takeaway_title: "Take Away// Servizio di asporto",
       takeaway_text: cf_takeaway ? cf_takeaway.value.trim() : "",
+      takeaway_en_title: "Take Away",
+      takeaway_en_text: cf_takeaway_en ? cf_takeaway_en.value.trim() : "",
+
+      pets_title: "Amici a 4 zampe //",
+      pets_text: cf_pets ? cf_pets.value.trim() : "",
+      pets_en_title: "Pets",
+      pets_en_text: cf_pets_en ? cf_pets_en.value.trim() : "",
+
       gluten_title: "Senza glutine e senza lattosio//",
       gluten_text: cf_gluten ? cf_gluten.value.trim() : "",
-      lactose_text: cf_lactose ? cf_lactose.value.trim() : "",
-            pets_title: "Amici a 4 zampe //",
-      pets_text: cf_pets ? cf_pets.value.trim() : "",
+      gluten_en_title: "Gluten-free",
+      gluten_en_text: cf_gluten_en ? cf_gluten_en.value.trim() : "",
 
+      lactose_title: "Lattosio",
+      lactose_text: cf_lactose ? cf_lactose.value.trim() : "",
+      lactose_en_title: "Lactose-free",
+      lactose_en_text: cf_lactose_en ? cf_lactose_en.value.trim() : "",
     };
 
     await api("/api/admin/page/come-funziona", {
