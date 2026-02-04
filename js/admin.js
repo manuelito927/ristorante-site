@@ -272,7 +272,7 @@ const uniqueAllergens = [...new Set(allergens)];
         price_cents: toCents($("price").value),
         category: $("category").value.trim(),
         category_en: $("category_en") ? $("category_en").value.trim() : "",
-category_order: Number((categoryOrder ? categoryOrder.value : 0) || 0),
+
         position: Number($("position").value || 0),
         allergens: uniqueAllergens,
         is_available: $("is_available").value === "true",
