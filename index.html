@@ -65,7 +65,10 @@
   // lingua globale (default IT)
   const lang = (localStorage.getItem("lang") || "it").toLowerCase();
   const btn = document.getElementById("langBtn");
-  if (btn) btn.textContent = lang.toUpperCase();
+if (btn) {
+  btn.classList.toggle("is-it", lang === "it");
+  btn.classList.toggle("is-en", lang === "en");
+}
 
   // toggle lingua
   if (btn) {
