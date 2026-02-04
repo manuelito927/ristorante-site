@@ -116,6 +116,70 @@
   })();
   </script>
 
+<script>
+(function(){
+  const reviewsRaw = [
+`I piatti tipici salentini sono una vera delizia: le fave e cicorie cremose e saporite, un abbraccio alla tradizione, e le polpette di carne al sugo… semplicemente irresistibili!
+E anche le pizze sono ottime: impasto leggero, ingredienti di qualità, ben cotte.
+Un posto che sa coniugare tradizione e accoglienza. Ci tornerò sicuramente!
+Il personale è super cordiale, ti fanno sentire subito a casa e il servizio è veloce e attento`,
+
+`Serata fra amici dal mitico Mimino!!! Pizza buonissima al giusto prezzo!
+Scoperta in sala ... Gabriele!!! Top. Il miglior direttore di sala del salento: gentilezza e i giusti consigli su cosa bere e mangiare con la giusta ironia e simpatia.
+Locale sicuramente consigliato e da provare.`,
+
+`Ottima esperienza! Dalla location all'ordine dei tavoli, dai menù al personale, è stato tutto perfetto! Nonostante la serata fosse da pienone siamo stati serviti rapidamente e abbiamo potuto gustare il nostro ordine senza fretta o solleciti! ...un particolare apprezzamento va a Gabriele che ci ha saputo indicare dei nuovi piatti gustosi!!`,
+
+`Cucina buonissima con una vasta varietà di prodotti, location perfetta per famiglie poiché si trascorre la serata in pineta al fresco. Inoltre si trova all'interno della villa comunale. Personale capace e accogliente e servizio veloce`,
+
+`Il posto è simpatico e la pizza era buona, i bimbi si divertono anche con parco giochi, tartarughe, e arrampica sugli alberi. nuove foto ^^ c'è un grande schermo per eventi sportivi sulla terrazza 👍🏼👍🏼`,
+
+`Serata fra amici dal mitico Mimino!!! Pizzabuonissima al giusto prezzo!
+Scoperta in sala ... Gabriele!!! Top. Il miglior direttore di sala del salento: gentilezza e i giusti consigli su cosa bere e mangiare con la giusta ironia e simpatia.`
+  ];
+
+  // ✅ rimuove duplicati identici
+  const seen = new Set();
+  const reviews = reviewsRaw
+    .map(s => String(s).trim())
+    .filter(s => s && (seen.has(s) ? false : (seen.add(s), true)));
+
+  const wrap = document.getElementById("reviewsChat");
+  if(!wrap) return;
+
+  wrap.innerHTML = `
+    <div class="chat">
+      ${reviews.map((text, i) => `
+        <div class="bubble ${i % 2 === 0 ? "left" : "right"} reveal">
+          ${escapeHtml(text)}
+          <div class="meta"><span class="stars">★★★★★</span></div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  // lingua (se usi localStorage lang)
+  const lang = (localStorage.getItem("lang") || "it").toLowerCase();
+  const titleEl = document.getElementById("t_reviews_title");
+  const noteEl  = document.getElementById("t_reviews_note");
+
+  if(lang === "en"){
+    if(titleEl) titleEl.textContent = "Reviews";
+    if(noteEl) noteEl.textContent =
+      "Qualitative summary: overall sentiment is strongly positive, with recurring mentions of food quality, hospitality, and service.";
+  }else{
+    if(titleEl) titleEl.textContent = "Recensioni";
+    if(noteEl) noteEl.textContent =
+      "Sintesi qualitativa: il sentiment dei clienti è fortemente positivo, con ricorrenza di giudizi su qualità, accoglienza e servizio.";
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, c => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
+    }[c]));
+  }
+})();
+</script>
 
 <script src="/js/scroll-animate.js"></script>
 </body>
