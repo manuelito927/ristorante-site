@@ -783,4 +783,30 @@ body{
 .lang-btn.is-it .flag-en{ display:none; }
 .lang-btn.is-en .flag-it{ display:none; }
 
+/* =========================
+   SCROLL REVEAL ANIMATION
+   ========================= */
 
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s ease;
+  will-change: opacity, transform;
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Variante più lenta */
+[data-reveal="slow"] {
+  transition-duration: 1.3s;
+}
+
+/* Variante leggera */
+[data-reveal="soft"] {
+  transform: translateY(16px);
+}
