@@ -191,6 +191,38 @@ let stripOpenIndex = null; // tiene aperto solo 1 piatto nello strip
     return (c / 100).toFixed(2);
   }
 
+  /* =========================================================
+     MENU: SEARCH (filtra lastMenuItems)
+     ========================================================= */
+
+  function normalizeText(s) {
+    return String(s || "").toLowerCase().trim();
+  }
+
+  function getFilteredMenuItems(allItems) {
+    const q = normalizeText(menuSearch?.value || "");
+    if (!q) return allItems;
+
+    return (allItems || []).filter(it => {
+      const hay = [
+        it.name,
+        it.name_en,
+        it.category,
+        it.category_en,
+        it.description,
+        it.description_en
+      ].map(normalizeText).join(" ");
+      return hay.includes(q);
+    });
+  }
+
+  if (menuSearch) {
+    menuSearch.addEventListener("input", () => {
+      // non richiamare API: ridisegno solo
+      renderMenuItems(getFilteredMenuItems(lastMenuItems));
+    });
+  }
+
   // CREA nuovo prodotto (POST /api/admin/menu)
   if (createBtn) {
     createBtn.onclick = async () => {
