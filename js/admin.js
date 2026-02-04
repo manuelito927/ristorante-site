@@ -12,6 +12,7 @@ const API = "https://still-haze-01c8.filosofiaefficace.workers.dev";
 
   // MENU
   const createBtn = $("createBtn");
+  const categoryOrder = $("category_order"); // ✅ ordine categoria
   const grid = $("itemsGrid");
 
   // COME FUNZIONA
