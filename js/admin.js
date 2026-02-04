@@ -292,6 +292,16 @@ const items = res.items || res.data?.items || [];
   }
 }
 
+function renderMenuItems(items) {
+  if (!grid) return;
+
+  grid.innerHTML = "";
+
+  // ⬇️ QUI incolli TUTTO il codice che avevi prima
+  // cioè il forEach che costruisce le card
+  // + l'if finale "Nessun prodotto presente"
+}
+
 /* =========================================================
    HOME - CARICA + SALVA (5 CARD)  ✅ IT + EN
    usa: GET  /api/page/home
