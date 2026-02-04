@@ -300,6 +300,93 @@ function renderMenuItems(items) {
   // ⬇️ QUI incolli TUTTO il codice che avevi prima
   // cioè il forEach che costruisce le card
   // + l'if finale "Nessun prodotto presente"
+
+// tiene traccia di quale prodotto è aperto
+let openId = null;
+
+(items || []).forEach((it) => {
+  const wrap = document.createElement("div");
+  wrap.className = "item-card card";
+  wrap.style.padding = "14px";
+
+  const selAll = new Set(Array.isArray(it.allergens) ? it.allergens : []);
+
+  function alg(value, label) {
+    const checked = selAll.has(value) ? "checked" : "";
+    return `
+      <label style="display:flex; gap:8px; align-items:center; font-size:13px; background:#fafafa; border:1px solid #e0e0e0; padding:8px 10px; border-radius:10px;">
+        <input class="alg" type="checkbox" value="${value}" ${checked}>
+        <span>${label}</span>
+      </label>
+    `;
+  }
+
+  const allergensHtml = `
+    <div class="form-group" style="margin-bottom:12px;">
+      <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:8px;">
+        ALLERGENI
+      </label>
+      <div style="display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:8px;">
+        ${alg("glutine","Glutine")}
+        ${alg("latte","Latte")}
+        ${alg("uova","Uova")}
+        ${alg("pesce","Pesce")}
+        ${alg("arachidi","Arachidi")}
+        ${alg("soia","Soia")}
+        ${alg("frutta_a_guscio","Frutta a guscio")}
+        ${alg("sedano","Sedano")}
+        ${alg("senape","Senape")}
+        ${alg("sesamo","Sesamo")}
+        ${alg("solfiti","Solfiti")}
+        ${alg("lupini","Lupini")}
+        ${alg("molluschi","Molluschi")}
+        ${alg("nichel","Nichel")}
+      </div>
+    </div>
+  `;
+
+  const compactHeader = `
+    <button data-act="toggle" style="width:100%; background:none; border:0; cursor:pointer; text-align:left;">
+      <strong>${escapeHtml(it.name)}</strong>
+      <div style="font-size:12px; opacity:.6;">${escapeHtml(it.category || "")}</div>
+    </button>
+  `;
+
+  const details = `
+    <div data-el="details" hidden style="margin-top:10px;">
+      <input data-k="name" value="${escapeAttr(it.name)}" />
+      <textarea data-k="description">${escapeHtml(it.description || "")}</textarea>
+
+      <input data-k="position" type="number" value="${it.position || 0}" />
+      ${allergensHtml}
+
+      <button data-act="save" class="btn success">Salva</button>
+      <button data-act="del" class="btn danger">Elimina</button>
+      <div data-msg style="font-size:12px; margin-top:6px;"></div>
+    </div>
+  `;
+
+  wrap.innerHTML = compactHeader + details;
+  grid.appendChild(wrap);
+
+  const toggleBtn = wrap.querySelector('[data-act="toggle"]');
+  const detailsEl = wrap.querySelector('[data-el="details"]');
+
+  toggleBtn.onclick = () => {
+    const open = openId !== it.id;
+    document.querySelectorAll('[data-el="details"]').forEach(d => d.hidden = true);
+    if (open) {
+      openId = it.id;
+      detailsEl.hidden = false;
+    } else {
+      openId = null;
+    }
+  };
+});
+
+if (!items || items.length === 0) {
+  grid.innerHTML = "<div class='card'>Nessun prodotto presente nel menu.</div>";
+}
 }
 
 /* =========================================================
