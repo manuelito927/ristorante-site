@@ -211,20 +211,20 @@ applyLangToStaticTexts(); // <-- aggiungi questa riga
     localStorage.setItem("lang", lang);
     document.documentElement.lang = lang;
 
-    const t = {
-      it: {
-        h1: "Gallery",
-        title: "Le nostre foto",
-        sub: "",
-        empty: "Nessuna foto ancora. Vai in Admin → Gallery e aggiungile."
-      },
-      en: {
-        h1: "Gallery",
-        title: "Our photos",
-        sub: "Photos managed from Admin (add / remove anytime).",
-        empty: "No photos yet. Go to Admin → Gallery and add them."
-      }
-    }[lang];
+const t = {
+  it: {
+    h1: "Gallery",
+    title: "Le nostre foto",
+    sub: "",
+    empty: ""
+  },
+  en: {
+    h1: "Gallery",
+    title: "Our photos",
+    sub: "",
+    empty: ""
+  }
+}[lang];
 
     setText("t_gallery_h1", t.h1);
     setText("t_gallery_title", t.title);
