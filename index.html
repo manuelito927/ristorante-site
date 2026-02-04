@@ -133,28 +133,62 @@ if (btn) {
 
     let covers = (json.data || {})[key];
 
-    // 🔹 normalizza: stringa → array
+    // normalizza: stringa → array
     if (typeof covers === "string") covers = [covers];
     if (!Array.isArray(covers) || !covers.length) return;
 
-    let index = 0;
+    // ✅ overlay per effetto "switch morbido"
+    hero.style.position = hero.style.position || "relative";
+    hero.style.overflow = "hidden";
 
-    function show(i){
+    let overlay = hero.querySelector(".hero-cover-overlay");
+    if (!overlay) {
+      overlay = document.createElement("div");
+      overlay.className = "hero-cover-overlay";
+      overlay.style.position = "absolute";
+      overlay.style.inset = "0";
+      overlay.style.backgroundSize = "cover";
+      overlay.style.backgroundPosition = "center";
+      overlay.style.backgroundRepeat = "no-repeat";
+      overlay.style.opacity = "0";
+      overlay.style.transition = "opacity 0.8s ease"; // ✅ morbido
+      overlay.style.pointerEvents = "none";
+      hero.appendChild(overlay);
+    }
+
+    let index = 0;
+    const intervalMs = 1300; // ✅ 1.3 secondi
+
+    function setHeroBg(url){
       hero.style.backgroundImage =
-        `linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)), url("${covers[i]}")`;
+        `linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)), url("${url}")`;
       hero.style.backgroundSize = "cover";
       hero.style.backgroundPosition = "center";
       hero.style.backgroundRepeat = "no-repeat";
     }
 
+    function transitionTo(nextUrl){
+      // metto la nuova immagine nell'overlay e faccio fade-in
+      overlay.style.backgroundImage =
+        `linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)), url("${nextUrl}")`;
+
+      overlay.style.opacity = "1";
+
+      // quando finisce il fade, rendo l'overlay la base e lo spengo
+      setTimeout(() => {
+        setHeroBg(nextUrl);
+        overlay.style.opacity = "0";
+      }, 800); // uguale alla transition 0.8s
+    }
+
     // prima immagine
-    show(index);
+    setHeroBg(covers[index]);
 
     // autoplay
     setInterval(() => {
       index = (index + 1) % covers.length;
-      show(index);
-    }, 4500);
+      transitionTo(covers[index]);
+    }, intervalMs);
 
   } catch(e){
     console.warn("Cover non caricata:", e);
