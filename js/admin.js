@@ -202,6 +202,7 @@ async function loadItems() {
   try {
 const res = await api("/api/menu");
 const items = res.items || res.data?.items || [];
+      lastMenuItems = Array.isArray(items) ? items : [];
     grid.innerHTML = "";
 
     // tiene traccia di quale prodotto è aperto
