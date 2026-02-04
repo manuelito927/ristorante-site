@@ -27,7 +27,9 @@
     btn.type = "button";
     btn.className = "lang-btn";
     btn.setAttribute("aria-label", "Cambia lingua");
-    btn.textContent = (lang === "it") ? "EN" : "IT";
+btn.innerHTML = lang === "it"
+  ? "🇮🇹"
+  : "🇬🇧";
 
     btn.addEventListener("click", () => {
       setLang(lang === "it" ? "en" : "it");
