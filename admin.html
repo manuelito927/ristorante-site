@@ -127,7 +127,24 @@
         <div class="sticky-sidebar">
           <div class="card">
 
+<h2>Ordine categorie (MENU)</h2>
 
+<div class="form-group">
+  <label>Una categoria per riga (ordine dall’alto verso il basso)</label>
+  <textarea id="menuCategoriesOrder" placeholder="PIZZE
+ANTIPASTI
+DOLCI"></textarea>
+  <note>Questo ordina SOLO le categorie nel menu pubblico. I prodotti dentro la categoria si ordinano con “Ordine (Pos)”.</note>
+</div>
+
+<div style="display:flex; gap:10px; flex-wrap:wrap;">
+  <button class="btn secondary" id="loadMenuCategories" style="width:auto; padding:12px 18px;">Carica</button>
+  <button class="btn success" id="saveMenuCategories" style="width:auto; padding:12px 18px;">Salva ordine</button>
+</div>
+
+<div id="menuCategoriesMsg" style="margin-top:10px; font-size:13px; opacity:.75;"></div>
+
+<hr>
 
  <h2>Nuovo Prodotto</h2>
             <div class="form-group">
