@@ -182,13 +182,14 @@ async function loadMenuCategoriesOrder() {
 async function saveMenuCategoriesOrder() {
   if (!menuCategoriesList) return;
 
-  const rows = Array.from(menuCategoriesList.querySelectorAll('input[data-cat-name]'));
-  const categories = rows.map((inp) => {
-    const name = inp.getAttribute("data-cat-name") || "";
-    const order = Number(inp.value || 0);
-    return { name, order: Number.isFinite(order) ? order : 0 };
-  });
-
+const rows = Array.from(menuCategoriesList.querySelectorAll('input[data-cat-name]'));
+const categories = rows
+  .map((inp) => {
+    const name = String(inp.getAttribute("data-cat-name") || "").trim();
+    const orderNum = Number(String(inp.value || "0").trim());
+    return { name, order: Number.isFinite(orderNum) ? orderNum : 0 };
+  })
+  .filter(c => c.name);
   try {
     setMenuCategoriesMsg("Salvataggio...");
 
