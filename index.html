@@ -145,63 +145,6 @@ if (btn) {
   }
 })();
 
-/* 
-(async function(){
-  ...
-})();
-*/
-
-<script>
-(function(){
-  const hero = document.getElementById("pageHero");
-  if (!hero) return;
-
-  // 🔹 IMMAGINI DELLA COPERTINA
-  const covers = [
-    "https://TUO-LINK-IMMAGINE-1.jpg",
-    "https://TUO-LINK-IMMAGINE-2.jpg",
-    "https://TUO-LINK-IMMAGINE-3.jpg"
-  ];
-
-  let index = 0;
-  let timer = null;
-
-  function showCover(i){
-    hero.style.backgroundImage =
-      `linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)), url("${covers[i]}")`;
-    hero.style.backgroundSize = "cover";
-    hero.style.backgroundPosition = "center";
-    hero.style.backgroundRepeat = "no-repeat";
-  }
-
-  function next(){
-    index = (index + 1) % covers.length;
-    showCover(index);
-  }
-
-  // avvio
-  showCover(index);
-  timer = setInterval(next, 4500);
-
-  // swipe manuale (mobile)
-  let startX = 0;
-  hero.addEventListener("touchstart", e => {
-    startX = e.touches[0].clientX;
-    clearInterval(timer);
-  });
-
-  hero.addEventListener("touchend", e => {
-    const dx = e.changedTouches[0].clientX - startX;
-    if (dx < -40) next();
-    if (dx > 40) {
-      index = (index - 1 + covers.length) % covers.length;
-      showCover(index);
-    }
-    timer = setInterval(next, 4500);
-  });
-})();
-</script>
-
 </script>
 
 <script>
