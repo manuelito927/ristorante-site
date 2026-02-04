@@ -135,45 +135,78 @@ let stripOpenIndex = null; // tiene aperto solo 1 piatto nello strip
     if (menuCategoriesMsg) menuCategoriesMsg.textContent = t || "";
   }
 
-  async function loadMenuCategoriesOrder() {
-    if (!menuCategoriesOrder) return;
+function renderMenuCategoriesList(data) {
+  if (!menuCategoriesList) return;
 
-    try {
-      setMenuCategoriesMsg("Caricamento...");
-      const res = await api("/api/menu/categories", { method: "GET" });
-      const order = res?.data?.order || [];
+  const arr = Array.isArray(data) ? data : [];
 
-      menuCategoriesOrder.value = Array.isArray(order) ? order.join("\n") : "";
-      setMenuCategoriesMsg("Caricato ✅");
-      setTimeout(() => setMenuCategoriesMsg(""), 1000);
-    } catch (e) {
-      setMenuCategoriesMsg("❌ " + e.message);
-    }
+  menuCategoriesList.innerHTML = arr.map((c) => {
+    const name = String(c.name || "").trim();
+    const ord  = Number.isFinite(Number(c.order)) ? Number(c.order) : 0;
+
+    return `
+      <div class="card" style="padding:12px; border-radius:14px; border:1px solid rgba(0,0,0,.06);">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+          <strong style="font-size:14px;">${escapeHtml(name)}</strong>
+          <input
+            type="number"
+            data-cat-name="${escapeAttr(name)}"
+            value="${ord}"
+            style="width:120px;"
+            placeholder="0"
+          >
+        </div>
+        <div style="opacity:.6; font-size:12px; margin-top:6px;">
+          0 = prima categoria
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+async function loadMenuCategoriesOrder() {
+  if (!menuCategoriesList) return;
+
+  try {
+    setMenuCategoriesMsg("Caricamento...");
+    const res = await api("/api/menu/categories", { method: "GET" });
+
+    const categories = res?.data?.categories || res?.categories || [];
+    renderMenuCategoriesList(categories);
+
+    setMenuCategoriesMsg("Caricato ✅");
+    setTimeout(() => setMenuCategoriesMsg(""), 1000);
+  } catch (e) {
+    setMenuCategoriesMsg("❌ " + e.message);
   }
+}
 
-  async function saveMenuCategoriesOrder() {
-    if (!menuCategoriesOrder) return;
+async function saveMenuCategoriesOrder() {
+  if (!menuCategoriesList) return;
 
-    const order = String(menuCategoriesOrder.value || "")
-      .split("\n")
-      .map(s => s.trim())
-      .filter(Boolean);
+  const rows = Array.from(menuCategoriesList.querySelectorAll('input[data-cat-name]'));
+  const categories = rows.map((inp) => {
+    const name = inp.getAttribute("data-cat-name") || "";
+    const order = Number(inp.value || 0);
+    return { name, order: Number.isFinite(order) ? order : 0 };
+  });
 
-    try {
-      setMenuCategoriesMsg("Salvataggio...");
-      await api("/api/admin/menu/categories", {
-        method: "PUT",
-        body: JSON.stringify({ order })
-      });
-      setMenuCategoriesMsg("Salvato ✅");
-      setTimeout(() => setMenuCategoriesMsg(""), 1200);
+  try {
+    setMenuCategoriesMsg("Salvataggio...");
 
-      // ricarico menu pubblico in admin così vedi l'effetto dell'ordinamento
-      await loadItems();
-    } catch (e) {
-      setMenuCategoriesMsg("❌ " + e.message);
-    }
+    await api("/api/admin/menu/categories", {
+      method: "PUT",
+      body: JSON.stringify({ categories })
+    });
+
+    setMenuCategoriesMsg("Salvato ✅");
+    setTimeout(() => setMenuCategoriesMsg(""), 1200);
+
+    await loadItems();
+  } catch (e) {
+    setMenuCategoriesMsg("❌ " + e.message);
   }
+}
 
   if (loadMenuCategoriesBtn) loadMenuCategoriesBtn.onclick = () => loadMenuCategoriesOrder();
   if (saveMenuCategoriesBtn) saveMenuCategoriesBtn.onclick = () => saveMenuCategoriesOrder();
