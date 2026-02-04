@@ -417,33 +417,105 @@ const items = res.items || res.data?.items || [];
 }
 
 /* =========================================================
-   HOME - CARICA + SALVA (5 CARD)
+   HOME - CARICA + SALVA (5 CARD)  ✅ IT + EN
    usa: GET  /api/page/home
         PUT  /api/admin/page/home
    ========================================================= */
 
+// default con IT + EN
 const DEFAULT_HOME_CARDS = [
-  { title:"Menu Digitale", text:"Scopri tutti i piatti, ingredienti e prezzi in un attimo.", href:"/menu/", buttonText:"VAI AL MENU" },
-  { title:"Come funziona", text:"Orari, indirizzo, info utili e tutto quello che devi sapere.", href:"/come-funziona/", buttonText:"SCOPRI" },
-  { title:"Prenota", text:"Prenota il tuo tavolo in pochi secondi.", href:"/prenota/", buttonText:"PRENOTA" },
-  { title:"Gallery", text:"Guarda foto, atmosfera e piatti.", href:"/gallery/", buttonText:"VEDI FOTO" },
-  { title:"Recensioni", text:"Leggi cosa dicono di noi.", href:"/recensioni/", buttonText:"LEGGI" },
+  {
+    title_it:"BENVENUTI DA GREENWOOD, DOVE",
+    text_it:"In un equilibrio perfetto tra tradizione culinaria e innovazione contemporanea, Greenwood non è solo una sosta, ma una destinazione.",
+    href:"/menu/",
+    button_it:"SCOPRI SUBITO",
+
+    title_en:"WELCOME TO GREENWOOD, WHERE",
+    text_en:"In a perfect balance between culinary tradition and modern innovation, Greenwood is not just a stop — it’s a destination.",
+    button_en:"DISCOVER NOW"
+  },
+  {
+    title_it:"COME FUNZIONA",
+    text_it:"Scopri orari, indirizzo e tutte le informazioni utili per vivere al meglio Greenwood.",
+    href:"/come-funziona/",
+    button_it:"SCOPRI",
+
+    title_en:"HOW IT WORKS",
+    text_en:"Find opening hours, address and everything you need to enjoy Greenwood at its best.",
+    button_en:"LEARN MORE"
+  },
+  {
+    title_it:"PRENOTA",
+    text_it:"Prenota il tuo tavolo in pochi secondi e assicurati il tuo posto.",
+    href:"/prenota/",
+    button_it:"PRENOTA",
+
+    title_en:"BOOK A TABLE",
+    text_en:"Book your table in seconds and secure your spot.",
+    button_en:"BOOK NOW"
+  },
+  {
+    title_it:"GALLERY",
+    text_it:"Dai un’occhiata all’atmosfera, ai piatti e al locale.",
+    href:"/gallery/",
+    button_it:"VEDI FOTO",
+
+    title_en:"GALLERY",
+    text_en:"Take a look at the atmosphere, dishes and venue.",
+    button_en:"VIEW PHOTOS"
+  },
+  {
+    title_it:"RECENSIONI",
+    text_it:"Leggi cosa dicono di noi e condividi la tua esperienza.",
+    href:"/recensioni/",
+    button_it:"LEGGI",
+
+    title_en:"REVIEWS",
+    text_en:"Read what people say about us and share your experience.",
+    button_en:"READ"
+  },
 ];
+
+function normalizeHomeCards(cards){
+  // supporta sia il vecchio formato (title/text/buttonText)
+  // sia il nuovo formato (title_it/title_en ecc)
+  const out = [];
+  for(let i=0;i<5;i++){
+    const c = (cards && cards[i]) ? cards[i] : {};
+    out.push({
+      href: c.href || "#",
+
+      // se esistono i campi nuovi, li uso
+      title_it: c.title_it ?? c.title ?? "",
+      text_it:  c.text_it  ?? c.text  ?? "",
+      button_it: c.button_it ?? c.buttonText ?? "SCOPRI",
+
+      title_en: c.title_en ?? "",
+      text_en:  c.text_en  ?? "",
+      button_en: c.button_en ?? "DISCOVER"
+    });
+  }
+  return out;
+}
 
 function renderHomeCardsEditor(cards){
   if(!homeCardsEditor) return;
-  homeCardsEditor.innerHTML = (cards || []).map((c, i) => `
+  const norm = normalizeHomeCards(cards);
+
+  homeCardsEditor.innerHTML = norm.map((c, i) => `
     <div class="card" style="padding:14px; border-radius:14px; border:1px solid rgba(0,0,0,.06);">
       <div style="font-weight:800; margin-bottom:10px;">Card ${i+1}</div>
 
       <div class="form-group">
-        <label>Titolo</label>
-        <input data-hk="title" data-i="${i}" value="${escapeAttr(c.title || "")}">
+        <span class="lang-tag">ITALIANO</span>
+        <label>Titolo (IT)</label>
+        <input data-hk="title_it" data-i="${i}" value="${escapeAttr(c.title_it || "")}">
       </div>
 
       <div class="form-group">
-        <label>Testo</label>
-        <textarea data-hk="text" data-i="${i}">${escapeHtml(c.text || "")}</textarea>
+        <span class="lang-tag">ITALIANO</span>
+        <label>Testo (IT)</label>
+        <textarea data-hk="text_it" data-i="${i}">${escapeHtml(c.text_it || "")}</textarea>
       </div>
 
       <div class="form-group">
@@ -452,8 +524,29 @@ function renderHomeCardsEditor(cards){
       </div>
 
       <div class="form-group">
-        <label>Testo bottone</label>
-        <input data-hk="buttonText" data-i="${i}" value="${escapeAttr(c.buttonText || "")}">
+        <span class="lang-tag">ITALIANO</span>
+        <label>Testo bottone (IT)</label>
+        <input data-hk="button_it" data-i="${i}" value="${escapeAttr(c.button_it || "")}">
+      </div>
+
+      <hr style="border:0;border-top:1px solid rgba(0,0,0,.06);margin:14px 0">
+
+      <div class="form-group">
+        <span class="lang-tag">INGLESE</span>
+        <label>Title (EN)</label>
+        <input data-hk="title_en" data-i="${i}" value="${escapeAttr(c.title_en || "")}">
+      </div>
+
+      <div class="form-group">
+        <span class="lang-tag">INGLESE</span>
+        <label>Text (EN)</label>
+        <textarea data-hk="text_en" data-i="${i}">${escapeHtml(c.text_en || "")}</textarea>
+      </div>
+
+      <div class="form-group">
+        <span class="lang-tag">INGLESE</span>
+        <label>Button text (EN)</label>
+        <input data-hk="button_en" data-i="${i}" value="${escapeAttr(c.button_en || "")}">
       </div>
     </div>
   `).join("");
@@ -467,11 +560,17 @@ function readHomeCardsFromEditor(){
       const el = homeCardsEditor.querySelector(`[data-hk="${k}"][data-i="${i}"]`);
       return el ? String(el.value || "").trim() : "";
     };
+
     cards.push({
-      title: get("title"),
-      text: get("text"),
       href: get("href") || "#",
-      buttonText: get("buttonText") || "SCOPRI"
+
+      title_it: get("title_it"),
+      text_it:  get("text_it"),
+      button_it: get("button_it") || "SCOPRI",
+
+      title_en: get("title_en"),
+      text_en:  get("text_en"),
+      button_en: get("button_en") || "DISCOVER"
     });
   }
   return cards;
@@ -481,7 +580,6 @@ async function loadHome() {
   try {
     const res = await api("/api/page/home");
     const d = res && res.data ? res.data : {};
-
     const cards = Array.isArray(d.cards) ? d.cards : DEFAULT_HOME_CARDS;
 
     renderHomeCardsEditor(cards);
