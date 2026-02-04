@@ -806,3 +806,68 @@ body{
     opacity: 1;
   }
 }
+
+/* ===== Reviews: stile chat ===== */
+.reviews-chat{
+  padding: 22px 0 40px;
+  margin-top: 18px;
+}
+
+.reviews-title{
+  margin: 0 0 10px;
+  font-size: 26px;
+  font-weight: 300;
+  letter-spacing: .6px;
+}
+
+.reviews-note{
+  margin: 0 0 16px;
+  font-size: 13px;
+  font-style: italic;
+  color: #2f6b4f;
+  opacity: .85;
+  line-height: 1.5;
+  max-width: 520px;
+}
+
+.chat{
+  display:flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 520px;
+}
+
+.bubble{
+  max-width: 92%;
+  padding: 14px 16px;
+  border-radius: 18px;
+  line-height: 1.55;
+  font-size: 15px;
+  background: rgba(255,255,255,.85);
+  border: 1px solid rgba(0,0,0,.08);
+  box-shadow: 0 10px 22px rgba(0,0,0,.06);
+  white-space: pre-line;
+}
+
+.bubble.left{
+  align-self: flex-start;
+  border-top-left-radius: 8px;
+}
+
+.bubble.right{
+  align-self: flex-end;
+  background: rgba(143,169,152,.22);
+  border-top-right-radius: 8px;
+}
+
+.meta{
+  margin-top: 10px;
+  font-size: 12px;
+  opacity: .7;
+  display:flex;
+  justify-content:flex-end;
+}
+
+.stars{ letter-spacing: 1px; }
+
+
