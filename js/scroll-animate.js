@@ -1,5 +1,6 @@
 // Scroll reveal globale (auto, senza data-reveal)
 (function () {
+  alert("scroll-animate attivo ✅");
   const SELECTOR = [
     "main",
     "section",
