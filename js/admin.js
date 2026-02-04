@@ -892,7 +892,7 @@ function fmtDate(d) {
         `;
 
         card.querySelector('[data-act="saveStatus"]').onclick = async () => {
-          const msg = card.querySelector('[data-msg=""]');
+const msg = card.querySelector('[data-msg]');
           msg.textContent = "Salvataggio...";
           try {
             const status = card.querySelector('[data-k="status"]').value;
