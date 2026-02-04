@@ -14,7 +14,14 @@ const API = "https://still-haze-01c8.filosofiaefficace.workers.dev";
   const createBtn = $("createBtn");
   const categoryOrder = $("category_order"); // ✅ ordine categoria
   const grid = $("itemsGrid");
+  // ✅ MENU: ordine categorie + search
+  const menuCategoriesOrder = $("menuCategoriesOrder");
+  const loadMenuCategoriesBtn = $("loadMenuCategories");
+  const saveMenuCategoriesBtn = $("saveMenuCategories");
+  const menuCategoriesMsg = $("menuCategoriesMsg");
+  const menuSearch = $("menuSearch");
 
+  let lastMenuItems = []; // cache per ricerca (items caricati)
   // COME FUNZIONA
   const cfSaveBtn = $("saveComeFunziona");
 
