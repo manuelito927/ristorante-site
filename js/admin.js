@@ -584,6 +584,45 @@ function readHomeCardsFromEditor(){
   return cards;
 }
 
+async function saveOneHomeCard(index){
+  const res = await api("/api/page/home");
+  const d = res && res.data ? res.data : {};
+  const serverCards = normalizeHomeCards(Array.isArray(d.cards) ? d.cards : DEFAULT_HOME_CARDS);
+
+  const editorCards = readHomeCardsFromEditor();
+  serverCards[index] = editorCards[index];
+
+  await api("/api/admin/page/home", {
+    method: "PUT",
+    body: JSON.stringify({ cards: serverCards })
+  });
+
+  const msg = document.querySelector(`[data-home-one-msg="${index}"]`);
+  if (msg) msg.textContent = "Salvata ✅";
+  setTimeout(() => { if (msg) msg.textContent = ""; }, 1200);
+}
+
+function bindHomeSaveButtons(){
+  if(!homeCardsEditor) return;
+
+  homeCardsEditor.querySelectorAll("[data-home-save-one]").forEach(btn=>{
+    btn.onclick = async () => {
+      const i = Number(btn.getAttribute("data-home-save-one"));
+      const oldText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = "Salvataggio...";
+      try{
+        await saveOneHomeCard(i);
+      }catch(e){
+        alert("❌ " + e.message);
+      }finally{
+        btn.disabled = false;
+        btn.textContent = oldText;
+      }
+    };
+  });
+}
+
 async function loadHome() {
   try {
     const res = await api("/api/page/home");
