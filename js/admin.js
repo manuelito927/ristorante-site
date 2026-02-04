@@ -557,6 +557,7 @@ function renderHomeCardsEditor(cards){
       </div>
     </div>
   `).join("");
+        bindHomeSaveButtons();
 }
 
 function readHomeCardsFromEditor(){
