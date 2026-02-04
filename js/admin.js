@@ -125,6 +125,57 @@ let stripOpenIndex = null; // tiene aperto solo 1 piatto nello strip
     return data;
   }
 
+  /* =========================================================
+     MENU: ORDINE CATEGORIE (GET/PUT)
+     ========================================================= */
+
+  function setMenuCategoriesMsg(t) {
+    if (menuCategoriesMsg) menuCategoriesMsg.textContent = t || "";
+  }
+
+  async function loadMenuCategoriesOrder() {
+    if (!menuCategoriesOrder) return;
+
+    try {
+      setMenuCategoriesMsg("Caricamento...");
+      const res = await api("/api/menu/categories", { method: "GET" });
+      const order = res?.data?.order || [];
+
+      menuCategoriesOrder.value = Array.isArray(order) ? order.join("\n") : "";
+      setMenuCategoriesMsg("Caricato ✅");
+      setTimeout(() => setMenuCategoriesMsg(""), 1000);
+    } catch (e) {
+      setMenuCategoriesMsg("❌ " + e.message);
+    }
+  }
+
+  async function saveMenuCategoriesOrder() {
+    if (!menuCategoriesOrder) return;
+
+    const order = String(menuCategoriesOrder.value || "")
+      .split("\n")
+      .map(s => s.trim())
+      .filter(Boolean);
+
+    try {
+      setMenuCategoriesMsg("Salvataggio...");
+      await api("/api/admin/menu/categories", {
+        method: "PUT",
+        body: JSON.stringify({ order })
+      });
+      setMenuCategoriesMsg("Salvato ✅");
+      setTimeout(() => setMenuCategoriesMsg(""), 1200);
+
+      // ricarico menu pubblico in admin così vedi l'effetto dell'ordinamento
+      await loadItems();
+    } catch (e) {
+      setMenuCategoriesMsg("❌ " + e.message);
+    }
+  }
+
+  if (loadMenuCategoriesBtn) loadMenuCategoriesBtn.onclick = () => loadMenuCategoriesOrder();
+  if (saveMenuCategoriesBtn) saveMenuCategoriesBtn.onclick = () => saveMenuCategoriesOrder();
+
   function showApp(yes) {
     if (loginCard) loginCard.classList.toggle("hidden", yes);
     if (appCard) appCard.classList.toggle("hidden", !yes);
