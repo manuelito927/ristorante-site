@@ -51,7 +51,7 @@ const API = "https://still-haze-01c8.filosofiaefficace.workers.dev";
   const galPreview = $("galPreview");   // div dove mostriamo anteprime
 // 🖼 COPERTINE
 const coverPage = $("cover_page");
-const coverFile = $("cover_file");
+const coverFiles = $("cover_files"); // ✅ MULTIPLE
 const saveCoverBtn = $("saveCover");
 
 // 🏠 HOME
