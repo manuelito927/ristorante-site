@@ -1238,7 +1238,8 @@ await refreshStripEditor();
   if (token) {
     if (tokenInput) tokenInput.value = token;
     showApp(true);
-loadItems()
+loadMenuCategoriesOrder()
+  .then(loadItems)
   .then(loadComeFunziona)
   .then(loadReservations)
   .then(loadHome)
