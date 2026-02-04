@@ -167,9 +167,25 @@ async function loadMenuCategoriesOrder() {
 
   try {
     setMenuCategoriesMsg("Caricamento...");
-    const res = await api("/api/menu/categories", { method: "GET" });
 
-    const categories = res?.data?.categories || res?.categories || [];
+    // 1) prendo TUTTI gli items per ricavare le categorie reali
+    const menuRes = await api("/api/menu", { method: "GET" });
+    const items = menuRes.items || menuRes.data?.items || [];
+    const uniqueCats = Array.from(
+      new Set((items || []).map(x => String(x.category || "").trim()).filter(Boolean))
+    ).sort((a,b)=>a.localeCompare(b,"it"));
+
+    // 2) prendo l’ordine salvato dal worker (data.order)
+    const ordRes = await api("/api/menu/categories", { method: "GET" });
+    const savedOrder = Array.isArray(ordRes?.data?.order) ? ordRes.data.order : [];
+
+    // mappa: categoria -> numero (posizione nell’array)
+    const map = new Map();
+    savedOrder.forEach((name, i) => map.set(String(name || "").trim(), i));
+
+    // 3) creo righe con input numero
+    const categories = uniqueCats.map(name => ({ name, order: map.has(name) ? map.get(name) : 999 }));
+
     renderMenuCategoriesList(categories);
 
     setMenuCategoriesMsg("Caricato ✅");
