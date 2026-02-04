@@ -675,9 +675,16 @@ if (saveHomeBtn) {
         if (cf_hours_it) cf_hours_it.value = d.hours_it_text || "";
         if (cf_hours_en) cf_hours_en.value = d.hours_en_text || "";
         if (cf_takeaway) cf_takeaway.value = d.takeaway_text || "";
-        if (cf_gluten) cf_gluten.value = d.gluten_text || "";
-        if (cf_lactose) cf_lactose.value = d.lactose_text || "";
+        if (cf_takeaway_en) cf_takeaway_en.value = d.takeaway_en_text || "";
+
         if (cf_pets) cf_pets.value = d.pets_text || "";
+        if (cf_pets_en) cf_pets_en.value = d.pets_en_text || "";
+
+        if (cf_gluten) cf_gluten.value = d.gluten_text || "";
+        if (cf_gluten_en) cf_gluten_en.value = d.gluten_en_text || "";
+
+        if (cf_lactose) cf_lactose.value = d.lactose_text || "";
+        if (cf_lactose_en) cf_lactose_en.value = d.lactose_en_text || "";
     } catch(e) { console.error("Errore caricamento info", e); }
   }
 
