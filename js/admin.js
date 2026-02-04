@@ -198,20 +198,23 @@ async function loadMenuCategoriesOrder() {
 async function saveMenuCategoriesOrder() {
   if (!menuCategoriesList) return;
 
-const rows = Array.from(menuCategoriesList.querySelectorAll('input[data-cat-name]'));
-const categories = rows
-  .map((inp) => {
-    const name = String(inp.getAttribute("data-cat-name") || "").trim();
-    const orderNum = Number(String(inp.value || "0").trim());
-    return { name, order: Number.isFinite(orderNum) ? orderNum : 0 };
-  })
-  .filter(c => c.name);
+  // leggo i numeri inseriti
+  const inputs = Array.from(menuCategoriesList.querySelectorAll('input[data-cat-name]'));
+  const rows = inputs.map(inp => ({
+    name: inp.getAttribute("data-cat-name") || "",
+    order: Number(inp.value || 0)
+  }));
+
+  // ordino per numero crescente e creo l’array order: ["PIZZE","ANTIPASTI",...]
+  rows.sort((a,b) => (a.order ?? 0) - (b.order ?? 0));
+  const order = rows.map(r => String(r.name || "").trim()).filter(Boolean);
+
   try {
     setMenuCategoriesMsg("Salvataggio...");
 
     await api("/api/admin/menu/categories", {
       method: "PUT",
-      body: JSON.stringify({ categories })
+      body: JSON.stringify({ order })
     });
 
     setMenuCategoriesMsg("Salvato ✅");
