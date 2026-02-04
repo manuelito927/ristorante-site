@@ -783,29 +783,6 @@ body{
 .lang-btn.is-it .flag-en{ display:none; }
 .lang-btn.is-en .flag-it{ display:none; }
 
-
-/* Scroll reveal globale */
-.reveal{
-  opacity: 0;
-  transform: translateY(22px);
-  transition: opacity .85s ease, transform .85s ease;
-  will-change: opacity, transform;
-}
-
-.reveal.is-visible{
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Accessibilità: se l’utente ha “riduci animazioni” */
-@media (prefers-reduced-motion: reduce){
-  .reveal{
-    transition: none;
-    transform: none;
-    opacity: 1;
-  }
-}
-
 /* =========================
    SCROLL REVEAL (globale)
    ========================= */
