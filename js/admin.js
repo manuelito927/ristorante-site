@@ -1332,144 +1332,49 @@ function renderStripItemsEditor(items) {
     return;
   }
 
-  items.forEach((it, idx) => {
-    const row = document.createElement("div");
-    row.className = "card";
-    row.style.padding = "12px";
-    row.style.borderRadius = "14px";
-    row.style.border = "1px solid rgba(0,0,0,.06)";
+// 🔍 input ricerca (se non esiste lo crea)
+let searchInput = document.getElementById("searchProducts");
+if (!searchInput) {
+  searchInput = document.createElement("input");
+  searchInput.id = "searchProducts";
+  searchInput.placeholder = "Cerca prodotto...";
+  searchInput.style = "width:100%; padding:12px; margin-bottom:15px; border-radius:10px; border:1px solid #ddd;";
+  grid.parentElement.prepend(searchInput);
+}
 
-row.innerHTML = `
-<button data-s="toggle"
-  style="all:unset; width:100%; cursor:pointer;">
-  <div style="display:flex; gap:12px; align-items:center;">
-    <img src="${escapeAttr(it.image_url || "")}"
-      style="width:84px; height:64px; object-fit:cover; border-radius:12px; background:#eee;">
-    <strong>${escapeHtml(it.name || "Senza nome")}</strong>
-  </div>
-</button>
+function renderItems(list) {
+  grid.innerHTML = "";
 
-<div data-s="editor" hidden style="margin-top:12px;">
-  <input data-s="name" value="${escapeAttr(it.name || "")}"
-    style="width:100%; margin-bottom:8px;">
-
-  <label class="btn secondary" style="width:100%;">
-    Cambia foto
-    <input data-s="file" type="file" hidden>
-  </label>
-
-  <div style="display:flex; gap:8px; margin-top:8px;">
-    <button data-s="save" class="btn success" style="flex:1;">Salva</button>
-    <button data-s="del" class="btn danger" style="flex:1;">Elimina</button>
-  </div>
-
-  <div data-s="msg" style="margin-top:6px; font-size:12px;"></div>
-</div>
-`;
-
-const toggleBtn = row.querySelector('[data-s="toggle"]');
-const editor = row.querySelector('[data-s="editor"]');
-
-toggleBtn.onclick = () => {
-  const isOpen = stripOpenIndex === idx;
-
-  // chiude tutti
-  stripItemsGrid
-    .querySelectorAll('[data-s="editor"]')
-    .forEach(e => e.hidden = true);
-
-  if (isOpen) {
-    stripOpenIndex = null;
-  } else {
-    editor.hidden = false;
-    stripOpenIndex = idx;
-
-    row.scrollIntoView({ behavior: "smooth", block: "start" });
+  if (!list.length) {
+    grid.innerHTML = "<div class='card'>Nessun prodotto trovato.</div>";
+    return;
   }
-};
-    // handlers
-    const fileInput = row.querySelector('[data-s="file"]');
-    const msgEl = row.querySelector('[data-s="msg"]');
-    const nameInput = row.querySelector('[data-s="name"]');
 
-    // CAMBIA FOTO (upload immediato e aggiorna url in memoria)
-    fileInput.onchange = async () => {
-      const file = fileInput.files && fileInput.files[0];
-      if (!file) return;
-      msgEl.textContent = "Upload foto...";
-      try {
-        const url = await uploadOneFileToR2(file);
-        it.image_url = url; // aggiorna oggetto
-        // aggiorna preview
-        const img = row.querySelector("img");
-        if (img) {
-          img.style.display = "";
-          img.src = url;
-        }
-        msgEl.textContent = "✅ Foto aggiornata (ora premi Salva)";
-      } catch (e) {
-        msgEl.textContent = "❌ " + e.message;
-      }
-    };
-
-    // SALVA singolo item: salva TUTTA la lista
-    row.querySelector('[data-s="save"]').onclick = async () => {
-      const key = String(stripKey?.value || "").trim();
-      if (!key) return alert("Seleziona la sezione");
-
-      const title = String(stripTitle?.value || "").trim();
-      it.name = String(nameInput.value || "").trim();
-
-      if (!it.name) return alert("Nome piatto obbligatorio");
-
-      msgEl.textContent = "Salvataggio...";
-      try {
-        const { items: currentItems } = await loadStripData(key);
-        // ricostruisco lista mantenendo ordine, sostituisco l'elemento per id o per index
-        const next = currentItems.map((x, i) => {
-          const same =
-            (it.id != null && x.id === it.id) ||
-            (it.id == null && i === idx);
-          return same ? { ...x, name: it.name, image_url: it.image_url } : x;
-        });
-
-        await saveStripData(key, title, next);
-        msgEl.textContent = "✅ Salvato";
-        await refreshStripEditor(); // ricarica da DB e ridisegna
-      } catch (e) {
-        msgEl.textContent = "❌ " + e.message;
-      }
-    };
-
-    // ELIMINA item: salva TUTTA la lista senza quell'item
-    row.querySelector('[data-s="del"]').onclick = async () => {
-      const ok = confirm("Eliminare questo piatto dallo scroll?");
-      if (!ok) return;
-
-      const key = String(stripKey?.value || "").trim();
-      if (!key) return alert("Seleziona la sezione");
-      const title = String(stripTitle?.value || "").trim();
-
-      msgEl.textContent = "Eliminazione...";
-      try {
-        const { items: currentItems } = await loadStripData(key);
-        const next = currentItems.filter((x, i) => {
-          const same =
-            (it.id != null && x.id === it.id) ||
-            (it.id == null && i === idx);
-          return !same;
-        });
-
-        await saveStripData(key, title, next);
-        msgEl.textContent = "✅ Eliminato";
-        await refreshStripEditor();
-      } catch (e) {
-        msgEl.textContent = "❌ " + e.message;
-      }
-    };
-
-    stripItemsGrid.appendChild(row);
+  list.forEach((it) => {
+    const wrap = document.createElement("div");
+    wrap.className = "item-card card";
+    wrap.style.padding = "14px";
+    wrap.innerHTML = `
+      <strong>${escapeHtml(it.name)}</strong><br>
+      <small>${escapeHtml(it.category)}</small><br>
+      <strong>€ ${fromCents(it.price_cents)}</strong>
+    `;
+    grid.appendChild(wrap);
   });
+}
+
+// prima render
+renderItems(items);
+
+// live search
+searchInput.oninput = () => {
+  const q = searchInput.value.toLowerCase();
+  const filtered = items.filter(it =>
+    it.name.toLowerCase().includes(q) ||
+    it.category.toLowerCase().includes(q)
+  );
+  renderItems(filtered);
+};
 }
 
 // ricarica titolo + lista in editor
