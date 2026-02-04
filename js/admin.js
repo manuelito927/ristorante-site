@@ -547,6 +547,13 @@ function renderHomeCardsEditor(cards){
         <span class="lang-tag">INGLESE</span>
         <label>Button text (EN)</label>
         <input data-hk="button_en" data-i="${i}" value="${escapeAttr(c.button_en || "")}">
+              <button class="btn success" type="button"
+        data-home-save-one="${i}"
+        style="width:auto; padding:12px 22px; margin-top:12px;">
+        Salva Card ${i+1}
+      </button>
+
+      <div data-home-one-msg="${i}" style="margin-top:8px; font-size:13px; opacity:.75;"></div>
       </div>
     </div>
   `).join("");
