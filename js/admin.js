@@ -167,8 +167,8 @@ if (cards.length >= 2) {
 
         <div style="font-size:14px; margin-bottom:5px;">📞 ${escapeHtml(r.phone || "")} • 👥 <strong>${r.people} persone</strong></div>
         <div style="font-size:14px; margin-bottom:10px; color:var(--greenwood); font-weight:bold;">📅 ${fmtDate(r.reserved_at)}</div>
-        <div style="t
-          font-size:13px; background:#f5f5f5; padding:8px; border-radius:6px; margin-bottom:12px;">
+        <div style="
+  font-size:13px; background:#f5f5f5; ...
           <strong>Note:</strong> ${escapeHtml(r.notes || "—")}
         </div>
 
