@@ -73,36 +73,42 @@ const menuCategoriesList  = $("menuCategoriesList");  // ✅ nuovo contenitore r
     bar.style.marginBottom = "15px";
     bar.style.padding = "14px";
 
-    bar.innerHTML = `
-      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:end;">
-        <div style="flex:1; min-width:180px;">
-          <label>Filtra per giorno</label>
-          <input id="resFilterDate" type="date" style="width:100%;" />
-          <div style="opacity:.65; font-size:12px; margin-top:6px;">
-            Di default mostra le prenotazioni di oggi.
-          </div>
-        </div>
+bar.innerHTML = `
+  <div style="display:flex; align-items:center; gap:10px;">
+    <input
+      id="resFilterDate"
+      type="date"
+      style="
+        max-width:160px;
+        padding:6px 10px;
+        font-size:13px;
+        border-radius:8px;
+      "
+    />
 
-        <button class="btn secondary" id="resFilterToday" style="width:auto; padding:12px 18px;">
-          Oggi
-        </button>
+    <button
+      id="resFilterAll"
+      title="Mostra tutte"
+      style="
+        border:0;
+        background:#f0f0f0;
+        width:32px;
+        height:32px;
+        border-radius:8px;
+        cursor:pointer;
+        font-size:16px;
+      "
+    >✕</button>
 
-        <button class="btn secondary" id="resFilterAll" style="width:auto; padding:12px 18px;">
-          Tutte
-        </button>
-
-        <div id="resFilterInfo" style="font-size:13px; opacity:.75; margin-left:auto;"></div>
-      </div>
-    `;
+    <div id="resFilterInfo" style="font-size:12px; opacity:.6; margin-left:auto;"></div>
+  </div>
+`;
 
     // metto la barra sopra la lista prenotazioni
     // tab-reservations ha già una card dentro, quindi la inserisco all'inizio di quella card
-const h2 = tab.querySelector("h2");
-if (h2 && h2.parentNode) {
-  h2.parentNode.insertBefore(bar, h2.nextSibling);
-} else {
-  tab.insertBefore(bar, tab.firstChild);
-}
+    const mainCard = tab.querySelector(".card");
+    if (mainCard) mainCard.insertBefore(bar, mainCard.firstChild);
+    else tab.insertBefore(bar, tab.firstChild);
 
     const dateInput = document.getElementById("resFilterDate");
     const btnToday = document.getElementById("resFilterToday");
