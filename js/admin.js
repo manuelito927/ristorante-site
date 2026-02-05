@@ -37,8 +37,6 @@ const menuCategoriesList  = $("menuCategoriesList");  // ✅ nuovo contenitore r
     const dd = String(d.getDate()).padStart(2, "0");
     return `${d.getFullYear()}-${mm}-${dd}`; // YYYY-MM-DD
   })();
-
-  let lastReservations = []; // cache ultime prenotazioni caricate
 let allReservations = [];
 
 function getDateKeyFromReservedAt(reserved_at) {
