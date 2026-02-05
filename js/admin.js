@@ -148,9 +148,9 @@ function applyAndRender() {
         <div style="font-size:14px; margin-bottom:5px;">📞 ${escapeHtml(r.phone || "")} • 👥 <strong>${r.people} persone</strong></div>
         <div style="font-size:14px; margin-bottom:10px; color:var(--greenwood); font-weight:bold;">📅 ${fmtDate(r.reserved_at)}</div>
         <div style="
-  font-size:13px; background:#f5f5f5; ...
-          <strong>Note:</strong> ${escapeHtml(r.notes || "—")}
-        </div>
+<div style="font-size:13px; background:#f5f5f5; padding:10px; border-radius:10px; margin-bottom:10px;">
+  <strong>Note:</strong> ${escapeHtml(r.notes || "—")}
+</div>
 
         <div style="display:flex; align-items:center; gap:10px;">
           <select data-k="status" style="flex:1;">
