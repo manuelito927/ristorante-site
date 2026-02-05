@@ -39,6 +39,7 @@ const menuCategoriesList  = $("menuCategoriesList");  // ✅ nuovo contenitore r
   })();
 
   let lastReservations = []; // cache ultime prenotazioni caricate
+let allReservations = [];
 
 function getDateKeyFromReservedAt(reserved_at) {
   if (!reserved_at) return "";
