@@ -131,8 +131,29 @@ function ensureReservationsFilterUI() {
 
         <div style="font-size:14px; margin-bottom:5px;">📞 ${escapeHtml(r.phone || "")} • 👥 <strong>${r.people} persone</strong></div>
         <div style="font-size:14px; margin-bottom:10px; color:var(--greenwood); font-weight:bold;">📅 ${fmtDate(r.reserved_at)}</div>
-        <div style="
-<div style="font-size:13px; background:#f5f5f5; padding:10px; border-radius:10px; margin-bottom:10px;">
+ card.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;">
+    <strong style="font-size:16px;">${escapeHtml(r.full_name || "")}</strong>
+    <span style="opacity:.6; font-size:12px;">#${r.id}</span>
+  </div>
+
+  <div style="font-size:14px; margin-bottom:5px;">📞 ${escapeHtml(r.phone || "")} • 👥 <strong>${r.people} persone</strong></div>
+  <div style="font-size:14px; margin-bottom:10px; color:var(--greenwood); font-weight:bold;">📅 ${fmtDate(r.reserved_at)}</div>
+
+  <div style="font-size:13px; background:#f5f5f5; padding:10px; border-radius:10px; margin-bottom:10px;">
+    <strong>Note:</strong> ${escapeHtml(r.notes || "—")}
+  </div>
+
+  <div style="display:flex; align-items:center; gap:10px;">
+    <select data-k="status" style="flex:1;">
+      <option value="new" ${r.status === "new" ? "selected" : ""}>Nuova</option>
+      <option value="confirmed" ${r.status === "confirmed" ? "selected" : ""}>Confermata</option>
+      <option value="cancelled" ${r.status === "cancelled" ? "selected" : ""}>Annullata</option>
+    </select>
+    <button class="btn success" data-act="saveStatus" style="padding:5px 15px;">Salva</button>
+  </div>
+  <div style="margin-top:5px; font-size:12px; text-align:center;" data-msg=""></div>
+`;
   <strong>Note:</strong> ${escapeHtml(r.notes || "—")}
 </div>
 
