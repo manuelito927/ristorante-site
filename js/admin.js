@@ -103,11 +103,6 @@ if (refreshBtn) {
   // metto il filtro subito DOPO la card "Richieste di Prenotazione"
   requestsCard.after(bar);
 
-  // e mi assicuro che la card stia subito dopo Impostazioni
-  const cards = tab.querySelectorAll(".card");
-  if (cards.length >= 2) {
-    cards[1].after(requestsCard);
-  }
 } else {
   tab.appendChild(bar);
 }
