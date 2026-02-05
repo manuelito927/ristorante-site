@@ -44,8 +44,10 @@ let allReservations = [];
 function getDateKeyFromReservedAt(reserved_at) {
   if (!reserved_at) return "";
 
-  // forza sempre YYYY-MM-DD
-  return String(reserved_at).slice(0, 10);
+  // forza sempre YYYY-MM-DD anche se arriva "2026-02-05 17:33"
+  const s = String(reserved_at).trim();
+  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  return m ? `${m[1]}-${m[2]}-${m[3]}` : "";
 }
 
   function ensureReservationsFilterUI() {
