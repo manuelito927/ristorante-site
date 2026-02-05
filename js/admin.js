@@ -104,11 +104,15 @@ bar.innerHTML = `
   </div>
 `;
 
-    // metto la barra sopra la lista prenotazioni
-    // tab-reservations ha già una card dentro, quindi la inserisco all'inizio di quella card
-    const mainCard = tab.querySelector(".card");
-    if (mainCard) mainCard.insertBefore(bar, mainCard.firstChild);
-    else tab.insertBefore(bar, tab.firstChild);
+// inserisce il filtro DOPO la card "Impostazioni Prenotazioni"
+const cards = tab.querySelectorAll(".card");
+
+if (cards.length >= 2) {
+  // la seconda card è "Impostazioni Prenotazioni"
+  cards[1].after(bar);
+} else {
+  tab.appendChild(bar);
+}
 
     const dateInput = document.getElementById("resFilterDate");
     const btnToday = document.getElementById("resFilterToday");
