@@ -46,17 +46,6 @@ function getDateKeyFromReservedAt(reserved_at) {
   // forza sempre YYYY-MM-DD
   return String(reserved_at).slice(0, 10);
 }
-
-    // fallback Date
-    try {
-      const d = new Date(s);
-      if (isNaN(d.getTime())) return "";
-      const mm = String(d.getMonth() + 1).padStart(2, "0");
-      const dd = String(d.getDate()).padStart(2, "0");
-      return `${d.getFullYear()}-${mm}-${dd}`;
-    } catch {
-      return "";
-    }
   }
 
   function ensureReservationsFilterUI() {
