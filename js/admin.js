@@ -1068,6 +1068,7 @@ function fmtDate(d) {
       
 allReservations = reservations || [];
 renderReservations(allReservations);
+if (reservationsMsg) reservationsMsg.textContent = "";
 
       if (!reservations || reservations.length === 0) {
         reservationsGrid.innerHTML = "<div class='card'>Nessuna prenotazione trovata.</div>";
