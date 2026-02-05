@@ -96,57 +96,110 @@ const API =
       arr.sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
     }
 
-    // Render HTML
-    menuEl.innerHTML = "";
-    for (const [cat, arr] of byCat.entries()) {
-      const sec = document.createElement("section");
-      sec.className = "menu-section";
+// ============================
+// ✅ MACROAREE (solo UI)
+// ============================
+const MACROS = LANG === "en"
+  ? [
+      { key: "food",   title: "FOOD",        cats: ["Starters & Snacks", "Main courses & Sides", "Big Salads"] },
+      { key: "pizza",  title: "PIZZERIA",    cats: ["Pizzas (White, Red, Gourmet)", "Doughs & Extras"] },
+      { key: "drink",  title: "DRINK",       cats: ["Soft drinks", "Beers (Bottle, Draft, Special)"] },
+      { key: "bar",    title: "BAR & RELAX", cats: ["Coffee & Hot drinks", "Bitters", "Spirits", "Grappa"] },
+    ]
+  : [
+      { key: "food",   title: "FOOD",        cats: ["Antipasti & Stuzzichini", "Secondi & Contorni", "Insalatone"] },
+      { key: "pizza",  title: "PIZZERIA",    cats: ["Pizze (Bianche, Rosse, Gourmet)", "Impasti e Aggiunte"] },
+      { key: "drink",  title: "DRINK",       cats: ["Bevande", "Birre (Bottiglia, Spina, Special)"] },
+      { key: "bar",    title: "BAR & RELAX", cats: ["Caffetteria", "Amari", "Liquori", "Grappe"] },
+    ];
 
-      sec.innerHTML = `
-        <button class="menu-title js-toggle" type="button" aria-expanded="false">
-          <h2>${escapeHtml(cat)}</h2>
-          <span class="plus">+</span>
-        </button>
-        <div class="menu-content" hidden>
-          ${arr
-            .map((it) => {
-              const name = pickText(it, "name", "name_en");
-              const desc = pickText(it, "description", "description_en");
-
-const rawAll = Array.isArray(it.allergens) ? it.allergens : [];
-
-// ✅ deduplica + pulizia (niente doppioni, niente valori vuoti)
-const itemAll = Array.from(new Set(rawAll.map(String).map(s => s.trim()).filter(Boolean)));
-
-// ✅ aggiunge alla legenda (una sola volta) solo i puliti
-itemAll.forEach((k) => usedAllergens.add(k));
-
-const iconsRow =
-  itemAll.length
-    ? `<div class="item-allergens" style="margin-top:6px; font-size:18px; line-height:1;">
-         ${itemAll
-           .map((k) => `<span title="${escapeHtml(labelForAllergen(k))}">${iconForAllergen(k)}</span>`)
-           .join(" ")}
-       </div>`
-    : "";
-
-              return `
-                <div class="item">
-                  <div class="item-row">
-                    <span>${escapeHtml(name)}</span>
-                    <span>€ ${formatEuro(it.price_cents)}</span>
-                  </div>
-                  ${iconsRow}
-                  ${desc ? `<div class="item-desc">${escapeHtml(desc)}</div>` : ``}
-                </div>
-              `;
-            })
-            .join("")}
-        </div>
-      `;
-
-      menuEl.appendChild(sec);
+// helper: match flessibile (ignora maiuscole/spazi)
+function normCat(s){ return String(s||"").toLowerCase().replace(/\s+/g," ").trim(); }
+function findMacroForCat(catName){
+  const c = normCat(catName);
+  for (const m of MACROS){
+    for (const x of m.cats){
+      if (normCat(x) === c) return m.title;
     }
+  }
+  return null;
+}
+
+// ============================
+// Render HTML con macroaree
+// ============================
+menuEl.innerHTML = "";
+
+// 1) prendo le categorie nell’ordine di inserimento (quello che già hai)
+const orderedCats = Array.from(byCat.keys());
+
+// 2) raggruppo: macroTitle -> [catName...]
+const macroBuckets = new Map();
+MACROS.forEach(m => macroBuckets.set(m.title, []));
+macroBuckets.set(LANG === "en" ? "OTHER" : "ALTRO", []);
+
+for (const catName of orderedCats) {
+  const macroTitle = findMacroForCat(catName) || (LANG === "en" ? "OTHER" : "ALTRO");
+  macroBuckets.get(macroTitle).push(catName);
+}
+
+// 3) render: titolo macro + sezioni categoria sotto
+for (const [macroTitle, catNames] of macroBuckets.entries()) {
+  if (!catNames.length) continue;
+
+  const macroH = document.createElement("h2");
+  macroH.className = "menu-macro-title";
+  macroH.textContent = macroTitle;
+  menuEl.appendChild(macroH);
+
+  for (const cat of catNames) {
+    const arr = byCat.get(cat) || [];
+
+    const sec = document.createElement("section");
+    sec.className = "menu-section";
+
+    sec.innerHTML = `
+      <button class="menu-title js-toggle" type="button" aria-expanded="false">
+        <h3>${escapeHtml(cat)}</h3>
+        <span class="plus">+</span>
+      </button>
+      <div class="menu-content" hidden>
+        ${arr
+          .map((it) => {
+            const name = pickText(it, "name", "name_en");
+            const desc = pickText(it, "description", "description_en");
+
+            const rawAll = Array.isArray(it.allergens) ? it.allergens : [];
+            const itemAll = Array.from(new Set(rawAll.map(String).map(s => s.trim()).filter(Boolean)));
+            itemAll.forEach((k) => usedAllergens.add(k));
+
+            const iconsRow =
+              itemAll.length
+                ? `<div class="item-allergens" style="margin-top:6px; font-size:18px; line-height:1;">
+                     ${itemAll
+                       .map((k) => `<span title="${escapeHtml(labelForAllergen(k))}">${iconForAllergen(k)}</span>`)
+                       .join(" ")}
+                   </div>`
+                : "";
+
+            return `
+              <div class="item">
+                <div class="item-row">
+                  <span>${escapeHtml(name)}</span>
+                  <span>€ ${formatEuro(it.price_cents)}</span>
+                </div>
+                ${iconsRow}
+                ${desc ? `<div class="item-desc">${escapeHtml(desc)}</div>` : ``}
+              </div>
+            `;
+          })
+          .join("")}
+      </div>
+    `;
+
+    menuEl.appendChild(sec);
+  }
+}
 
     // ✅ LEGENDA UNA SOLA VOLTA IN FONDO
     const list = Array.from(usedAllergens).filter(Boolean);
