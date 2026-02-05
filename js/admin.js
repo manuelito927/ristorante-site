@@ -42,8 +42,6 @@ const menuCategoriesList  = $("menuCategoriesList");  // ✅ nuovo contenitore r
 
 function getDateKeyFromReservedAt(reserved_at) {
   if (!reserved_at) return "";
-
-  // forza sempre YYYY-MM-DD
   return String(reserved_at).slice(0, 10);
 }
   }
