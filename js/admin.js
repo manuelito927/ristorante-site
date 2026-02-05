@@ -1087,6 +1087,7 @@ function fmtDate(d) {
     if (!reservationsGrid) return;
     if (reservationsMsg) reservationsMsg.textContent = "Caricamento...";
     reservationsGrid.innerHTML = "Caricamento...";
+    ensureReservationsFilterUI();
 
     try {
       const { reservations } = await api("/api/admin/reservations?limit=50");
