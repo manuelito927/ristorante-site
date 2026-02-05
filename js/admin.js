@@ -97,9 +97,12 @@ const menuCategoriesList  = $("menuCategoriesList");  // ✅ nuovo contenitore r
 
     // metto la barra sopra la lista prenotazioni
     // tab-reservations ha già una card dentro, quindi la inserisco all'inizio di quella card
-    const mainCard = tab.querySelector(".card");
-    if (mainCard) mainCard.insertBefore(bar, mainCard.firstChild);
-    else tab.insertBefore(bar, tab.firstChild);
+const h2 = tab.querySelector("h2");
+if (h2 && h2.parentNode) {
+  h2.parentNode.insertBefore(bar, h2.nextSibling);
+} else {
+  tab.insertBefore(bar, tab.firstChild);
+}
 
     const dateInput = document.getElementById("resFilterDate");
     const btnToday = document.getElementById("resFilterToday");
