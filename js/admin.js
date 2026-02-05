@@ -94,18 +94,8 @@ bar.innerHTML = `
   </div>
 `;
 
-// sposta "Richieste di Prenotazione" sopra al filtro
-const refreshBtn = document.getElementById("refreshReservations");
-
-if (refreshBtn) {
-  const requestsCard = refreshBtn.closest(".card");
-
-  // metto il filtro subito DOPO la card "Richieste di Prenotazione"
-  requestsCard.after(bar);
-
-} else {
-  tab.appendChild(bar);
-}
+const tab = document.getElementById("tab-reservations");
+tab.appendChild(bar);
 
     const dateInput = document.getElementById("resFilterDate");
     const btnAll = document.getElementById("resFilterAll");
