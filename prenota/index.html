@@ -192,6 +192,98 @@
   <script src="/js/lang.js"></script>
 
 <script>
+(function(){
+  const lang = (localStorage.getItem("lang") || "it").toLowerCase();
+
+  const T = {
+    it: {
+      hero: "Prenota",
+      title: "Richiedi un tavolo",
+      sub: "Compila i dati qui sotto. La prenotazione verrà confermata dal locale.",
+
+      waTitle: "Contattaci su WhatsApp",
+      waSub: "Scrivici direttamente per prenotare il tuo tavolo.",
+      waBtn: "Apri WhatsApp",
+
+      lblDate: "Data",
+      lblTime: "Ora",
+      lblPeople: "Persone",
+      lblPhone: "Telefono",
+      lblName: "Nome e cognome",
+      lblNotes: "Note (opzionale)",
+
+      phPhone: "Es. 3331234567",
+      phName: "Es. Mario Rossi",
+      phNotes: "Allergie, passeggino, richiesta tavolo, ecc.",
+
+      submit: "Invia richiesta",
+      note: "* La richiesta verrà inviata al sistema del locale."
+    },
+    en: {
+      hero: "Book a table",
+      title: "Request a table",
+      sub: "Fill in the details below. Your booking will be confirmed by the restaurant.",
+
+      waTitle: "Contact us on WhatsApp",
+      waSub: "Message us directly to book your table.",
+      waBtn: "Open WhatsApp",
+
+      lblDate: "Date",
+      lblTime: "Time",
+      lblPeople: "People",
+      lblPhone: "Phone",
+      lblName: "Full name",
+      lblNotes: "Notes (optional)",
+
+      phPhone: "e.g. +39 3331234567",
+      phName: "e.g. John Smith",
+      phNotes: "Allergies, stroller, table requests, etc.",
+
+      submit: "Send request",
+      note: "* Your request will be sent to the restaurant system."
+    }
+  };
+
+  const tr = T[lang] || T.it;
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+
+  set("heroTitle", tr.hero);
+  set("bookTitle", tr.title);
+  set("bookSub", tr.sub);
+  set("waTitle", tr.waTitle);
+  set("waSub", tr.waSub);
+
+  // ✅ label (servono gli id sulle label, vedi punto 2)
+  set("lblDate", tr.lblDate);
+  set("lblTime", tr.lblTime);
+  set("lblPeople", tr.lblPeople);
+  set("lblPhone", tr.lblPhone);
+  set("lblName", tr.lblName);
+  set("lblNotes", tr.lblNotes);
+
+  // placeholders
+  const inPhone = document.querySelector('input[name="phone"]');
+  if (inPhone) inPhone.placeholder = tr.phPhone;
+
+  const inName = document.querySelector('input[name="name"]');
+  if (inName) inName.placeholder = tr.phName;
+
+  const txNotes = document.querySelector('textarea[name="notes"]');
+  if (txNotes) txNotes.placeholder = tr.phNotes;
+
+  // bottoni e note
+  const sb = document.getElementById("submitBtn");
+  if (sb) sb.textContent = tr.submit;
+
+  const note = document.getElementById("noteMsg");
+  if (note) note.textContent = tr.note;
+
+  const waBtn = document.getElementById("whatsappLink");
+  if (waBtn) waBtn.textContent = tr.waBtn;
+})();
+</script>
+
+<script>
 (async function(){
   const API = window.API_BASE || "";
   try{
