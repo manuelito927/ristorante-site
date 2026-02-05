@@ -94,11 +94,20 @@ bar.innerHTML = `
   </div>
 `;
 
-// inserisce il filtro DOPO "Richieste di Prenotazione"
+// sposta "Richieste di Prenotazione" sopra al filtro
 const refreshBtn = document.getElementById("refreshReservations");
 
 if (refreshBtn) {
-  refreshBtn.closest(".card").after(bar);
+  const requestsCard = refreshBtn.closest(".card");
+
+  // metto il filtro subito DOPO la card "Richieste di Prenotazione"
+  requestsCard.after(bar);
+
+  // e mi assicuro che la card stia subito dopo Impostazioni
+  const cards = tab.querySelectorAll(".card");
+  if (cards.length >= 2) {
+    cards[1].after(requestsCard);
+  }
 } else {
   tab.appendChild(bar);
 }
