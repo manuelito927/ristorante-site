@@ -48,72 +48,56 @@ function getDateKeyFromReservedAt(reserved_at) {
   return m ? `${m[1]}-${m[2]}-${m[3]}` : "";
 }
 
-  function ensureReservationsFilterUI() {
-    const tab = document.getElementById("tab-reservations");
-    if (!tab) return;
+function ensureReservationsFilterUI() {
+  const tab = document.getElementById("tab-reservations");
+  if (!tab) return;
 
-    // se già esiste non la ricreo
-    if (document.getElementById("resFilterBar")) return;
+  if (document.getElementById("resFilterBar")) return;
 
-    const bar = document.createElement("div");
-    bar.id = "resFilterBar";
-    bar.className = "card";
-    bar.style.marginBottom = "15px";
-    bar.style.padding = "14px";
+  const bar = document.createElement("div");
+  bar.id = "resFilterBar";
+  bar.className = "card";
+  bar.style.marginBottom = "15px";
+  bar.style.padding = "14px";
 
-bar.innerHTML = `
-  <div style="display:flex; align-items:center; gap:10px;">
-    <input
-      id="resFilterDate"
-      type="date"
-      style="
-        max-width:160px;
-        padding:6px 10px;
-        font-size:13px;
-        border-radius:8px;
-      "
-    />
+  bar.innerHTML = `
+    <div style="display:flex; align-items:center; gap:10px;">
+      <input id="resFilterDate" type="date" style="max-width:160px; padding:6px 10px; font-size:13px; border-radius:8px;" />
+      <button id="resFilterAll" title="Mostra tutte" style="border:0; background:#f0f0f0; width:32px; height:32px; border-radius:8px; cursor:pointer; font-size:16px;">✕</button>
+      <div id="resFilterInfo" style="font-size:12px; opacity:.6; margin-left:auto;"></div>
+    </div>
+  `;
 
-    <button
-      id="resFilterAll"
-      title="Mostra tutte"
-      style="
-        border:0;
-        background:#f0f0f0;
-        width:32px;
-        height:32px;
-        border-radius:8px;
-        cursor:pointer;
-        font-size:16px;
-      "
-    >✕</button>
+  // ✅ INSERIMENTO: lo metto subito prima della lista prenotazioni
+  if (reservationsGrid && reservationsGrid.parentNode) {
+    reservationsGrid.parentNode.insertBefore(bar, reservationsGrid);
+  } else {
+    tab.appendChild(bar);
+  }
 
-    <div id="resFilterInfo" style="font-size:12px; opacity:.6; margin-left:auto;"></div>
-  </div>
-`;
+  // ✅ prendo i riferimenti dall’elemento creato, non dal document
+  const dateInput = bar.querySelector("#resFilterDate");
+  const btnAll = bar.querySelector("#resFilterAll");
 
-    const dateInput = document.getElementById("resFilterDate");
-    const btnAll = document.getElementById("resFilterAll");
+  if (dateInput) dateInput.value = reservationsFilterDate;
 
-    if (dateInput) dateInput.value = reservationsFilterDate;
+  function applyAndRender() {
+    renderReservations(allReservations);
+  }
 
-function applyAndRender() {
-  renderReservations(allReservations);
-}
+  if (btnAll) btnAll.onclick = () => {
+    reservationsFilterDate = "";
+    if (dateInput) dateInput.value = "";
+    applyAndRender();
+  };
 
-    if (btnAll) btnAll.onclick = () => {
-      reservationsFilterDate = ""; // vuoto = tutte
-      if (dateInput) dateInput.value = "";
+  if (dateInput) {
+    dateInput.onchange = () => {
+      reservationsFilterDate = String(dateInput.value || "").trim();
       applyAndRender();
     };
-
-    if (dateInput) {
-      dateInput.onchange = () => {
-        reservationsFilterDate = String(dateInput.value || "").trim(); // YYYY-MM-DD o ""
-        applyAndRender();
-      };
-    }
   }
+}
 
   function renderReservations(allReservations) {
     if (!reservationsGrid) return;
