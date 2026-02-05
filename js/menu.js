@@ -99,31 +99,51 @@ const API =
 // ============================
 // ✅ MACROAREE (solo UI)
 // ============================
-const MACROS = LANG === "en"
-  ? [
-      { key: "food",   title: "FOOD",        cats: ["Starters & Snacks", "Main courses & Sides", "Big Salads"] },
-      { key: "pizza",  title: "PIZZERIA",    cats: ["Pizzas (White, Red, Gourmet)", "Doughs & Extras"] },
-      { key: "drink",  title: "DRINK",       cats: ["Soft drinks", "Beers (Bottle, Draft, Special)"] },
-      { key: "bar",    title: "BAR & RELAX", cats: ["Coffee & Hot drinks", "Bitters", "Spirits", "Grappa"] },
+const MACROS = [
+  {
+    title: "La Cucina & Gastronomia",
+    cats: [
+      "Insalatone",
+      "Stuzzichini",
+      "Antipasti",
+      "Secondi",
+      "Contorni"
     ]
-  : [
-      { key: "food",   title: "FOOD",        cats: ["Antipasti & Stuzzichini", "Secondi & Contorni", "Insalatone"] },
-      { key: "pizza",  title: "PIZZERIA",    cats: ["Pizze (Bianche, Rosse, Gourmet)", "Impasti e Aggiunte"] },
-      { key: "drink",  title: "DRINK",       cats: ["Bevande", "Birre (Bottiglia, Spina, Special)"] },
-      { key: "bar",    title: "BAR & RELAX", cats: ["Caffetteria", "Amari", "Liquori", "Grappe"] },
-    ];
-
-// helper: match flessibile (ignora maiuscole/spazi)
-function normCat(s){ return String(s||"").toLowerCase().replace(/\s+/g," ").trim(); }
-function findMacroForCat(catName){
-  const c = normCat(catName);
-  for (const m of MACROS){
-    for (const x of m.cats){
-      if (normCat(x) === c) return m.title;
-    }
+  },
+  {
+    title: "L’Arte Bianca & Pizzeria",
+    cats: [
+      "Pizze bianche",
+      "Pizze rosse",
+      "Pizza rossa",
+      "Pizze gourmet",
+      "Pucce vip",
+      "Sfilatini",
+      "Impasti alternativi",
+      "Aggiunte pizze"
+    ]
+  },
+  {
+    title: "Selezione Brassicola & Beverage",
+    cats: [
+      "Bevande",
+      "Birre",
+      "Birre alla spina",
+      "Special beer"
+    ]
+  },
+  {
+    title: "Fine Pasto & Distilleria",
+    cats: [
+      "La caffetteria",
+      "I nostri amari",
+      "I liquori",
+      "Le grappe",
+      "Whisky",
+      "Rhum"
+    ]
   }
-  return null;
-}
+];
 
 // ============================
 // Render HTML con macroaree
