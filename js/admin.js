@@ -94,12 +94,11 @@ bar.innerHTML = `
   </div>
 `;
 
-// inserisce il filtro DOPO la card "Impostazioni Prenotazioni"
-const cards = tab.querySelectorAll(".card");
+// inserisce il filtro DOPO "Richieste di Prenotazione"
+const refreshBtn = document.getElementById("refreshReservations");
 
-if (cards.length >= 2) {
-  // la seconda card è "Impostazioni Prenotazioni"
-  cards[1].after(bar);
+if (refreshBtn) {
+  refreshBtn.closest(".card").after(bar);
 } else {
   tab.appendChild(bar);
 }
