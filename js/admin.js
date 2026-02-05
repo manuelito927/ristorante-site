@@ -94,9 +94,6 @@ bar.innerHTML = `
   </div>
 `;
 
-const tab = document.getElementById("tab-reservations");
-tab.appendChild(bar);
-
     const dateInput = document.getElementById("resFilterDate");
     const btnAll = document.getElementById("resFilterAll");
 
