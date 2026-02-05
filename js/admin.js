@@ -1085,7 +1085,7 @@ renderReservations(allReservations);
       if (!reservations || reservations.length === 0) {
         reservationsGrid.innerHTML = "<div class='card'>Nessuna prenotazione trovata.</div>";
       }
-      // if (reservationsMsg) reservationsMsg.textContent = "OK";
+if (stripMsg) stripMsg.textContent = "";
     } catch (e) {
       reservationsGrid.innerHTML = `<div class="card">❌ Errore: ${escapeHtml(e.message)}</div>`;
       if (reservationsMsg) reservationsMsg.textContent = "Errore";
