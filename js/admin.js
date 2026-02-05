@@ -1252,23 +1252,36 @@ async function loadStripKeysIntoSelect() {
   if (!stripKey) return;
 
   try {
-    const res = await api("/api/strip"); // ritorna { keys: [...] }
+    const res = await api("/api/strip"); // { keys: [...] }
     const keys = Array.isArray(res.keys) ? res.keys : [];
 
-    // svuota e ricrea opzioni
     stripKey.innerHTML = "";
 
-    if (!keys.length) {
-      stripKey.innerHTML = `<option value="pizze">pizze</option>`;
-      return;
-    }
+    // placeholder
+    const ph = document.createElement("option");
+    ph.value = "";
+    ph.textContent = "Seleziona…";
+    stripKey.appendChild(ph);
 
-    keys.forEach((k) => {
+    if (!keys.length) return;
+
+    // carico title+order per ogni key
+    const meta = await Promise.all(keys.map(async (k) => {
+      const d = await loadStripData(k); // già esiste nel tuo file
+      return { key: k, title: d.title || k, order: Number(d.order ?? 0) };
+    }));
+
+    meta.sort((a,b) => (a.order - b.order) || a.title.localeCompare(b.title, "it"));
+
+    meta.forEach(m => {
       const opt = document.createElement("option");
-      opt.value = k;
-      opt.textContent = k;
+      opt.value = m.key;          // valore tecnico
+      opt.textContent = m.title;  // testo che vedi
       stripKey.appendChild(opt);
     });
+
+    // seleziona la prima (order più basso)
+    stripKey.value = meta[0].key;
 
   } catch (e) {
     console.warn("Errore load strip keys:", e);
