@@ -1632,7 +1632,7 @@ async function refreshStripEditor() {
   if (stripOrder) stripOrder.value = String(d.order ?? 0);
   renderStripItemsEditor(d.items);
 
-  if (stripMsg) stripMsg.textContent = "OK";
+if (stripMsg) stripMsg.textContent = "";
 }
 
 // =======================
