@@ -97,9 +97,9 @@ bar.innerHTML = `
 
     if (dateInput) dateInput.value = reservationsFilterDate;
 
-    function applyAndRender() {
-      renderReservations(lastReservations);
-    }
+function applyAndRender() {
+  renderReservations(allReservations);
+}
 
     if (btnAll) btnAll.onclick = () => {
       reservationsFilterDate = ""; // vuoto = tutte
