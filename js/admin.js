@@ -103,7 +103,6 @@ if (cards.length >= 2) {
 }
 
     const dateInput = document.getElementById("resFilterDate");
-    const btnToday = document.getElementById("resFilterToday");
     const btnAll = document.getElementById("resFilterAll");
 
     if (dateInput) dateInput.value = reservationsFilterDate;
