@@ -165,7 +165,18 @@ for (const catName of orderedCats) {
 
 // 3) render: titolo macro + sezioni categoria sotto
 for (const [macroTitle, catNames] of macroBuckets.entries()) {
-  if (!catNames.length) continue;
+
+  // ✅ se è ALTRO e vuoto → salta
+  if (!catNames.length && macroTitle === "ALTRO") continue;
+
+  const macroH = document.createElement("h2");
+  macroH.className = "menu-macro-title";
+  macroH.textContent = macroTitle;
+  menuEl.appendChild(macroH);
+
+  for (const cat of catNames) {
+    const arr = byCat.get(cat);
+    if (!arr || !arr.length) continue;
 
   const macroH = document.createElement("h2");
   macroH.className = "menu-macro-title";
