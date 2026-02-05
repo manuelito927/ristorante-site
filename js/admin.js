@@ -29,6 +29,183 @@ const menuCategoriesList  = $("menuCategoriesList");  // ✅ nuovo contenitore r
   const reservationsGrid = $("reservationsGrid");
   const refreshReservationsBtn = $("refreshReservations");
   const reservationsMsg = $("reservationsMsg");
+  
+    // ✅ PRENOTAZIONI: filtro data (oggi / tutte / scelta giorno)
+  let reservationsFilterDate = (() => {
+    const d = new Date();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return `${d.getFullYear()}-${mm}-${dd}`; // YYYY-MM-DD
+  })();
+
+  let lastReservations = []; // cache ultime prenotazioni caricate
+
+  function getDateKeyFromReservedAt(reserved_at) {
+    if (!reserved_at) return "";
+    const s = String(reserved_at).trim();
+
+    // supporta "YYYY-MM-DD HH:MM" o "YYYY-MM-DDTHH:MM..."
+    const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (m) return `${m[1]}-${m[2]}-${m[3]}`;
+
+    // fallback Date
+    try {
+      const d = new Date(s);
+      if (isNaN(d.getTime())) return "";
+      const mm = String(d.getMonth() + 1).padStart(2, "0");
+      const dd = String(d.getDate()).padStart(2, "0");
+      return `${d.getFullYear()}-${mm}-${dd}`;
+    } catch {
+      return "";
+    }
+  }
+
+  function ensureReservationsFilterUI() {
+    const tab = document.getElementById("tab-reservations");
+    if (!tab) return;
+
+    // se già esiste non la ricreo
+    if (document.getElementById("resFilterBar")) return;
+
+    const bar = document.createElement("div");
+    bar.id = "resFilterBar";
+    bar.className = "card";
+    bar.style.marginBottom = "15px";
+    bar.style.padding = "14px";
+
+    bar.innerHTML = `
+      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:end;">
+        <div style="flex:1; min-width:180px;">
+          <label>Filtra per giorno</label>
+          <input id="resFilterDate" type="date" style="width:100%;" />
+          <div style="opacity:.65; font-size:12px; margin-top:6px;">
+            Di default mostra le prenotazioni di oggi.
+          </div>
+        </div>
+
+        <button class="btn secondary" id="resFilterToday" style="width:auto; padding:12px 18px;">
+          Oggi
+        </button>
+
+        <button class="btn secondary" id="resFilterAll" style="width:auto; padding:12px 18px;">
+          Tutte
+        </button>
+
+        <div id="resFilterInfo" style="font-size:13px; opacity:.75; margin-left:auto;"></div>
+      </div>
+    `;
+
+    // metto la barra sopra la lista prenotazioni
+    // tab-reservations ha già una card dentro, quindi la inserisco all'inizio di quella card
+    const mainCard = tab.querySelector(".card");
+    if (mainCard) mainCard.insertBefore(bar, mainCard.firstChild);
+    else tab.insertBefore(bar, tab.firstChild);
+
+    const dateInput = document.getElementById("resFilterDate");
+    const btnToday = document.getElementById("resFilterToday");
+    const btnAll = document.getElementById("resFilterAll");
+
+    if (dateInput) dateInput.value = reservationsFilterDate;
+
+    function applyAndRender() {
+      renderReservations(lastReservations);
+    }
+
+    if (btnToday) btnToday.onclick = () => {
+      const d = new Date();
+      const mm = String(d.getMonth() + 1).padStart(2, "0");
+      const dd = String(d.getDate()).padStart(2, "0");
+      reservationsFilterDate = `${d.getFullYear()}-${mm}-${dd}`;
+      if (dateInput) dateInput.value = reservationsFilterDate;
+      applyAndRender();
+    };
+
+    if (btnAll) btnAll.onclick = () => {
+      reservationsFilterDate = ""; // vuoto = tutte
+      if (dateInput) dateInput.value = "";
+      applyAndRender();
+    };
+
+    if (dateInput) {
+      dateInput.onchange = () => {
+        reservationsFilterDate = String(dateInput.value || "").trim(); // YYYY-MM-DD o ""
+        applyAndRender();
+      };
+    }
+  }
+
+  function renderReservations(allReservations) {
+    if (!reservationsGrid) return;
+
+    const info = document.getElementById("resFilterInfo");
+
+    // filtro
+    const filtered = (allReservations || []).filter(r => {
+      if (!reservationsFilterDate) return true; // tutte
+      return getDateKeyFromReservedAt(r.reserved_at) === reservationsFilterDate;
+    });
+
+    if (info) {
+      info.textContent = reservationsFilterDate
+        ? `Mostro: ${reservationsFilterDate} • Tot: ${filtered.length}`
+        : `Mostro: tutte • Tot: ${filtered.length}`;
+    }
+
+    reservationsGrid.innerHTML = "";
+
+    filtered.forEach((r) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.marginBottom = "15px";
+
+      card.innerHTML = `
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;">
+          <strong style="font-size:16px;">${escapeHtml(r.full_name || "")}</strong>
+          <span style="opacity:.6; font-size:12px;">#${r.id}</span>
+        </div>
+
+        <div style="font-size:14px; margin-bottom:5px;">📞 ${escapeHtml(r.phone || "")} • 👥 <strong>${r.people} persone</strong></div>
+        <div style="font-size:14px; margin-bottom:10px; color:var(--greenwood); font-weight:bold;">📅 ${fmtDate(r.reserved_at)}</div>
+        <div style="t
+          font-size:13px; background:#f5f5f5; padding:8px; border-radius:6px; margin-bottom:12px;">
+          <strong>Note:</strong> ${escapeHtml(r.notes || "—")}
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px;">
+          <select data-k="status" style="flex:1;">
+            <option value="new" ${r.status === "new" ? "selected" : ""}>Nuova</option>
+            <option value="confirmed" ${r.status === "confirmed" ? "selected" : ""}>Confermata</option>
+            <option value="cancelled" ${r.status === "cancelled" ? "selected" : ""}>Annullata</option>
+          </select>
+          <button class="btn success" data-act="saveStatus" style="padding:5px 15px;">Salva</button>
+        </div>
+        <div style="margin-top:5px; font-size:12px; text-align:center;" data-msg=""></div>
+      `;
+
+      card.querySelector('[data-act="saveStatus"]').onclick = async () => {
+        const msg = card.querySelector('[data-msg]');
+        msg.textContent = "Salvataggio...";
+        try {
+          const status = card.querySelector('[data-k="status"]').value;
+          await api("/api/admin/reservations/" + r.id, {
+            method: "PUT",
+            body: JSON.stringify({ status })
+          });
+          msg.innerHTML = "<span style='color:green'>✅ Aggiornato</span>";
+          setTimeout(() => loadReservations(), 800);
+        } catch (e) {
+          msg.textContent = "❌ " + e.message;
+        }
+      };
+
+      reservationsGrid.appendChild(card);
+    });
+
+    if (!filtered.length) {
+      reservationsGrid.innerHTML = `<div class="card">Nessuna prenotazione per questo filtro.</div>`;
+    }
+  }
+  
   // ✅ SETTINGS PRENOTAZIONI (toggle + whatsapp)
   const bookingEnabled = $("bookingEnabled");         // checkbox
   const bookingWhatsapp = $("bookingWhatsapp");       // input
