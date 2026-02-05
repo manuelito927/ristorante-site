@@ -112,15 +112,6 @@ if (cards.length >= 2) {
       renderReservations(lastReservations);
     }
 
-    if (btnToday) btnToday.onclick = () => {
-      const d = new Date();
-      const mm = String(d.getMonth() + 1).padStart(2, "0");
-      const dd = String(d.getDate()).padStart(2, "0");
-      reservationsFilterDate = `${d.getFullYear()}-${mm}-${dd}`;
-      if (dateInput) dateInput.value = reservationsFilterDate;
-      applyAndRender();
-    };
-
     if (btnAll) btnAll.onclick = () => {
       reservationsFilterDate = ""; // vuoto = tutte
       if (dateInput) dateInput.value = "";
