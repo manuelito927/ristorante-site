@@ -231,16 +231,17 @@ if (enBlock) enBlock.style.display = "none";
 set("phone", d.phone);
 set("address", d.address);
 
-// TITOLI + TESTI in base alla lingua
-set("takeaway_title", lang === "en" ? (d.takeaway_en_title || d.takeaway_title) : d.takeaway_title);
+// TITOLI BLOCCATI (fissi in HTML)
+
+// set("takeaway_title", lang === "en" ? (d.takeaway_en_title || d.takeaway_title) : d.takeaway_title);
 set("takeaway_text",  lang === "en" ? (d.takeaway_en_text  || d.takeaway_text)  : d.takeaway_text);
 
-set("gluten_title",   lang === "en" ? (d.gluten_en_title   || d.gluten_title)   : d.gluten_title);
+// set("gluten_title",   lang === "en" ? (d.gluten_en_title   || d.gluten_title)   : d.gluten_title);
 set("gluten_text",    lang === "en" ? (d.gluten_en_text    || d.gluten_text)    : d.gluten_text);
 
 set("lactose_text",   lang === "en" ? (d.lactose_en_text   || d.lactose_text)   : d.lactose_text);
 
-set("pets_title",     lang === "en" ? (d.pets_en_title     || d.pets_title)     : d.pets_title);
+// set("pets_title",     lang === "en" ? (d.pets_en_title     || d.pets_title)     : d.pets_title);
 set("pets_text",      lang === "en" ? (d.pets_en_text      || d.pets_text)      : d.pets_text);
       } catch (e) { console.error("Errore caricamento dati:", e); }
     })();
