@@ -358,16 +358,16 @@ async function saveMenuCategoriesOrder() {
   }));
 
   // ordino per numero crescente e creo l’array order: ["PIZZE","ANTIPASTI",...]
-  rows.sort((a,b) => (a.order ?? 0) - (b.order ?? 0));
-  const order = rows.map(r => String(r.name || "").trim()).filter(Boolean);
+const inputs = Array.from(menuCategoriesList.querySelectorAll('input[data-cat-name]'));
+const categories = inputs.map(inp => ({
+  name: String(inp.getAttribute("data-cat-name") || "").trim(),
+  order: Number(inp.value || 0)
+})).filter(c => c.name);
 
-  try {
-    setMenuCategoriesMsg("Salvataggio...");
-
-    await api("/api/admin/menu/categories", {
-      method: "PUT",
-      body: JSON.stringify({ order })
-    });
+await api("/api/admin/menu/categories", {
+  method: "PUT",
+  body: JSON.stringify({ categories })
+});
 
     setMenuCategoriesMsg("Salvato ✅");
     setTimeout(() => setMenuCategoriesMsg(""), 1200);
