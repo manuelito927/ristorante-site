@@ -353,24 +353,18 @@ savedCats.forEach(c => {
 async function saveMenuCategoriesOrder() {
   if (!menuCategoriesList) return;
 
-  // leggo i numeri inseriti
-  const inputs = Array.from(menuCategoriesList.querySelectorAll('input[data-cat-name]'));
-  const rows = inputs.map(inp => ({
-    name: inp.getAttribute("data-cat-name") || "",
-    order: Number(inp.value || 0)
-  }));
+  try {
+    const inputs = Array.from(menuCategoriesList.querySelectorAll('input[data-cat-name]'));
 
-  // ordino per numero crescente e creo l’array order: ["PIZZE","ANTIPASTI",...]
-const inputs = Array.from(menuCategoriesList.querySelectorAll('input[data-cat-name]'));
-const categories = inputs.map(inp => ({
-  name: String(inp.getAttribute("data-cat-name") || "").trim(),
-  order: Number(inp.value || 0)
-})).filter(c => c.name);
+    const categories = inputs.map(inp => ({
+      name: String(inp.getAttribute("data-cat-name") || "").trim(),
+      order: Number(inp.value || 0)
+    })).filter(c => c.name);
 
-await api("/api/admin/menu/categories", {
-  method: "PUT",
-  body: JSON.stringify({ categories })
-});
+    await api("/api/admin/menu/categories", {
+      method: "PUT",
+      body: JSON.stringify({ categories })
+    });
 
     setMenuCategoriesMsg("Salvato ✅");
     setTimeout(() => setMenuCategoriesMsg(""), 1200);
