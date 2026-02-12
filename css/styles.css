@@ -878,9 +878,8 @@ body{
 }
 
 .mobile-logo__img {
-  width: 70px;          /* grandezza */
-  height: 70px;
-  object-fit: cover;    /* ritaglia */
-  object-position: center; /* centra */
-  transform: scale(1.4); /* ZOOM */
+  width: 90px;        /* aumenta dimensione */
+  height: auto;       /* mantiene proporzione */
+  display: block;
+  margin: 0 auto;
 }
