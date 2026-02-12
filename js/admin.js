@@ -651,9 +651,26 @@ function renderMenuItems(items) {
   </label>
 
   <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
-    <img data-k="image_preview"
-      src="${escapeAttr(it.image_url || "")}"
-      style="width:120px; height:90px; object-fit:cover; border-radius:12px; background:#eee; border:1px solid #ddd;">
+    <div style="position:relative; width:120px; height:90px; flex:0 0 auto;">
+      <img data-k="image_preview"
+        src="${escapeAttr(it.image_url || "")}"
+        style="width:120px; height:90px; object-fit:cover; border-radius:12px; background:#eee; border:1px solid #ddd;">
+
+      <button type="button" data-act="removeImage"
+        title="Rimuovi foto"
+        style="
+          position:absolute; top:-8px; right:-8px;
+          width:28px; height:28px;
+          border-radius:999px;
+          border:1px solid rgba(0,0,0,.15);
+          background:#fff;
+          cursor:pointer;
+          font-size:16px;
+          line-height:1;
+          display:flex; align-items:center; justify-content:center;
+        ">✕</button>
+    </div>
+
     <div style="font-size:12px; opacity:.7;">
       Se non carichi nulla, resta quella attuale.
     </div>
