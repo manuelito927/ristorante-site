@@ -741,6 +741,10 @@ if (imageFileInput) {
       msg.textContent = "Salvataggio...";
       try {
         const payload = readPayload(wrap);
+        // se ho caricato una nuova foto, la uso
+if (wrap.dataset.imageUrl) {
+  payload.image_url = wrap.dataset.imageUrl;
+}
         await api("/api/admin/menu/" + it.id, {
           method: "PUT",
           body: JSON.stringify(payload)
