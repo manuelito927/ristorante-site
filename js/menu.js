@@ -132,6 +132,21 @@ const iconsRow =
 
               return `
   <div class="item">
+${it.image_url ? `
+  <div style="margin:10px 0 12px;">
+    <div style="
+      width:100%;
+      max-width:260px;
+      aspect-ratio:1 / 1;
+      overflow:hidden;
+      border-radius:16px;
+    ">
+      <img src="${escapeHtml(it.image_url)}"
+           style="width:100%; height:100%; object-fit:cover; display:block;">
+    </div>
+  </div>
+` : ""}
+
 
  <div class="item-row" style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
 
