@@ -13,6 +13,8 @@ const API = "https://still-haze-01c8.filosofiaefficace.workers.dev";
   // MENU
   const createBtn = $("createBtn");
   const grid = $("itemsGrid");
+  const menuImageFile = $("menu_image_file");
+const menuImagePreview = $("menu_image_preview");
   // ✅ MENU: ordine categorie + search
 const menuCategoriesOrder = $("menuCategoriesOrder"); // (può anche NON esistere più)
 const menuCategoriesList  = $("menuCategoriesList");  // ✅ nuovo contenitore righe categoria
