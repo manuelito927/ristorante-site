@@ -1184,6 +1184,21 @@ if (galSaveBtn) {
   };
 }
 
+// ANTEPRIMA FOTO MENU (Nuovo Prodotto)
+if (menuImageFile && menuImagePreview) {
+  menuImageFile.addEventListener("change", () => {
+    const f = menuImageFile.files && menuImageFile.files[0];
+    if (!f) {
+      menuImagePreview.innerHTML = "";
+      return;
+    }
+    const url = URL.createObjectURL(f);
+    menuImagePreview.innerHTML = `
+      <img src="${url}" style="width:100%; max-width:320px; border-radius:12px; border:1px solid #ddd; aspect-ratio:4/3; object-fit:cover;">
+    `;
+  });
+}
+
 /* =========================================================
    COPERTINE PAGINE
    ========================================================= */
