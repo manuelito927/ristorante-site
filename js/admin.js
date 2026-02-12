@@ -702,6 +702,34 @@ function renderMenuItems(items) {
 // ✅ FOTO: cambio immagine prodotto (upload su R2 e salvo image_url nel campo)
 const imageFileInput = wrap.querySelector('[data-k="image_file"]');
 const imagePreview = wrap.querySelector('[data-k="image_preview"]');
+const removeImageBtn = wrap.querySelector('[data-act="removeImage"]');
+
+if (removeImageBtn) {
+  // mostra/nasconde la X in base a se esiste davvero una foto
+  const hasImg = !!(it.image_url || "").trim();
+  removeImageBtn.style.display = hasImg ? "flex" : "none";
+
+  removeImageBtn.onclick = () => {
+    // flag: al salvataggio → image_url = null
+    wrap.dataset.imageRemove = "1";
+
+    // se avevi appena caricato una nuova foto, annulla quella
+    delete wrap.dataset.imageUrl;
+
+    // pulisci preview
+    if (imagePreview) imagePreview.src = "";
+
+    // reset input file
+    if (imageFileInput) imageFileInput.value = "";
+
+    const msg = wrap.querySelector('[data-msg]');
+    if (msg) msg.textContent = "✅ Foto rimossa (ora premi Salva Modifiche)";
+    
+    // nascondo la X perché ora non c'è più foto
+    removeImageBtn.style.display = "none";
+  };
+}
+
 
 if (imageFileInput) {
   imageFileInput.onchange = async () => {
