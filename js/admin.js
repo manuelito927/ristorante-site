@@ -648,6 +648,25 @@ function renderMenuItems(items) {
           </div>
         </div>
 
+<div class="form-group" style="margin-bottom:12px;">
+  <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:8px;">
+    FOTO PRODOTTO
+  </label>
+
+  <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+    <img data-k="image_preview"
+      src="${escapeAttr(it.image_url || "")}"
+      style="width:120px; height:90px; object-fit:cover; border-radius:12px; background:#eee; border:1px solid #ddd;">
+    <div style="font-size:12px; opacity:.7;">
+      Se non carichi nulla, resta quella attuale.
+    </div>
+  </div>
+
+  <label class="btn secondary" style="width:100%;">
+    Carica nuova foto
+    <input type="file" data-k="image_file" hidden>
+  </label>
+</div>
         ${allergensHtml}
 
         <div class="row" style="display:flex; gap:10px;">
