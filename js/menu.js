@@ -133,10 +133,22 @@ const iconsRow =
               return `
   <div class="item">
 
-    <div class="item-row">
-      <span>${escapeHtml(name)}</span>
-      <span>€ ${formatEuro(it.price_cents)}</span>
-    </div>
+ <div class="item-row" style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+
+  <span>${escapeHtml(name)}</span>
+
+  <div style="display:flex; align-items:center; gap:8px;">
+    
+    <span style="font-weight:600;">€ ${formatEuro(it.price_cents)}</span>
+
+    ${it.image_url ? `
+      <img src="${escapeHtml(it.image_url)}"
+           style="width:38px; height:38px; object-fit:cover; border-radius:8px;">
+    ` : ""}
+
+  </div>
+
+</div>
                   ${iconsRow}
                   ${desc ? `<div class="item-desc">${escapeHtml(desc)}</div>` : ``}
                 </div>
