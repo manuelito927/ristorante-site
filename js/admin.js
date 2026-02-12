@@ -452,6 +452,7 @@ if (file) {
         position: Number($("position").value || 0),
         allergens: uniqueAllergens,
         is_available: $("is_available").value === "true",
+        image_url: image_url,
       };
 
       if (!payload.name) return alert("Nome (IT) obbligatorio");
