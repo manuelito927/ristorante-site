@@ -1511,8 +1511,14 @@ function readPayload(wrap) {
       payload[key] = el.value !== "" ? Number(el.value) : null;
     } 
     else {
-      payload[key] = el.value.trim();
-    }
+  if (el.type === "file") {
+    return; // ignora file
+  }
+  if (el.tagName === "IMG") {
+    return; // ignora preview
+  }
+  payload[key] = (el.value || "").trim();
+}
   });
 
   // allergeni (checkbox)
