@@ -685,6 +685,34 @@ function renderMenuItems(items) {
     const detailsEl = wrap.querySelector('[data-el="details"]');
     const chevEl = wrap.querySelector('[data-el="chev"]');
 
+// ✅ FOTO: cambio immagine prodotto (upload su R2 e salvo image_url nel campo)
+const imageFileInput = wrap.querySelector('[data-k="image_file"]');
+const imagePreview = wrap.querySelector('[data-k="image_preview"]');
+
+if (imageFileInput) {
+  imageFileInput.onchange = async () => {
+    const f = imageFileInput.files && imageFileInput.files[0];
+    if (!f) return;
+
+    const msg = wrap.querySelector('[data-msg]');
+    if (msg) msg.textContent = "Upload foto...";
+
+    try {
+      const url = await uploadOneFileToR2(f);
+
+      // salvo l'url in un attributo del wrap così lo riprendo al "Salva"
+      wrap.dataset.imageUrl = url;
+
+      // aggiorno preview
+      if (imagePreview) imagePreview.src = url;
+
+      if (msg) msg.textContent = "✅ Foto caricata (ora premi Salva Modifiche)";
+    } catch (e) {
+      if (msg) msg.textContent = "❌ " + e.message;
+    }
+  };
+}
+
     function setOpen(isOpen) {
       toggleBtn.setAttribute("aria-expanded", String(isOpen));
       detailsEl.hidden = !isOpen;
