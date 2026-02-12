@@ -137,16 +137,9 @@ const iconsRow =
 
   <span>${escapeHtml(name)}</span>
 
-  <div style="display:flex; align-items:center; gap:8px;">
-    
-    <span style="font-weight:600;">€ ${formatEuro(it.price_cents)}</span>
-
-    ${it.image_url ? `
-      <img src="${escapeHtml(it.image_url)}"
-           style="width:38px; height:38px; object-fit:cover; border-radius:8px;">
-    ` : ""}
-
-  </div>
+<div style="display:flex; align-items:center; gap:8px;">
+  <span style="font-weight:600;">€ ${formatEuro(it.price_cents)}</span>
+</div>
 
 </div>
                   ${iconsRow}
