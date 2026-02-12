@@ -134,13 +134,14 @@ const iconsRow =
   <div class="item">
 ${it.image_url ? `
   <div style="margin:10px 0 12px;">
-    <div style="
-      width:100%;
-      max-width:260px;
-      aspect-ratio:1 / 1;
-      overflow:hidden;
-      border-radius:16px;
-    ">
+<div style="
+  width:88%;
+  max-width:260px;
+  margin:0 auto;
+  aspect-ratio:1 / 1;
+  overflow:hidden;
+  border-radius:16px;
+">
       <img src="${escapeHtml(it.image_url)}"
            style="width:100%; height:100%; object-fit:cover; display:block;">
     </div>
