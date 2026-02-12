@@ -329,11 +329,14 @@ async function loadMenuCategoriesOrder() {
 
     // 2) prendo l’ordine salvato dal worker (data.order)
     const ordRes = await api("/api/menu/categories", { method: "GET" });
-    const savedOrder = Array.isArray(ordRes?.data?.order) ? ordRes.data.order : [];
+const savedCats = Array.isArray(ordRes?.data?.categories) ? ordRes.data.categories : [];
 
-    // mappa: categoria -> numero (posizione nell’array)
-    const map = new Map();
-    savedOrder.forEach((name, i) => map.set(String(name || "").trim(), i));
+const map = new Map();
+savedCats.forEach(c => {
+  const name = String(c?.name || "").trim();
+  const ord = Number.isFinite(Number(c?.order)) ? Number(c.order) : 999;
+  if (name) map.set(name, ord);
+});
 
     // 3) creo righe con input numero
     const categories = uniqueCats.map(name => ({ name, order: map.has(name) ? map.get(name) : 999 }));
