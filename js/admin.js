@@ -435,6 +435,11 @@ async function saveMenuCategoriesOrder() {
       const newCard = createBtn.closest(".card"); // card "Nuovo Prodotto"
 const allergens = Array.from(newCard.querySelectorAll(".alg:checked")).map(el => el.value);
 const uniqueAllergens = [...new Set(allergens)];
+let image_url = "";
+const file = menuImageFile?.files?.[0];
+if (file) {
+  image_url = await uploadOneFileToR2(file);
+}
       const payload = {
         name: $("name").value.trim(),
         name_en: ($("name_en") ? $("name_en").value.trim() : ""),
