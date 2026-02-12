@@ -789,8 +789,14 @@ if (removeBtn) removeBtn.style.display = "flex";
       const msg = wrap.querySelector('[data-msg]');
       msg.textContent = "Salvataggio...";
       try {
-        const payload = readPayload(wrap);
-        // se ho caricato una nuova foto, la uso
+const payload = readPayload(wrap);
+
+// 1) se ho cliccato "X" → rimuovi foto dal DB
+if (wrap.dataset.imageRemove === "1") {
+  payload.image_url = null;
+}
+
+// 2) se ho caricato una nuova foto → sovrascrive (vince su tutto)
 if (wrap.dataset.imageUrl) {
   payload.image_url = wrap.dataset.imageUrl;
 }
