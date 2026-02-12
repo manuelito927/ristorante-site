@@ -477,6 +477,9 @@ if (file) {
 
         // reset checkbox allergeni
 newCard.querySelectorAll(".alg").forEach(c => (c.checked = false));
+// reset immagine menu (file + anteprima)
+if (menuImageFile) menuImageFile.value = "";
+if (menuImagePreview) menuImagePreview.innerHTML = "";
 
         await loadItems();
         alert("✅ Prodotto aggiunto!");
