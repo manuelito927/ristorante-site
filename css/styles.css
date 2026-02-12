@@ -870,4 +870,16 @@ body{
 
 .stars{ letter-spacing: 1px; }
 
+.logo-mark-img{
+  height: 42px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
 
+.mobile-logo__img{
+  height: 46px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
