@@ -747,6 +747,13 @@ if (imageFileInput) {
 
       // aggiorno preview
       if (imagePreview) imagePreview.src = url;
+// se carico una nuova foto, annullo l'eventuale "rimuovi"
+delete wrap.dataset.imageRemove;
+
+// ri-mostro la X perché ora la foto esiste
+const removeBtn = wrap.querySelector('[data-act="removeImage"]');
+if (removeBtn) removeBtn.style.display = "flex";
+
 
       if (msg) msg.textContent = "✅ Foto caricata (ora premi Salva Modifiche)";
     } catch (e) {
