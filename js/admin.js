@@ -804,6 +804,8 @@ if (wrap.dataset.imageUrl) {
           method: "PUT",
           body: JSON.stringify(payload)
         });
+        delete wrap.dataset.imageUrl;
+delete wrap.dataset.imageRemove;
         msg.innerHTML = "<span style='color:green'>✅ Salvato</span>";
         setTimeout(() => {
           msg.textContent = "";
