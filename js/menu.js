@@ -47,6 +47,22 @@ const API =
   // ============================
   const menuEl = document.querySelector("main.menu") || document.querySelector(".menu");
 
+
+  // ===== DEBUG PANEL (TEMP) =====
+  const dbg = document.createElement("div");
+  dbg.style.cssText = `
+    position:fixed; left:10px; right:10px; bottom:10px; z-index:999999;
+    background:#111; color:#fff; padding:10px 12px; border-radius:12px;
+    font:12px/1.35 -apple-system,system-ui,Segoe UI,Roboto,Arial; opacity:.92;
+  `;
+  dbg.innerHTML = "DEBUG: avvio…";
+  document.body.appendChild(dbg);
+
+  function logDbg(msg) {
+    dbg.innerHTML += "<br>" + String(msg).replace(/</g,"&lt;");
+  }
+
+  logDbg("menuEl: " + (menuEl ? "✅ TROVATO" : "❌ MANCANTE"));
   // ✅ Mappa allergeni -> icona + label (IT/EN)
   const ALLERGENS = {
     glutine: { icon: "🌾", it: "Glutine", en: "Gluten" },
