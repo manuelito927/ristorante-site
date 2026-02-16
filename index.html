@@ -126,7 +126,7 @@ if (btn) {
   const key = hero.dataset.coverKey || "home";
 
   try {
-    const base = (window.API_BASE || "https://still-haze-01c8.filosofiaefficace.workers.dev").trim();
+    const base = (window.API_BASE || "")
     const res = await fetch(base + "/api/page/covers", { cache: "no-store" });
     const json = await res.json().catch(() => ({}));
 
