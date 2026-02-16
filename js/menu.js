@@ -64,6 +64,9 @@ const API =
     lupini: { icon: "🫘", it: "Lupini", en: "Lupin" },
     molluschi: { icon: "🦪", it: "Molluschi", en: "Molluscs" },
     nichel: { icon: "🧲", it: "Nichel", en: "Nickel" }
+      "*":   { icon: "*",   it: "*",   en: "*" },
+  "**":  { icon: "**",  it: "**",  en: "**" },
+  "***": { icon: "***", it: "***", en: "***" }
   };
 
   function labelForAllergen(key) {
