@@ -31,7 +31,6 @@ try {
   items = data.items || data.data?.items || [];
   logDbg("items length: " + items.length);
 } catch (err) {
-  logDbg("❌ FETCH/JSON ERROR: " + (err && err.message ? err.message : err));
   console.error("Errore nel caricamento del menu:", err);
 }
 
