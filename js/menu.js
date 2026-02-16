@@ -17,7 +17,6 @@ const API =
     dbg.innerHTML += "<br>" + String(msg).replace(/</g,"&lt;");
   }
 
-  logDbg("menuEl: " + (menuEl ? "✅ TROVATO" : "❌ MANCANTE"));
   
   // ✅ 1) LINGUA (IT / EN) — PRIMA della fetch
   let LANG = localStorage.getItem("lang") || "it";
