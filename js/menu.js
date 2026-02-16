@@ -63,7 +63,8 @@ const API =
     solfiti: { icon: "🍷", it: "Solfiti", en: "Sulphites" },
     lupini: { icon: "🫘", it: "Lupini", en: "Lupin" },
     molluschi: { icon: "🦪", it: "Molluschi", en: "Molluscs" },
-    nichel: { icon: "🧲", it: "Nichel", en: "Nickel" }
+nichel: { icon: "🧲", it: "Nichel", en: "Nickel" },
+
 "*": {
   icon: "*",
   it: "* Prodotto surgelato",
