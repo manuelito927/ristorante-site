@@ -64,6 +64,21 @@ const API =
     lupini: { icon: "🫘", it: "Lupini", en: "Lupin" },
     molluschi: { icon: "🦪", it: "Molluschi", en: "Molluscs" },
 nichel: { icon: "🧲", it: "Nichel", en: "Nickel" },
+"*": {
+  icon: "*",
+  it: "* Prodotto surgelato",
+  en: "* Frozen product"
+},
+"**": {
+  icon: "**",
+  it: "** Prodotto abbattuto e congelato all’origine",
+  en: "** Blast frozen at origin"
+},
+"***": {
+  icon: "***",
+  it: "*** Produzione propria – abbattuto e congelato all’origine",
+  en: "*** House production – blast frozen at origin"
+}
   };
 
   function labelForAllergen(key) {
