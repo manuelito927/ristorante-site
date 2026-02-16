@@ -198,7 +198,7 @@ if (btn) {
 <script>
 (async function(){
   try {
-const res = await fetch((window.API_BASE || "https://still-haze-01c8.filosofiaefficace.workers.dev") + "/api/page/home", { cache: "no-store" });
+const res = await fetch((window.API_BASE || "")+ "/api/page/home", { cache: "no-store" });
     const j = await res.json();
     const data = j.data || {};
     const cards = Array.isArray(data.cards) ? data.cards : [];
