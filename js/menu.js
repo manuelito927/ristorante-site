@@ -17,19 +17,14 @@ const API =
 let items = [];
 try {
   const url = `${API}/api/menu?lang=${LANG}&t=${Date.now()}`;
-  logDbg("FETCH: " + url);
 
   const res = await fetch(url, { cache: "no-store" });
-  logDbg("HTTP: " + res.status + " " + (res.ok ? "OK" : "NOT OK"));
 
   const text = await res.text();
-  logDbg("BODY first 120: " + text.slice(0,120));
 
   const data = JSON.parse(text);
-  logDbg("JSON keys: " + Object.keys(data).join(", "));
 
   items = data.items || data.data?.items || [];
-  logDbg("items length: " + items.length);
 } catch (err) {
   console.error("Errore nel caricamento del menu:", err);
 }
