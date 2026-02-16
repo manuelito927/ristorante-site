@@ -338,3 +338,4 @@ window.addEventListener("pagehide", closeMenu);
     }[c]));
   }
 })();
+});
