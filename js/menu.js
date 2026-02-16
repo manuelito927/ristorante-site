@@ -1,3 +1,4 @@
+window.addEventListener("DOMContentLoaded", () => {
 (async function () {
 const API =
   (window.API_BASE && String(window.API_BASE).replace(/\/$/, "")) ||
