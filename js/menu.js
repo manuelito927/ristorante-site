@@ -3,22 +3,7 @@ window.addEventListener("DOMContentLoaded", () => {
 const API =
   (window.API_BASE && String(window.API_BASE).replace(/\/$/, "")) ||
   "";
-  
-    // ===== DEBUG PANEL (TEMP) =====
-  const dbg = document.createElement("div");
-  dbg.style.cssText = `
-    position:fixed; left:10px; right:10px; bottom:10px; z-index:999999;
-    background:#111; color:#fff; padding:10px 12px; border-radius:12px;
-    font:12px/1.35 -apple-system,system-ui,Segoe UI,Roboto,Arial; opacity:.92;
-  `;
-  dbg.innerHTML = "DEBUG: avvio…";
-  document.body.appendChild(dbg);
 
-  function logDbg(msg) {
-    dbg.innerHTML += "<br>" + String(msg).replace(/</g,"&lt;");
-  }
-
-  
   // ✅ 1) LINGUA (IT / EN) — PRIMA della fetch
   let LANG = localStorage.getItem("lang") || "it";
   const langBtns = Array.from(document.querySelectorAll(".langbtn"));
