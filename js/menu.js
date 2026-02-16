@@ -52,7 +52,6 @@ try {
   // 3) RENDER MENU (ACCORDION)
   // ============================
   const menuEl = document.querySelector("main.menu") || document.querySelector(".menu");
-  logDbg("menuEl: " + (menuEl ? "✅ TROVATO" : "❌ MANCANTE"));
 
   // ✅ Mappa allergeni -> icona + label (IT/EN)
   const ALLERGENS = {
