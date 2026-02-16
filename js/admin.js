@@ -548,6 +548,9 @@ function renderMenuItems(items) {
           ${alg("lupini","Lupini")}
           ${alg("molluschi","Molluschi")}
           ${alg("nichel","Nichel")}
+          ${alg("*","*")}
+${alg("**","**")}
+${alg("***","***")}
         </div>
       </div>
     `;
