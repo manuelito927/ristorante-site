@@ -1,7 +1,7 @@
 (async function () {
 const API =
   (window.API_BASE && String(window.API_BASE).replace(/\/$/, "")) ||
-  "";
+  "https://greenwood-pizzeria.com";
 
   // ✅ 1) LINGUA (IT / EN) — PRIMA della fetch
   let LANG = localStorage.getItem("lang") || "it";
