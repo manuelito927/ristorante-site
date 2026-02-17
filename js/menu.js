@@ -190,35 +190,31 @@ ${it.image_url ? `
       menuEl.appendChild(sec);
     }
 
-    // ✅ LEGENDA UNA SOLA VOLTA IN FONDO
-    const list = Array.from(usedAllergens).filter(Boolean);
-    if (list.length) {
-      // opzionale: ordine “stabile” secondo la mappa
-      const order = Object.keys(ALLERGENS);
-      list.sort((a, b) => order.indexOf(a) - order.indexOf(b));
+// ✅ LEGENDA SEMPRE COMPLETA (a prescindere dai prodotti)
+const list = Object.keys(ALLERGENS);
 
-      const legendTitle = LANG === "en" ? "Allergen legend" : "Legenda allergeni";
+const legendTitle = LANG === "en" ? "Allergen legend" : "Legenda allergeni";
 
-      const legend = document.createElement("section");
-      legend.className = "menu-legend";
-      legend.innerHTML = `
-        <div style="margin-top:18px; padding-top:14px; border-top:1px solid rgba(0,0,0,.12);">
-          <h3 style="margin:0 0 10px 0;">${legendTitle}</h3>
-          <div style="display:grid; gap:8px;">
-            ${list
-              .map(
-                (k) => `
-                  <div style="display:flex; gap:10px; align-items:center;">
-                    <span style="font-size:20px;">${iconForAllergen(k)}</span>
-                    <span>${escapeHtml(labelForAllergen(k))}</span>
-                  </div>
-                `
-              )
-              .join("")}
-          </div>
-        </div>
-      `;
-      menuEl.appendChild(legend);
+const legend = document.createElement("section");
+legend.className = "menu-legend";
+legend.innerHTML = `
+  <div style="margin-top:18px; padding-top:14px; border-top:1px solid rgba(0,0,0,.12);">
+    <h3 style="margin:0 0 10px 0;">${legendTitle}</h3>
+    <div style="display:grid; gap:8px;">
+      ${list
+        .map(
+          (k) => `
+            <div style="display:flex; gap:10px; align-items:center;">
+              <span style="font-size:20px;">${iconForAllergen(k)}</span>
+              <span>${escapeHtml(labelForAllergen(k))}</span>
+            </div>
+          `
+        )
+        .join("")}
+    </div>
+  </div>
+`;
+menuEl.appendChild(legend);
     }
 
     // Attiva accordion
