@@ -1,5 +1,5 @@
 (function () {
-const API = "https://still-haze-01c8.filosofiaefficace.workers.dev";
+const API = "https://greenwood-pizzeria.com";
   const $ = (id) => document.getElementById(id);
 
   const statusEl = $("status");
