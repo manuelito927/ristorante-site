@@ -201,16 +201,20 @@ legend.innerHTML = `
   <div style="margin-top:18px; padding-top:14px; border-top:1px solid rgba(0,0,0,.12);">
     <h3 style="margin:0 0 10px 0;">${legendTitle}</h3>
     <div style="display:grid; gap:8px;">
-      ${list
-        .map(
-          (k) => `
-            <div style="display:flex; gap:10px; align-items:center;">
-              <span style="font-size:20px;">${iconForAllergen(k)}</span>
-              <span>${escapeHtml(labelForAllergen(k))}</span>
-            </div>
-          `
-        )
-        .join("")}
+${list
+  .map(
+    (k) => `
+      <div style="display:flex; gap:8px; align-items:center; opacity:.75;">
+        <span style="font-size:14px; width:18px; text-align:center;">
+          ${iconForAllergen(k)}
+        </span>
+        <span style="font-size:13px; letter-spacing:.3px;">
+          ${escapeHtml(labelForAllergen(k))}
+        </span>
+      </div>
+    `
+  )
+  .join("")}
     </div>
   </div>
 `;
