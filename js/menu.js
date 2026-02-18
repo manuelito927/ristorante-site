@@ -71,18 +71,18 @@ try {
 nichel: { icon: "🧲", it: "Nichel", en: "Nickel" },
 "*": {
   icon: "*",
-  it: "* Prodotto surgelato",
-  en: "* Frozen product"
+  it: "PRODOTTO SURGELATO",
+  en: "Frozen product"
 },
 "**": {
   icon: "**",
-  it: "** Prodotto abbattuto e congelato all’origine",
-  en: "** Blast frozen at origin"
+  it: "PRODOTTO ABBATTUTO E CONGELATO ALL’ORIGINE",
+  en: "Blast frozen at origin"
 },
 "***": {
   icon: "***",
-  it: "*** Produzione propria – abbattuto e congelato all’origine",
-  en: "*** House production – blast frozen at origin"
+  it: "PRODUZIONE PROPRIA - ABBATTUTO E CONGELATO ALL’ORIGINE",
+  en: "House production - blast frozen at origin"
 }
   };
 
