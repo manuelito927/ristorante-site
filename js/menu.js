@@ -215,7 +215,6 @@ legend.innerHTML = `
   </div>
 `;
 menuEl.appendChild(legend);
-    }
 
     // Attiva accordion
     document.querySelectorAll(".js-toggle").forEach((btn) => {
